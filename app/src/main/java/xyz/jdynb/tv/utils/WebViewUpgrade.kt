@@ -8,7 +8,6 @@ import com.norman.webviewup.lib.UpgradeCallback
 import com.norman.webviewup.lib.WebViewUpgrade
 import com.norman.webviewup.lib.source.download.UpgradeDownloadSource
 import xyz.jdynb.tv.DongYuTVApplication
-import xyz.jdynb.tv.MainActivity
 import java.io.File
 
 object WebViewUpgrade {
@@ -44,7 +43,7 @@ object WebViewUpgrade {
     return Int.MAX_VALUE
   }
 
-  fun initWebView(context: Context, onSuccess: () -> Unit) {
+  fun initWebView(context: Context, callback: () -> Unit) {
     try {
       val version = getWebViewVersionNumber()
       if (version < WEBVIEW_MIN_VERSION) {
@@ -63,7 +62,7 @@ object WebViewUpgrade {
             Log.i(TAG, "onUpgradeComplete")
             progressDialog?.dismiss()
             Toast.makeText(context, "内核更新完成！", Toast.LENGTH_LONG).show()
-            onSuccess()
+            callback()
           }
 
           override fun onUpgradeError(throwable: Throwable?) {
@@ -74,6 +73,7 @@ object WebViewUpgrade {
               Toast.LENGTH_LONG
             ).show()
             progressDialog?.dismiss()
+            callback()
           }
 
           override fun onUpgradeProcess(percent: Float) {
@@ -94,13 +94,14 @@ object WebViewUpgrade {
         })
 
         if (WebViewUpgrade.isCompleted()) {
-          onSuccess()
+          callback()
         }
       } else {
-        onSuccess()
+        callback()
       }
     } catch (e: Exception){
       Toast.makeText(context, "内核更新错误: ${e.message}", Toast.LENGTH_LONG).show()
+      callback()
     }
   }
 }
