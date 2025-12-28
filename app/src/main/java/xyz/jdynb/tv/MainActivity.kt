@@ -30,6 +30,20 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
 
     private const val TAG = "MainActivity"
 
+    private const val WEBVIEW_MIN_VERSION = 106
+
+    /**
+     * WebView 内核下载地址
+     *
+     * 这个文件只支持 arm64v8a,arm64v7a android 6 以上系统
+     */
+    private const val WEBVIEW_DOWNLOAD_URL =
+      "https://lz.qaiu.top/parser?url=https://jdy2002.lanzoue.com/iWgPm3ep91be"
+
+    /**
+     * WebView 内核文件名
+     */
+    private const val WEBVIEW_FILE_NAME = "com.google.android.webview_106.0.5249.65-524906503.apk"
   }
 
   private val livePlayerFragment: LivePlayerFragment = YspLivePlayerFragment()
@@ -57,7 +71,6 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
 
     channelListDialog = ChannelListDialog(this, mainViewModel)
 
-
     val systemWebViewPackageName = WebViewUpgrade.getSystemWebViewPackageName()
     val systemWebViewPackageVersion = WebViewUpgrade.getSystemWebViewPackageVersion()
 
@@ -66,11 +79,11 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
     val index = systemWebViewPackageVersion.indexOf(".")
     if (index > 0) {
       val version = systemWebViewPackageVersion.substring(0, index).toInt()
-      if (version > 106) {
+      if (version < WEBVIEW_MIN_VERSION) {
         val upgradeSource = UpgradeDownloadSource(
           context,
-          "https://lz.qaiu.top/parser?url=https://jdy2002.lanzoue.com/iWgPm3ep91be",
-          File(filesDir, "webview-core/com.google.android.webview_106.0.5249.65-524906503(arm-v8a+arm64-v7a).apk")
+          WEBVIEW_DOWNLOAD_URL,
+          File(filesDir, WEBVIEW_FILE_NAME)
         )
         Log.i(TAG, "start upgrade: $version")
         WebViewUpgrade.upgrade(upgradeSource)
@@ -88,7 +101,11 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
 
           override fun onUpgradeError(throwable: Throwable?) {
             Log.i(TAG, "throwable: $throwable")
-            Toast.makeText(this@MainActivity, "内核更新错误: ${throwable?.message}", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+              this@MainActivity,
+              "内核更新错误: ${throwable?.message}",
+              Toast.LENGTH_LONG
+            ).show()
             progressDialog?.dismiss()
           }
 
@@ -98,9 +115,13 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
               progressDialog = ProgressDialog(this@MainActivity)
                 .apply {
                   setTitle("正在下载内核...")
+                  setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
+                  setCancelable(false)
+                  setCanceledOnTouchOutside(false)
                   show()
                 }
             }
+
             progressDialog.progress = (percent * 100).toInt()
           }
         })
