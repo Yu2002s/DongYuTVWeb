@@ -34,12 +34,6 @@ android {
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     signingConfig = signingConfigs.getByName("debug")
-
-    ndk {
-      // 适配 cpu 架构: armeabi-v7a
-      // TBS X5内核对32位支持最好，强制使用32位可以解决大部分初始化失败的问题
-      // abiFilters += listOf("armeabi-v7a")
-    }
   }
 
   buildFeatures {
@@ -60,6 +54,17 @@ android {
   }
   kotlinOptions {
     jvmTarget = "11"
+  }
+
+  packagingOptions{
+    doNotStrip("*/.so")
+    jniLibs {
+      useLegacyPackaging = true
+    }
+  }
+
+  aaptOptions {
+    noCompress("apk")
   }
 }
 
@@ -84,10 +89,12 @@ dependencies {
   implementation("androidx.fragment:fragment:1.8.9")
   // https://mvnrepository.com/artifact/androidx.activity/activity-ktx
   implementation("androidx.activity:activity-ktx:1.12.2")
-  // implementation("io.github.jonanorman.android.webviewup:core:0.1.0")
-  // implementation("io.github.jonanorman.android.webviewup:download-source:0.1.0")
+  implementation("io.github.jonanorman.android.webviewup:core:0.1.0")
+  implementation("io.github.jonanorman.android.webviewup:download-source:0.1.0")
   implementation(libs.androidx.localbroadcastmanager)
   implementation(files("libs/tbs_sdk-44382-202411081743-release.aar"))
+  // implementation("com.github.HeartHappy.webX5Core:webx5core_arm64_v8a:1.0.2")
+  // implementation(project(":x5core_arm64_v8a"))
   // implementation("com.tencent.tbs:tbssdk:44286")
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit)

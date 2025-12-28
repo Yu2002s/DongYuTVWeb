@@ -3,18 +3,24 @@ package xyz.jdynb.tv
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import android.content.Intent
 import android.util.Log
+import android.widget.Toast
 import com.drake.brv.utils.BRV
 import com.drake.engine.base.Engine
-import com.drake.engine.base.app
+import com.norman.webviewup.lib.UpgradeCallback
+import com.norman.webviewup.lib.WebViewUpgrade
+import com.norman.webviewup.lib.source.UpgradeAssetSource
 import com.tencent.smtt.export.external.TbsCoreSettings
 import com.tencent.smtt.sdk.ProgressListener
 import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.TbsFramework
 import com.tencent.smtt.sdk.core.dynamicinstall.DynamicInstallManager
+import java.io.File
+import kotlin.system.exitProcess
 
 
-class DongYuTVApplication: Application() {
+class DongYuTVApplication : Application() {
 
   companion object {
 
@@ -31,7 +37,7 @@ class DongYuTVApplication: Application() {
 
     Engine.initialize(this)
     BRV.modelId = BR.m
-    /*val map: MutableMap<String?, Any?> = HashMap()
+    val map: MutableMap<String?, Any?> = HashMap()
     map.put(TbsCoreSettings.MULTI_PROCESS_ENABLE, 1)
     QbSdk.initTbsSettings(map)
 
@@ -79,7 +85,5 @@ class DongYuTVApplication: Application() {
       Log.i(TAG, "预初始化X5内核")
       QbSdk.preInit(this@DongYuTVApplication, true, localPreInitCallback)
     }
-*/
   }
-
 }

@@ -148,6 +148,7 @@ open class LivePlayerFragment: Fragment(), Playable {
 
       isFocusable = false
 
+      Log.i(TAG, "userAgent: $userAgentString")
       userAgentString = USER_AGENT
 
       // 基本设置

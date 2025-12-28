@@ -12,12 +12,17 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.drake.engine.base.EngineActivity
+import com.norman.webviewup.lib.UpgradeCallback
+import com.norman.webviewup.lib.WebViewUpgrade
+import com.norman.webviewup.lib.source.UpgradeAssetSource
 import kotlinx.coroutines.launch
+import xyz.jdynb.tv.DongYuTVApplication.Companion.context
 import xyz.jdynb.tv.databinding.ActivityMainBinding
 import xyz.jdynb.tv.dialog.ChannelListDialog
 import xyz.jdynb.tv.fragment.LivePlayerFragment
 import xyz.jdynb.tv.fragment.YspLivePlayerFragment
 import xyz.jdynb.tv.utils.isTv
+import java.io.File
 
 class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main) {
 
@@ -55,7 +60,6 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
     supportFragmentManager.beginTransaction()
       .replace(R.id.fragment, livePlayerFragment)
       .commitNow()
-
   }
 
   override fun initData() {
