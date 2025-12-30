@@ -6,5 +6,5 @@ interface Playable {
 
   fun play(channel: LiveChannelModel)
 
-  fun playOrPause()
+  fun resumeOrPause()
 }

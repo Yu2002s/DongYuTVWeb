@@ -29,13 +29,16 @@ import xyz.jdynb.tv.MainViewModel
 import xyz.jdynb.tv.R
 import xyz.jdynb.tv.databinding.FragmentLivePlayerBinding
 import xyz.jdynb.tv.enums.JsType
+import xyz.jdynb.tv.enums.LivePlayer
 import xyz.jdynb.tv.event.Playable
 import xyz.jdynb.tv.model.LiveChannelModel
+import xyz.jdynb.tv.model.LiveModel
 import xyz.jdynb.tv.model.LivePlayerModel
 import xyz.jdynb.tv.utils.JsManager.execJs
+import xyz.jdynb.tv.utils.toArray
 import java.io.ByteArrayInputStream
 
-open class LivePlayerFragment: Fragment(), Playable {
+abstract class LivePlayerFragment: Fragment(), Playable {
 
   companion object {
 
@@ -60,6 +63,16 @@ open class LivePlayerFragment: Fragment(), Playable {
 
   protected val mainViewModel by activityViewModels<MainViewModel>()
 
+  /**
+   * 播放器名称
+   */
+  lateinit var playerName: String
+
+  /**
+   * 播放器配置
+   */
+  lateinit var playerConfig: LiveModel.Player
+
   inner class VideoJavaScriptInterface {
     /**
      * 视频播放事件
@@ -75,6 +88,12 @@ open class LivePlayerFragment: Fragment(), Playable {
     @JavascriptInterface
     fun onKeyDown(key: String, keyCode: Int) {
     }
+  }
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    playerName = LivePlayer.getLivePlayerForClass(this.javaClass).player
+    playerConfig = mainViewModel.liveModel.player.find { it.name == playerName } ?: LiveModel.Player()
   }
 
   override fun onCreateView(
@@ -98,6 +117,8 @@ open class LivePlayerFragment: Fragment(), Playable {
 
     initWebView(webView)
 
+    onLoadUrl(playerConfig.url)
+
     viewLifecycleOwner.lifecycleScope.launch {
       mainViewModel.currentChannelModel.collectLatest {
         // 如果当前在数字切台的话, 就延迟 4 秒后进行切换
@@ -111,27 +132,38 @@ open class LivePlayerFragment: Fragment(), Playable {
     }
   }
 
+  protected open fun onLoadUrl(url: String?) {
+    url ?: return
+    webView.loadUrl(url)
+  }
+
   /**
    * 执行 JS 脚本
    */
-  fun execJs(jsType: JsType, vararg args: Pair<String, Any>) {
-    webView.execJs(jsType, *args)
+  fun execJs(jsType: JsType, vararg args: Pair<String, Any?>) {
+    viewLifecycleOwner.lifecycleScope.launch {
+      webView.execJs(playerConfig, jsType, *args)
+    }
   }
 
   /**
    * 批量执行 JS 脚本
    */
-  fun execJs(vararg args: Pair<JsType, Array<Pair<String, Any>>?>) {
-    args.forEach {
-      webView.execJs(it.first, *(it.second ?: arrayOf()))
+  fun execJs(vararg args: Pair<JsType, Array<Pair<String, Any?>>?>) {
+    viewLifecycleOwner.lifecycleScope.launch {
+      args.forEach {
+        webView.execJs(playerConfig,it.first, *(it.second ?: arrayOf()))
+      }
     }
   }
 
   override fun play(channel: LiveChannelModel) {
     // 默认的播放
+    execJs(JsType.PLAY, *channel.toArray())
   }
 
-  override fun playOrPause() {
+  override fun resumeOrPause() {
+    execJs(JsType.RESUME_PAUSE)
   }
 
   /**
@@ -225,7 +257,6 @@ open class LivePlayerFragment: Fragment(), Playable {
     }
   }
 
-
   /**
    * 是否应该加载资源
    *
@@ -234,6 +265,13 @@ open class LivePlayerFragment: Fragment(), Playable {
    * @return null 则默认加载，否则指定加载资源
    */
   protected open fun shouldInterceptRequest(url: String): WebResourceResponse? {
+    if (playerConfig.exclude?.url?.any { it == url } == true) {
+      // 通过地址拦截
+      return createEmptyResponse("*/*")
+    } else if (playerConfig.exclude?.suffix?.any { url.endsWith(it) } == true) {
+      // 通过后缀拦截
+      return createEmptyResponse("*/*")
+    }
     return null
   }
 
@@ -255,6 +293,7 @@ open class LivePlayerFragment: Fragment(), Playable {
    */
   protected open fun onPageFinished(url: String) {
     // 默认处理
+    execJs(JsType.INIT, *mainViewModel.currentChannelModel.value.toArray())
   }
 
   /**

@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import xyz.jdynb.music.utils.SpUtils.get
 import xyz.jdynb.music.utils.SpUtils.getRequired
@@ -27,12 +28,23 @@ import xyz.jdynb.music.utils.SpUtils.put
 import xyz.jdynb.tv.constants.SPKeyConstants
 import xyz.jdynb.tv.enums.LivePlayer
 import xyz.jdynb.tv.fragment.LivePlayerFragment
-import xyz.jdynb.tv.model.LiveChannelGroupModel
 import xyz.jdynb.tv.model.LiveChannelModel
-import xyz.jdynb.tv.utils.JsManager
-import java.nio.charset.StandardCharsets
+import xyz.jdynb.tv.model.LiveChannelTypeModel
+import xyz.jdynb.tv.model.LiveModel
+import xyz.jdynb.tv.utils.NetworkUtils
 
 class MainViewModel : ViewModel() {
+
+  companion object {
+
+    private const val TAG = "MainViewModel"
+
+    /**
+     * 直播配置地址
+     */
+    private const val LIVE_CONFIG_URL = "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/live.jsonc"
+
+  }
 
   private val _currentIndex = MutableStateFlow(SPKeyConstants.CURRENT_INDEX.getRequired(0))
 
@@ -46,6 +58,9 @@ class MainViewModel : ViewModel() {
    */
   private var beforeIndex = currentIndex.value
 
+  private var _liveModel: LiveModel? = null
+  val liveModel get() = _liveModel!!
+
   private val _channelModelList = MutableStateFlow<List<LiveChannelModel>>(emptyList())
 
   /**
@@ -53,12 +68,12 @@ class MainViewModel : ViewModel() {
    */
   val channelModelList = _channelModelList.asStateFlow()
 
-  private val _channelGroupModelList = MutableStateFlow<List<LiveChannelGroupModel>>(emptyList())
+  private val _channelTypeModelList = MutableStateFlow<List<LiveChannelTypeModel>>(emptyList())
 
   /**
    * 频道分组列表
    */
-  val channelGroupModelList = _channelGroupModelList.asStateFlow()
+  val channelTypeModelList = _channelTypeModelList.asStateFlow()
 
   private val _showActions = MutableStateFlow(true)
 
@@ -72,9 +87,11 @@ class MainViewModel : ViewModel() {
    */
   val numberStringBuilder = StringBuilder()
 
+  @OptIn(ExperimentalSerializationApi::class)
   private val json = Json {
     ignoreUnknownKeys = true
     encodeDefaults = true
+    allowComments = true
   }
 
   /**
@@ -82,7 +99,7 @@ class MainViewModel : ViewModel() {
    */
   @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
   val currentChannelModel = _currentIndex
-    .debounce(400)
+    .debounce(300)
     .onEach {
       if (!isTypingNumber()) {
         // 记录切台之前的频道索引位置
@@ -99,7 +116,7 @@ class MainViewModel : ViewModel() {
       flowOf(channelModelList.value.getOrNull(it) ?: LiveChannelModel())
     }
     .onEach {
-      _currentGroup.value = it.channelType
+      _currentChannelType.value = it.channelType
       // 保存当前的频道信息
       SPKeyConstants.CURRENT_CHANNEL.put(json.encodeToString(it))
     }
@@ -113,22 +130,20 @@ class MainViewModel : ViewModel() {
     )
 
   /**
-   * 初始化 js 脚本和频道数据
+   * 初始化数据
    */
   private suspend fun init() = withContext(Dispatchers.IO) {
-    JsManager.init(DongYuTVApplication.context)
-    DongYuTVApplication.context.assets.open("lives_ysp.json").use { stream ->
-      _channelModelList.value =
-        stream.readBytes().toString(StandardCharsets.UTF_8).let { channels ->
-          json.decodeFromString<List<LiveChannelModel>>(channels)
-        }.onEachIndexed { index, model ->
-          model.number = index + 1
+    val liveContent = NetworkUtils.getResponseBodyCache(LIVE_CONFIG_URL, "live.jsonc")
+    _liveModel = json.decodeFromString<LiveModel>(liveContent)
+    _channelTypeModelList.value = liveModel.channel
+    _channelModelList.value = _channelTypeModelList.value.flatMap { liveChannelTypeModel ->
+      liveChannelTypeModel.channelList.onEach {
+        if (it.player.isEmpty()) {
+          it.player = liveChannelTypeModel.player
         }
-    }
-    _channelGroupModelList.value =
-      _channelModelList.value.groupBy { model -> model.channelType }.map { group ->
-        LiveChannelGroupModel(group.key, group.value)
+        it.channelType = liveChannelTypeModel.channelType
       }
+    }.distinctBy { it.number }.sortedBy { it.number } // 去重，并且升序排序
   }
 
   /**
@@ -146,8 +161,8 @@ class MainViewModel : ViewModel() {
    * 通过渠道获取到对应的 Fragment
    */
   @Suppress("UNCHECKED_CAST")
-  private fun getFragmentClassForChannel(channelType: String): Class<LivePlayerFragment> {
-    return LivePlayer.getLivePlayerForChannelType(channelType).clazz as Class<LivePlayerFragment>
+  private fun getFragmentClassForChannel(channelModel: LiveChannelModel): Class<LivePlayerFragment> {
+    return LivePlayer.getLivePlayerForPlayer(channelModel.player).clazz as Class<LivePlayerFragment>
   }
 
   private val _showCurrentChannel = MutableStateFlow(true)
@@ -157,17 +172,18 @@ class MainViewModel : ViewModel() {
    */
   val showCurrentChannel = _showCurrentChannel.asStateFlow()
 
-  private var _currentGroup = MutableStateFlow("")
+  private val _currentChannelType = MutableStateFlow("")
 
   /**
    * 当前频道渠道类型分组
    */
-  val currentGroup = _currentGroup.asStateFlow()
+  val currentChannelType = _currentChannelType.asStateFlow()
 
   @OptIn(ExperimentalCoroutinesApi::class)
-  val currentFragment = currentGroup.filter { it.isNotEmpty() }.flatMapConcat {
-    flowOf(getFragmentClassForChannel(it))
-  }.stateIn(viewModelScope, SharingStarted.Lazily, null)
+  val currentFragment = currentChannelModel
+    .flatMapConcat {
+      flowOf(getFragmentClassForChannel(it))
+    }.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
   init {
     viewModelScope.launch {
@@ -208,8 +224,11 @@ class MainViewModel : ViewModel() {
     _currentIndex.value = currentIndex
   }
 
-  fun changeCurrentGroup(currentGroup: String) {
-    _currentGroup.value = currentGroup
+  /**
+   * 通过 model 修改当前索引的位置
+   */
+  fun changeCurrentIndex(model: LiveChannelModel) {
+    changeCurrentIndex(channelModelList.value.indexOf(model))
   }
 
   /**

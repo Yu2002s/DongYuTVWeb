@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.drake.engine.base.EngineActivity
 import com.drake.engine.utils.AppUtils
@@ -60,7 +59,7 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
     insetsController.hide(WindowInsetsCompat.Type.systemBars())
 
     // 判断cpu型号决定需不需要升级
-    isUpgrade = !Build.SUPPORTED_ABIS.any {
+    isUpgrade = BuildConfig.DEBUG || !Build.SUPPORTED_ABIS.any {
       it.contains("arm64")
     }
 
@@ -223,7 +222,7 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
           return true
         }
         Log.d(TAG, "onKeyDown: Ok")
-        livePlayerFragment.playOrPause()
+        livePlayerFragment.resumeOrPause()
       }
 
       // 静音

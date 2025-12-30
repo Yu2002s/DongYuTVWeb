@@ -1,22 +1,34 @@
 package xyz.jdynb.tv.enums
 
+import xyz.jdynb.tv.fragment.SimpleLivePlayerFragment
 import xyz.jdynb.tv.fragment.YspLivePlayerFragment
 
 /**
  * 播放器配置
  */
-enum class LivePlayer(private val channelTypes: Array<String>, val clazz: Class<*>) {
+enum class LivePlayer(val player: String, val clazz: Class<*>) {
   /**
    * 央视频播放器
    */
-  YSP(arrayOf("央视", "卫视"), YspLivePlayerFragment::class.java);
+  YSP("ysp", YspLivePlayerFragment::class.java),
+
+  /**
+   * 简单视频播放器
+   */
+  SIMPLE("simple", SimpleLivePlayerFragment::class.java)
+
+  ;
 
   companion object {
 
     @JvmStatic
-    fun getLivePlayerForChannelType(channelType: String): LivePlayer {
-      return LivePlayer.entries.find { it.channelTypes.contains(channelType) } ?: YSP
+    fun getLivePlayerForPlayer(player: String): LivePlayer {
+      return LivePlayer.entries.find { it.player == player } ?: YSP
     }
 
+    @JvmStatic
+    fun getLivePlayerForClass(clazz: Class<*>): LivePlayer {
+      return LivePlayer.entries.find { it.clazz == clazz } ?: YSP
+    }
   }
 }

@@ -22,7 +22,7 @@ import xyz.jdynb.tv.MainViewModel
 import xyz.jdynb.tv.R
 import xyz.jdynb.tv.databinding.DialogChannelListBinding
 import xyz.jdynb.tv.databinding.ItemListGroupBinding
-import xyz.jdynb.tv.model.LiveChannelGroupModel
+import xyz.jdynb.tv.model.LiveChannelTypeModel
 import xyz.jdynb.tv.model.LiveChannelModel
 import xyz.jdynb.tv.utils.isTv
 
@@ -110,7 +110,7 @@ class ChannelListDialog(
       R.id.tv_channel.onClick {
         val model = getModel<LiveChannelModel>()
         setChecked(modelPosition, true)
-        mainViewModel.changeCurrentIndex(model.number - 1)
+        mainViewModel.changeCurrentIndex(model)
         dismiss()
       }
     }
@@ -118,7 +118,7 @@ class ChannelListDialog(
     binding.rvGroup.dividerSpace(10).setup {
       singleMode = true
 
-      addType<LiveChannelGroupModel>(R.layout.item_list_group)
+      addType<LiveChannelTypeModel>(R.layout.item_list_group)
 
       onCreate {
         getBinding<ItemListGroupBinding>().root.onFocusChangeListener =
@@ -130,14 +130,14 @@ class ChannelListDialog(
       }
 
       onChecked { position, checked, allChecked ->
-        val model = getModel<LiveChannelGroupModel>(position)
+        val model = getModel<LiveChannelTypeModel>(position)
         model.isSelected = checked
 
         if (binding.rvChannel.isComputingLayout) {
           return@onChecked
         }
         binding.rvChannel.models = model.channelList.onEach { it.isSelected = false }
-        if (mainViewModel.currentGroup.value == model.channelType) {
+        if (mainViewModel.currentChannelType.value == model.channelType) {
           val checkedPosition = model.channelList.indexOfFirst {
             it.number == mainViewModel.currentChannelModel.value.number
           }
@@ -165,13 +165,12 @@ class ChannelListDialog(
       dismiss()
     }
   }
-
   override fun initData() {
     activity.lifecycleScope.launch {
-      mainViewModel.channelGroupModelList.collect {
+      mainViewModel.channelTypeModelList.collect {
         binding.rvGroup.models = it
         val checkedPosition = it.indexOfFirst { model ->
-          model.channelType == mainViewModel.currentGroup.value
+          model.channelType == mainViewModel.currentChannelType.value
         }
         if (checkedPosition == -1) {
           return@collect

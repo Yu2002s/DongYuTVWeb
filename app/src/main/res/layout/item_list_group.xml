@@ -8,7 +8,7 @@
 
         <variable
             name="m"
-            type="xyz.jdynb.tv.model.LiveChannelGroupModel" />
+            type="xyz.jdynb.tv.model.LiveChannelTypeModel" />
 
     </data>
 

@@ -1,12 +1,10 @@
 package xyz.jdynb.tv.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.webkit.WebResourceResponse
 import xyz.jdynb.tv.enums.JsType
 import xyz.jdynb.tv.model.LiveChannelModel
-import xyz.jdynb.tv.utils.JsManager.execJs
 
 /**
  * 央视频直播播放器实现
@@ -23,8 +21,10 @@ class YspLivePlayerFragment : LivePlayerFragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+  }
 
-    webView.loadUrl("$YSP_HOME?pid=${mainViewModel.currentChannelModel.value.pid}")
+  override fun onLoadUrl(url: String?) {
+    webView.loadUrl("${url}?pid=${mainViewModel.currentChannelModel.value.pid}")
   }
 
   /**
@@ -33,15 +33,14 @@ class YspLivePlayerFragment : LivePlayerFragment() {
    * @param  channel 直播频道
    */
   override fun play(channel: LiveChannelModel) {
-    execJs(JsType.PLAY_YSP, "pid" to channel.pid, "vid" to channel.streamId)
+    execJs(JsType.PLAY, "pid" to channel.pid, "vid" to channel.streamId)
   }
 
   /**
    * 播放或暂停
    */
-  override fun playOrPause() {
-    Log.i(TAG, "playOrPause")
-    execJs(JsType.PLAY_PAUSE_YSP)
+  override fun resumeOrPause() {
+    super.resumeOrPause()
   }
 
   /**
@@ -50,28 +49,14 @@ class YspLivePlayerFragment : LivePlayerFragment() {
    * @param url 加载的 url
    */
   override fun onPageFinished(url: String) {
-    val currentChannelModel = mainViewModel.currentChannelModel.value
+    // val currentChannelModel = mainViewModel.currentChannelModel.value
 
     execJs(
-      JsType.CLEAR_YSP to null,
-      JsType.FULLSCREEN_YSP to null,
-      JsType.PLAY_YSP to arrayOf(
+      JsType.INIT to null,
+      /*JsType.PLAY to arrayOf(
         "pid" to currentChannelModel.pid,
         "vid" to currentChannelModel.streamId
-      )
+      )*/
     )
-  }
-
-  /**
-   * 拦截请求
-   *
-   * @param url 请求的地址 url
-   */
-  override fun shouldInterceptRequest(url: String): WebResourceResponse? {
-    if (url.endsWith(".webp")) {
-      // 禁止加载图片资源
-      return createEmptyResponse("image/*")
-    }
-    return null
   }
 }

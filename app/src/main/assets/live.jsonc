@@ -2,7 +2,9 @@
   // 播放器配置
   "player": [
     {
+      "id": "ysp",
       "name": "ysp", // 播放器名称，一般程序中枚举指定（扩展的话默认指定 simple）
+      "url": "https://www.yangshipin.cn/tv/home", // 指定播放地址(name为simple时不需要指定)
       // 播放器需要执行的脚本
       "script": {
         "async": true, // 是否异步执行脚本（同步的话脚本会顺序执行）
@@ -24,6 +26,17 @@
         "url": [], // 需要排除的地址
         "suffix": ["webp"] // 需要排除的地址后缀
       }
+    },
+    {
+      "id": "hongkong",
+      "name": "simple",
+      "script": {
+        "init": [],
+        "play": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/hongkong/play.js"
+        ],
+        "resume_pause": []
+      }
     }
   ],
   // 播放频道列表
@@ -31,7 +44,7 @@
     {
       // 播放频道类型
       "channelType": "央视",
-      // 需要播放的播放器
+      // 需要播放的播放器（播放器id)
       "player": "ysp",
       // 频道列表
       "channelList": [
@@ -474,6 +487,15 @@
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202412/005fd504f809ab28ec8cdd5d34d3886f0611ddefa20ebcc0f3f7dc176ad528c7.png?imageMogr2/format/webp",
           "streamId": "2019927403",
           "number": 62
+        },
+        {
+          "channelName": "香港卫视",
+          "tvLogo": "",
+          "number": 63,
+          "player": "simple",
+          "args": {
+            "liveUrl": "https://www.hkstv.tv/webcast/livestream/mutfysrq/playlist.m3u8?hls_ctx=7144stj2"
+          }
         }
       ]
     }

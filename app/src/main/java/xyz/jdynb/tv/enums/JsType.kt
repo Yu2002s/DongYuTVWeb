@@ -1,15 +1,8 @@
 package xyz.jdynb.tv.enums
 
-enum class JsType(val filename: String, val liveSource: LiveSource) {
-  FULLSCREEN_YSP("auto_fullscreen", LiveSource.YSP),
-
-  CLEAR_YSP("clear", LiveSource.YSP),
-
-  PLAY_YSP("play", LiveSource.YSP),
-
-  PLAY_PAUSE_YSP("play_pause", LiveSource.YSP)
-
+enum class JsType(val type: String) {
+  INIT("init"),
+  PLAY("play"),
+  RESUME_PAUSE("resume_pause")
   ;
-
-  val typeName = filename + liveSource.source
 }

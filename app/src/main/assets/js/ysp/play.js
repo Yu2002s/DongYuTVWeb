@@ -89,7 +89,7 @@
 
     if (live) {
         live.videoConfig.pid = '{{pid}}'
-        live.videoConfig.vid = '{{vid}}'
+        live.videoConfig.vid = '{{streamId}}'
         console.log('videoConfig: pid=' + live.videoConfig.pid + "vid=" + live.videoConfig.vid)
     }
 })();

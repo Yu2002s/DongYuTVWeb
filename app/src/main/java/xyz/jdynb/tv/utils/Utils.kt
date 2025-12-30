@@ -24,6 +24,30 @@ fun Any?.toBundle(): Bundle {
   } ?: Bundle.EMPTY
 }
 
+fun Any?.toArray(): Array<Pair<String, Any>> {
+  return this?.javaClass?.let { clazz ->
+    val fields = clazz.declaredFields
+    val list = mutableListOf<Pair<String, Any>>()
+    fields.forEach {  field ->
+      field.isAccessible = true
+      val name = field.name
+      val value = field.get(this)
+      if (value is Map<*, *>) {
+        value.forEach {
+          if (it.value != null) {
+            list.add((it.key as String) to it.value!!)
+          }
+        }
+      } else {
+        if (value != null) {
+          list.add(name to value)
+        }
+      }
+    }
+    list.toTypedArray()
+  } ?: arrayOf()
+}
+
 inline fun <reified T> Bundle.toObj(): T? {
   val objClass = T::class.java
   val obj = objClass.getDeclaredConstructor().newInstance()
