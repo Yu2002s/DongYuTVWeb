@@ -4,11 +4,26 @@ import com.drake.engine.utils.EncryptUtil
 import xyz.jdynb.tv.DongYuTVApplication
 import java.io.File
 import java.io.IOException
+import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.StandardCharsets
 
 object NetworkUtils {
+
+  fun String.inputStream(headers: Map<String, String>? = null): InputStream? {
+    return try {
+      createConnection(this).apply {
+        headers?.let {
+          for ((key, value) in headers) {
+            setRequestProperty(key, value)
+          }
+        }
+      }.inputStream
+    } catch (_: IOException) {
+      null
+    }
+  }
 
   @Throws(IOException::class)
   private fun createConnection(url: String): HttpURLConnection {
@@ -16,8 +31,7 @@ object NetworkUtils {
     connection.connectTimeout = 3000
     connection.readTimeout = 3000
     connection.requestMethod = "GET"
-    // connection.setRequestProperty("Content-Type", "application/json")
-    connection.setRequestProperty("Accept", "application/json")
+    connection.setRequestProperty("Accept", "*/*")
     return connection
   }
 

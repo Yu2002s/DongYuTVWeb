@@ -1,13 +1,18 @@
 package xyz.jdynb.tv.fragment
 
 import android.content.Context
+import android.net.Uri
+import android.util.Log
 import android.webkit.JavascriptInterface
+import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.widget.Toast
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import xyz.jdynb.tv.model.LiveChannelModel
+import xyz.jdynb.tv.utils.NetworkUtils
+import xyz.jdynb.tv.utils.NetworkUtils.inputStream
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -15,6 +20,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.StandardCharsets
 import java.util.Locale
+import androidx.core.net.toUri
 
 
 class SimpleLivePlayerFragment : LivePlayerFragment() {
@@ -134,20 +140,53 @@ class SimpleLivePlayerFragment : LivePlayerFragment() {
     )
   }
 
-  override fun shouldInterceptRequest(url: String): WebResourceResponse? {
-    val shouldIntercept = super.shouldInterceptRequest(url)
+  protected fun createHlsJsResponse(): WebResourceResponse {
+    val hlsJs = requireContext().assets.open("js/lib/dy-hls.min.js")
+    // 创建一个空的响应
+    return WebResourceResponse(
+      "application/javascript",
+      "UTF-8",
+      hlsJs
+    )
+  }
+
+  override fun shouldInterceptRequest(
+    url: String,
+    request: WebResourceRequest
+  ): WebResourceResponse? {
+    val shouldIntercept = super.shouldInterceptRequest(url, request)
     if (url.endsWith("dy-crypto-js.min.js")) {
       // 注入 CRYPTO.JS
       return createCryptoJsResponse()
     } else if (url.endsWith("dy-http-util")) {
       // 注入网络请求 JS
       return createHttpUtilJsResponse()
+    } else if (url.endsWith("dy-hls.min.js")) {
+      return createHlsJsResponse()
     }
+
+    if (url.contains(".m3u8") || url.contains(".ts")) {
+      val uri = url.toUri()
+      return WebResourceResponse(
+        "application/vnd.apple.mpegurl", "UTF-8", url
+          .inputStream(
+            mapOf(
+              "Referer" to uri.scheme + "://" + uri.host + "/",
+              "User-Agent" to USER_AGENT,
+            )
+          )
+      )
+    }
+
     return shouldIntercept
   }
 
+  private val jsBridge by lazy {
+    JSBridge(requireContext())
+  }
+
   override fun onLoadUrl(url: String?) {
-    webView.addJavascriptInterface(JSBridge(requireContext()), "JSBridge")
+    webView.addJavascriptInterface(jsBridge, "JSBridge")
     webView.loadUrl("file:///android_asset/html/simple_player.html")
   }
 
@@ -155,10 +194,10 @@ class SimpleLivePlayerFragment : LivePlayerFragment() {
     super.onPageFinished(url)
 
     // 调试代码
-    /*requireContext().assets.open("js/jiangsu/init.js").use {
+    /*requireContext().assets.open("js/anhui/init.js").use {
       it.readBytes().toString(Charsets.UTF_8)
     }.let {
-     val js = it.replace("{{liveUrl}}", "https://litchi-play-encrypted-site.jstv.com/4klive/jsws4kpro.m3u8")
+      val js = it.replace("{{channelName}}", "安徽卫视")
       webView.evaluateJavascript(js, null)
     }*/
   }

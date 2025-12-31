@@ -31,6 +31,7 @@
     </style>
     <script src="../js/lib/dy-http-util.js"></script>
     <script src="../js/lib/dy-crypto-js.min.js"></script>
+    <script src="../js/lib/dy-hls.min.js"></script>
 </head>
 <body>
 <video autoplay id="video"></video>
@@ -59,10 +60,77 @@
         }
     }
 
+    let hls = null;
+
     function playLive(url) {
         video.volume = 1
-        video.src = url
-        video.play()
+        
+        // 检查是否支持 HLS.js 且为 m3u8 文件
+        if (Hls.isSupported() && url.includes('.m3u8')) {
+            if (hls) {
+                hls.destroy();
+            }
+            
+            hls = new Hls({
+                debug: false,
+                xhrSetup: function(xhr, url) {
+                    // 这里的请求会被 shouldInterceptRequest 拦截
+                    // 不需要手动设置 Referer,因为会在 shouldInterceptRequest 中处理
+                }
+            });
+            
+            hls.loadSource(url);
+            hls.attachMedia(video);
+            
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                video.play();
+            });
+            
+            hls.on(Hls.Events.ERROR, function(event, data) {
+                console.error('HLS Error:', data);
+                if (data.fatal) {
+                    switch(data.type) {
+                        case Hls.ErrorTypes.NETWORK_ERROR:
+                            console.log('Network error, trying to recover');
+                            hls.startLoad();
+                            break;
+                        case Hls.ErrorTypes.MEDIA_ERROR:
+                            console.log('Media error, trying to recover');
+                            hls.recoverMediaError();
+                            break;
+                        default:
+                            console.log('Fatal error, destroying HLS instance');
+                            hls.destroy();
+                            break;
+                    }
+                }
+            });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            // iOS Safari 原生支持
+            video.src = url;
+            video.play();
+        } else {
+            // 其他格式直接播放
+            video.src = url;
+            video.play();
+        }
+    }
+
+    function playLiveWithHeaders(url, headers) {
+        console.log('headers:' + headers)
+        fetch(url, {
+          headers,
+        })
+        .then(response => response.blob())
+        .then(blob => {
+          console.log(blob);
+
+            const url = URL.createObjectURL(blob);
+            console.log('blob:' + url);
+            video.src = url;
+            video.play()
+
+        })
     }
 </script>
 </html>

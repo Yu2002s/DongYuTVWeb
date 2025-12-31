@@ -44,7 +44,7 @@ abstract class LivePlayerFragment: Fragment(), Playable {
 
     private const val TAG = "LivePlayerFragment"
 
-    private const val USER_AGENT =
+    const val USER_AGENT =
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
 
     private const val JS_INTERFACE_NAME = "AndroidVideo"
@@ -276,7 +276,7 @@ abstract class LivePlayerFragment: Fragment(), Playable {
    *
    * @return null 则默认加载，否则指定加载资源
    */
-  protected open fun shouldInterceptRequest(url: String): WebResourceResponse? {
+  protected open fun shouldInterceptRequest(url: String, request: WebResourceRequest): WebResourceResponse? {
     if (playerConfig.exclude?.url?.any { it == url } == true) {
       // 通过地址拦截
       return createEmptyResponse("*/*")
@@ -284,6 +284,7 @@ abstract class LivePlayerFragment: Fragment(), Playable {
       // 通过后缀拦截
       return createEmptyResponse("*/*")
     }
+
     return null
   }
 
@@ -326,7 +327,7 @@ abstract class LivePlayerFragment: Fragment(), Playable {
 
         val url = request?.url?.toString() ?: return createEmptyResponse()
 
-        return shouldInterceptRequest(url) ?: super.shouldInterceptRequest(view, request)
+        return shouldInterceptRequest(url, request) ?: super.shouldInterceptRequest(view, request)
       }
 
       override fun shouldOverrideUrlLoading(
