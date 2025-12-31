@@ -9,7 +9,7 @@
       // 指定播放地址(name为simple时不需要指定)
       // 播放器需要执行的脚本
       "script": {
-        "async": true,
+        "async": false,
         // 是否异步执行脚本（同步的话脚本会顺序执行）
         // 页面加载完成初始化后需要执行的脚本
         "init": [
@@ -115,6 +115,18 @@
         ],
         "play": [
           "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/zhejiang/play.js"
+        ]
+      }
+    },
+    {
+      "id": "anhui",
+      "name": "simple",
+      "script": {
+        "init": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/anhui/init.js"
+        ],
+        "play": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/anhui/play.js"
         ]
       }
     }
@@ -960,6 +972,52 @@
           "channelName": "之江纪录",
           "tvLogo": "https://oss.cztv.com/ucc/20221019/c797cd82a3d44ca8a54f19a7e636b8f6.jpg",
           "args": { "code": "12" }
+        }
+      ]
+    },
+    {
+      "channelType": "安徽卫视",
+      "player": "anhui",
+      "channelList": [
+        {
+          "number": 123,
+          "tvLogo": "https://image.ahtv.cn/2021012210f12b01689743e3d415947bf449fbd3.jpg",
+          "channelName": "安徽卫视"
+        },
+        {
+          "number": 124,
+          "tvLogo": "https://image.ahtv.cn/20210202e34fe2c5ae0f7d2e277508618b1edb34.jpg",
+          "channelName": "经济生活"
+        },
+        {
+          "number": 125,
+          "tvLogo": "https://image.ahtv.cn/20210202370aac2caf7ceb06c5150ff1fc83a13c.jpg",
+          "channelName": "综艺体育"
+        },
+        {
+          "number": 126,
+          "tvLogo": "https://image.ahtv.cn/2021020248b7d344e7b29577fb84878d1d3bfafd.jpg",
+          "channelName": "影视频道"
+        },
+        {
+          "number": 127,
+          "tvLogo": "https://image.ahtv.cn/20210122c9e4bae963a30d400b17f576d33c100f.jpg",
+          "channelName": "安徽公共"
+        },
+        {
+          "number": 128,
+          "tvLogo": "https://image.ahtv.cn/202101221943fa60c4d19ddafa6ed7084813276a.jpg",
+          "channelName": "农业·科教"
+        },
+        {
+          "number": 129,
+          "tvLogo": "https://image.ahtv.cn/20210202851404cef529356babe3512fd17ce91f.jpg",
+          "channelName": "安徽国际"
+        },
+        {
+          "number": 130,
+          "tvLogo": "https://image.ahtv.cn/2021020270a9f8acec670518ab80a1281f9dbb68.jpg",
+          "channelName": "移动电视"
         }
       ]
     }
