@@ -33,25 +33,52 @@ async function getShanDongLiveUrl(channelId) {
     // console.log('body: ' + body)
     // console.log(`https://feiying.litenews.cn/api/v1/auth/exchange?t=${now}&s=${s}`)
 
-    const response = await HttpUtil.post(`https://feiying.litenews.cn/api/v1/auth/exchange?t=${now}&s=${s}`, body, {
-        headers: {
-            "accept": "*/*",
-            "accept-language": "zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7",
-            "content-type": "text/plain",
-            "priority": "u=1, i",
-            "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
-            "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": "\"Windows\"",
-            "sec-fetch-dest": "empty",
-            "sec-fetch-mode": "cors",
-            "sec-fetch-site": "cross-site",
-            "Referer": "https://v.iqilu.com/"
-        },
-        responseType: 'text'
-    })
-     // console.log('response:' + response.data)
-     const result = JSON.parse(decrypt(response.data))
-     playLive(result.data)
+    if (typeof window.HttpUtil !== 'undefined') {
+        const response = await HttpUtil.post(`https://feiying.litenews.cn/api/v1/auth/exchange?t=${now}&s=${s}`, body, {
+            headers: {
+                "accept": "*",
+                "accept-language": "zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7",
+                "content-type": "text/plain",
+                "priority": "u=1, i",
+                "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+                "sec-ch-ua-mobile": "?0",
+                "sec-ch-ua-platform": "\"Windows\"",
+                "sec-fetch-dest": "empty",
+                "sec-fetch-mode": "cors",
+                "sec-fetch-site": "cross-site",
+                "Referer": "https://v.iqilu.com/"
+            },
+            responseType: 'text'
+        })
+        const result = JSON.parse(decrypt(response.data))
+        playLive(result.data)
+    } else {
+        const response = await fetch(`https://feiying.litenews.cn/api/v1/auth/exchange?t=${now}&s=${s}`, {
+            method: 'POST',
+            headers: {
+                "accept": "*",
+                "accept-language": "zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7",
+                "content-type": "text/plain",
+                "priority": "u=1, i",
+                "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+                "sec-ch-ua-mobile": "?0",
+                "sec-ch-ua-platform": "\"Windows\"",
+                "sec-fetch-dest": "empty",
+                "sec-fetch-mode": "cors",
+                "sec-fetch-site": "cross-site",
+                "Referer": "https://v.iqilu.com/",
+                "X-Referer": "https://v.iqilu.com/",
+                "X-Body": body,
+            },
+            body,
+        }).then(res => {
+            return res.text()
+        })
+
+         // console.log('response:' + response)
+         const result = JSON.parse(decrypt(response))
+         playLive(result.data)
+    }
 }
 
 const channelId = '{{channelId}}'
