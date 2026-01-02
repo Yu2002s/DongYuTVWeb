@@ -126,7 +126,7 @@ abstract class LivePlayerFragment :
   fun execJs(vararg args: Pair<JsType, Array<Pair<String, Any?>>?>) {
     viewLifecycleOwner.lifecycleScope.launch {
       args.forEach {
-        webView.execJs(playerConfig,it.first, *(it.second ?: arrayOf()))
+        webView.execJs(playerConfig, it.first, *(it.second ?: arrayOf()))
       }
     }
   }

@@ -18,6 +18,8 @@ engine = "0.0.74"
 recyclerview = "1.4.0"
 kotlinxCoroutines = "1.10.2"
 localbroadcastmanager = "1.0.0"
+tbssdk = "44286"
+webx5core_arm64_v8a = "1.0.2"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
@@ -39,6 +41,8 @@ brv = { group = "com.github.liangjingkanji", name = "BRV", version.ref = "brv" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 androidx-localbroadcastmanager = { module = "androidx.localbroadcastmanager:localbroadcastmanager", version.ref = "localbroadcastmanager" }
+tbssdk = { module = "com.tencent.tbs:tbssdk", version.ref = "tbssdk" }
+webx5core_arm64_v8a = { module = "com.github.HeartHappy.webX5Core:webx5core_arm64_v8a", version.ref = "webx5core_arm64_v8a" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

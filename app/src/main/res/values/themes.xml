@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.DongYuTvWeb" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorAccent">#039BE5</item>
+        <item name="android:colorPrimary">@android:color/holo_red_light</item>
         <item name="android:windowFullscreen">true</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@color/black</item>

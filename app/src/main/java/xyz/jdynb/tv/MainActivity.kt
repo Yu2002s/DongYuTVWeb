@@ -73,14 +73,6 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
     binding.lifecycleOwner = this
 
     channelListDialog = ChannelListDialog(this, mainViewModel)
-
-    // initLivePlayerFragment()
-  }
-
-  private fun initLivePlayerFragment() {
-    supportFragmentManager.beginTransaction()
-      .replace(R.id.fragment, livePlayerFragment)
-      .commitNow()
   }
 
   override fun initData() {
