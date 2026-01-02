@@ -19,6 +19,9 @@ dependencyResolutionManagement {
     maven {
       setUrl("https://jitpack.io")
     }
+    maven {
+      setUrl("https://maven.mozilla.org/maven2/")
+    }
   }
 }
 

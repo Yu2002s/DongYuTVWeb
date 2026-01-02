@@ -11,12 +11,18 @@ import java.nio.charset.StandardCharsets
 
 object NetworkUtils {
 
-  fun String.inputStream(headers: Map<String, String>? = null): InputStream? {
+  fun String.inputStream(method: String = "GET",headers: Map<String, String>? = null, body: String? = null): InputStream? {
     return try {
-      createConnection(this).apply {
+      createConnection(this, method).apply {
         headers?.let {
           for ((key, value) in headers) {
             setRequestProperty(key, value)
+          }
+        }
+        body?.let {
+          doOutput = true
+          outputStream.use {
+            it.write(body.toByteArray())
           }
         }
       }.inputStream
@@ -26,11 +32,11 @@ object NetworkUtils {
   }
 
   @Throws(IOException::class)
-  private fun createConnection(url: String): HttpURLConnection {
+  private fun createConnection(url: String, method: String = "GET"): HttpURLConnection {
     val connection = URL(url).openConnection() as HttpURLConnection
     connection.connectTimeout = 3000
     connection.readTimeout = 3000
-    connection.requestMethod = "GET"
+    connection.requestMethod = method
     connection.setRequestProperty("Accept", "*/*")
     return connection
   }

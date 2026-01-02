@@ -1,6 +1,5 @@
 package xyz.jdynb.tv
 
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -160,6 +159,9 @@ class MainViewModel : ViewModel() {
     } ?: getDefaultChannelModel()
   }
 
+  /**
+   * 获取默认的频道
+   */
   private fun getDefaultChannelModel() = LiveChannelModel(
     channelName = "CCTV1",
     pid = "600001859",

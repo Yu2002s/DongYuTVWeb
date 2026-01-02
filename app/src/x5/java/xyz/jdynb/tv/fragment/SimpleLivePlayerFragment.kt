@@ -1,30 +1,27 @@
 package xyz.jdynb.tv.fragment
 
 import android.content.Context
-import android.net.Uri
-import android.util.Log
 import android.webkit.JavascriptInterface
-import android.webkit.WebResourceRequest
-import android.webkit.WebResourceResponse
+import android.webkit.MimeTypeMap
 import android.widget.Toast
+import androidx.core.net.toUri
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest
+import com.tencent.smtt.export.external.interfaces.WebResourceResponse
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import xyz.jdynb.music.utils.SpUtils.remove
 import xyz.jdynb.tv.model.LiveChannelModel
-import xyz.jdynb.tv.utils.NetworkUtils
 import xyz.jdynb.tv.utils.NetworkUtils.inputStream
 import java.io.BufferedReader
-import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.StandardCharsets
 import java.util.Locale
-import androidx.core.net.toUri
+import kotlin.text.isNullOrEmpty
 
-
-class SimpleLivePlayerFragment : LivePlayerFragment() {
-
+class SimpleLivePlayerFragment: LivePlayerFragment() {
   companion object {
 
     private const val TAG = "SimpleLivePlayerFragment"
@@ -131,18 +128,16 @@ class SimpleLivePlayerFragment : LivePlayerFragment() {
   }
 
   protected fun createHttpUtilJsResponse(): WebResourceResponse {
-    val cryptoJs = requireContext().assets.open("js/lib/dy-http-util.js")
-    // 创建一个空的响应
+    val httpUtil = requireContext().assets.open("js/lib/dy-http-util.js")
     return WebResourceResponse(
       "application/javascript",
       "UTF-8",
-      cryptoJs
+      httpUtil
     )
   }
 
   protected fun createHlsJsResponse(): WebResourceResponse {
     val hlsJs = requireContext().assets.open("js/lib/dy-hls.min.js")
-    // 创建一个空的响应
     return WebResourceResponse(
       "application/javascript",
       "UTF-8",
@@ -158,27 +153,38 @@ class SimpleLivePlayerFragment : LivePlayerFragment() {
     if (url.endsWith("dy-crypto-js.min.js")) {
       // 注入 CRYPTO.JS
       return createCryptoJsResponse()
-    } else if (url.endsWith("dy-http-util")) {
+    } /*else if (url.endsWith("dy-http-util")) {
       // 注入网络请求 JS
       return createHttpUtilJsResponse()
-    } else if (url.endsWith("dy-hls.min.js")) {
+    } */else if (url.endsWith("dy-hls.min.js")) {
       return createHlsJsResponse()
     }
 
-    if (url.contains(".m3u8") || url.contains(".ts")) {
-      val uri = url.toUri()
-      return WebResourceResponse(
-        "application/vnd.apple.mpegurl", "UTF-8", url
-          .inputStream(
-            mapOf(
-              "Referer" to uri.scheme + "://" + uri.host + "/",
-              "User-Agent" to USER_AGENT,
-            )
-          )
-      )
+    val referer = request.requestHeaders["X-Referer"]
+
+    if (referer.isNullOrEmpty() && (!url.contains(".m3u8") && !url.contains(".ts"))) {
+      // 没有自定义 Referer 加上 非 M3U8、TS 才进行默认请求，否则下面进行重写
+      return shouldIntercept
     }
 
-    return shouldIntercept
+    request.requestHeaders["X-Referer"]?.remove()
+    val body = request.requestHeaders["X-Body"]
+    request.requestHeaders["X-Body"]?.remove()
+
+    val urlObj = url.toUri()
+    val extension = urlObj.path?.substringAfterLast(".") ?: return shouldIntercept
+    val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+
+    request.requestHeaders.put("Referer", (referer ?: (urlObj.scheme + "://" + urlObj.host + "/")))
+
+    return WebResourceResponse(
+      mimeType, "UTF-8", url
+        .inputStream(
+          method = request.method,
+          request.requestHeaders,
+          body = body
+        )
+    )
   }
 
   private val jsBridge by lazy {
@@ -187,7 +193,10 @@ class SimpleLivePlayerFragment : LivePlayerFragment() {
 
   override fun onLoadUrl(url: String?) {
     webView.addJavascriptInterface(jsBridge, "JSBridge")
-    webView.loadUrl("file:///android_asset/html/simple_player.html")
+    webView.loadUrl(
+      "file:///android_asset/html/simple_player.html",
+      mapOf("User-Agent" to USER_AGENT)
+    )
   }
 
   override fun onPageFinished(url: String) {

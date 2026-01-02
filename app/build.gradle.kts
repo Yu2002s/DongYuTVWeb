@@ -1,3 +1,7 @@
+import com.android.build.api.variant.FilterConfiguration
+import java.text.SimpleDateFormat
+import java.util.Date
+
 plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.kotlin.android)
@@ -56,8 +60,46 @@ android {
     jvmTarget = "11"
   }
 
-  aaptOptions {
-    noCompress("apk")
+  flavorDimensions("example")
+
+  productFlavors {
+    create("webview") {
+      // 默认配置
+    }
+
+    create("x5") {
+      applicationIdSuffix = ".x5"
+    }
+
+    // 限制太多，不支持
+    /*create("gecko") {
+      applicationIdSuffix = ".gecko"
+    }*/
+  }
+
+  /*splits {
+    abi {
+      isEnable = true // 开启不同cpu apk 拆分
+      reset() // 重置默认的cpu平台
+      include("armeabi-v7a", "arm64-v8a", "x86", "armeabi") // 只打包 v8、v7两种架构的安装包
+      isUniversalApk = true // 全量包
+    }
+  }*/
+
+  applicationVariants.all {
+    outputs.all {
+
+      this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+
+      val flavorNames = productFlavors.map { it.name }
+      val flavorNameStr = flavorNames.joinToString("_")
+      val createTime = SimpleDateFormat("yyyyMMdd_HHmm").format(Date())
+      val abiName = getFilter(FilterConfiguration.FilterType.ABI.name) ?: "all"
+
+      val newName = "app_${flavorNameStr}_${buildType.name}_v${versionName}_${createTime}_$abiName.apk"
+      outputFileName = newName
+      println("配置 APK 文件名: $newName")
+    }
   }
 }
 
@@ -75,20 +117,22 @@ dependencies {
   implementation(libs.kotlinx.coroutines.core)
   implementation(libs.kotlinx.coroutines.android)
   // https://mvnrepository.com/artifact/androidx.lifecycle/lifecycle-viewmodel
-  implementation("androidx.lifecycle:lifecycle-viewmodel:2.10.0")
+  implementation(libs.androidx.lifecycle.viewmodel)
   // https://mvnrepository.com/artifact/androidx.fragment/fragment-ktx
-  implementation("androidx.fragment:fragment-ktx:1.8.9")
+  implementation(libs.androidx.fragment.ktx)
   // https://mvnrepository.com/artifact/androidx.fragment/fragment
-  implementation("androidx.fragment:fragment:1.8.9")
+  implementation(libs.androidx.fragment)
   // https://mvnrepository.com/artifact/androidx.activity/activity-ktx
-  implementation("androidx.activity:activity-ktx:1.12.2")
+  implementation(libs.androidx.activity.ktx)
   implementation("io.github.jonanorman.android.webviewup:core:0.1.0")
   implementation("io.github.jonanorman.android.webviewup:download-source:0.1.0")
   implementation(libs.androidx.localbroadcastmanager)
+  // "geckoImplementation"("org.mozilla.geckoview:geckoview:93.0.20210927210923")
   // implementation(files("libs/tbs_sdk-44382-202411081743-release.aar"))
-  // implementation("com.github.HeartHappy.webX5Core:webx5core_arm64_v8a:1.0.2")
+  "x5Implementation"("com.github.HeartHappy.webX5Core:webx5core_arm64_v8a:1.0.2")
+  // "x5Implementation"("com.github.HeartHappy.webX5Core:webx5core_armeabi_v7a:1.0.2")
   // implementation(project(":x5core_arm64_v8a"))
-  // implementation("com.tencent.tbs:tbssdk:44286")
+  "x5Implementation"("com.tencent.tbs:tbssdk:44286")
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit)
   androidTestImplementation(libs.androidx.espresso.core)
