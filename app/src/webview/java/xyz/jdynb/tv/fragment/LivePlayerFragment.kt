@@ -35,10 +35,11 @@ import xyz.jdynb.tv.model.LiveChannelModel
 import xyz.jdynb.tv.model.LiveModel
 import xyz.jdynb.tv.model.LivePlayerModel
 import xyz.jdynb.tv.utils.JsManager.execJs
+import xyz.jdynb.tv.utils.NetworkUtils.inputStream
 import xyz.jdynb.tv.utils.toArray
 import java.io.ByteArrayInputStream
 
-abstract class LivePlayerFragment: Fragment(), Playable {
+abstract class LivePlayerFragment : Fragment(), Playable {
 
   companion object {
 
@@ -67,6 +68,8 @@ abstract class LivePlayerFragment: Fragment(), Playable {
    * 播放器名称
    */
   lateinit var playerName: String
+
+  protected var loadUrl = ""
 
   /**
    * 播放器配置
@@ -121,7 +124,9 @@ abstract class LivePlayerFragment: Fragment(), Playable {
 
     initWebView(webView)
 
-    onLoadUrl(playerConfig.url)
+    val url = mainViewModel.liveModel.player.find { it.name == playerName }?.url
+    loadUrl = url ?: ""
+    onLoadUrl(url)
 
     viewLifecycleOwner.lifecycleScope.launch {
       mainViewModel.currentChannelModel.collectLatest {
@@ -161,7 +166,7 @@ abstract class LivePlayerFragment: Fragment(), Playable {
   fun execJs(vararg args: Pair<JsType, Array<Pair<String, Any?>>?>) {
     viewLifecycleOwner.lifecycleScope.launch {
       args.forEach {
-        webView.execJs(playerConfig,it.first, *(it.second ?: arrayOf()))
+        webView.execJs(playerConfig, it.first, *(it.second ?: arrayOf()))
       }
     }
   }
@@ -276,7 +281,10 @@ abstract class LivePlayerFragment: Fragment(), Playable {
    *
    * @return null 则默认加载，否则指定加载资源
    */
-  protected open fun shouldInterceptRequest(url: String, request: WebResourceRequest): WebResourceResponse? {
+  protected open fun shouldInterceptRequest(
+    url: String,
+    request: WebResourceRequest
+  ): WebResourceResponse? {
     if (playerConfig.exclude?.url?.any { it == url } == true) {
       // 通过地址拦截
       return createEmptyResponse("*/*")
@@ -371,13 +379,44 @@ abstract class LivePlayerFragment: Fragment(), Playable {
     )
   }
 
-  protected fun createCryptoJsResponse(): WebResourceResponse {
-    val cryptoJs = requireContext().assets.open("js/lib/dy-crypto-js.min.js")
+  protected fun createResponse(
+    url: String,
+    mimeType: String = "text/plain",
+    headers: Map<String, String> = mapOf(
+      "User-Agent" to USER_AGENT,
+    )
+  ): WebResourceResponse {
+    val allHeaders = mutableMapOf(
+      "Access-Control-Allow-Origin" to "*",
+    )
+    allHeaders.putAll(headers)
+    val index = url.indexOf('/', 12)
+    if (index != -1) {
+      allHeaders.put("Referer", url.substring(0, index))
+    } else {
+      allHeaders.put("Referer", url)
+    }
+    Log.i(TAG, "requestHeaders: $allHeaders")
+    return WebResourceResponse(
+      mimeType,
+      "UTF-8",
+      200, "ok", allHeaders,
+      url.inputStream(
+        headers = allHeaders
+      )
+    )
+  }
+
+  /**
+   * 创建 JS 响应
+   */
+  protected fun createJsResponse(fileName: String): WebResourceResponse {
+    val js = requireContext().assets.open(fileName)
     // 创建一个空的响应
     return WebResourceResponse(
       "application/javascript",
       "UTF-8",
-      cryptoJs
+      js
     )
   }
 

@@ -40,7 +40,11 @@ async function initHenanTV() {
 
     // 通过频道名称取值
     const channelItem = window.channelList_henan.find(item => item.name === '{{channelName}}')
-    playLive(channelItem.video_streams[0])
+    playLive(channelItem.video_streams[0], {
+        'X-Referer': 'https://static.hntv.tv/',
+        'Accept': '*/*',
+        'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+    })
 }
 
 initHenanTV()

@@ -3,14 +3,15 @@ package xyz.jdynb.tv.utils
 import android.app.ProgressDialog
 import android.content.Context
 import android.util.Log
-import android.webkit.WebView
 import android.widget.Toast
 import com.norman.webviewup.lib.UpgradeCallback
 import com.norman.webviewup.lib.WebViewUpgrade
 import com.norman.webviewup.lib.reflect.RuntimeAccess
 import com.norman.webviewup.lib.service.interfaces.IServiceManager
 import com.norman.webviewup.lib.service.interfaces.IWebViewUpdateService
+import com.norman.webviewup.lib.source.UpgradeAssetSource
 import com.norman.webviewup.lib.source.download.UpgradeDownloadSource
+import xyz.jdynb.tv.BuildConfig
 import xyz.jdynb.tv.DongYuTVApplication
 import java.io.File
 
@@ -74,11 +75,18 @@ object WebViewUpgrade {
     try {
       val version = getWebViewVersionNumber()
       if (version < WEBVIEW_MIN_VERSION) {
-        val upgradeSource = UpgradeDownloadSource(
-          DongYuTVApplication.Companion.context,
-          WEBVIEW_DOWNLOAD_URL,
-          File(context.filesDir, WEBVIEW_FILE_NAME)
-        )
+
+        val file = File(context.filesDir, WEBVIEW_FILE_NAME)
+        val upgradeSource = if (false/*BuildConfig.DEBUG*/) {
+          UpgradeAssetSource(context, "com.google.android.webview_106.0.5249.65-524906503(arm-v8a+arm64-v7a).apk", file)
+        } else {
+          UpgradeDownloadSource(
+            DongYuTVApplication.Companion.context,
+            WEBVIEW_DOWNLOAD_URL,
+            file
+          )
+        }
+
         Log.i(TAG, "start upgrade: $version")
         WebViewUpgrade.upgrade(upgradeSource)
 
@@ -128,7 +136,7 @@ object WebViewUpgrade {
         Log.i(TAG, "WebView version: $version >= $WEBVIEW_MIN_VERSION")
         callback()
       }
-    } catch (e: Exception){
+    } catch (e: Exception) {
       Log.e(TAG, "更新发生异常: $e")
       Toast.makeText(context, "内核更新错误: ${e.message}", Toast.LENGTH_LONG).show()
       callback()

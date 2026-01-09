@@ -50,7 +50,9 @@ function getJiangXiLiveUrl(m3u8) {
     }).then(res => {
         const playUrl = `https://yun-live.jxtvcn.com.cn/live-jxtv/tv_jxtv1.m3u8?source=pc&t=${res.t}&token=${res.token}&uuid=04206c0b50f5`
         console.log('playUrl:' + playUrl)
-        playLive(playUrl)
+        playLive(playUrl, {
+            "X-Referer": "https://www.jxntv.cn/"
+        })
     })
 }
 

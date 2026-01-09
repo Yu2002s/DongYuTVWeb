@@ -174,6 +174,8 @@
 
 ### simple 播放器内置的 html 代码
 
+`/main/assets/html/simple_player.html`
+
 ```html
 <!doctype html>
 <html lang="en">

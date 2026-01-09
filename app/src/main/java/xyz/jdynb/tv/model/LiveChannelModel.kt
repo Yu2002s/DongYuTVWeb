@@ -6,7 +6,6 @@ import androidx.databinding.Bindable
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import xyz.jdynb.tv.BR
-import xyz.jdynb.tv.constants.LiveModeConstants
 
 @Serializable
 data class LiveChannelModel(

@@ -17,8 +17,6 @@ class SPKeyConstants {
      */
     const val CURRENT_CHANNEL = "current_channel"
 
-    const val IS_DOWNLOAD_co = "is_download"
-
   }
 
 }

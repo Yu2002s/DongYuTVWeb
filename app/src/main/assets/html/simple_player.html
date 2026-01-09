@@ -62,7 +62,7 @@
 
     let hls = null;
 
-    function playLive(url) {
+    function playLive(url, headers) {
         video.volume = 1
         
         // 检查是否支持 HLS.js 且为 m3u8 文件
@@ -74,8 +74,13 @@
             hls = new Hls({
                 debug: false,
                 xhrSetup: function(xhr, url) {
-                    // 这里的请求会被 shouldInterceptRequest 拦截
-                    // 不需要手动设置 Referer,因为会在 shouldInterceptRequest 中处理
+                    // xhr.setRequestHeader('X-Referer', headers['Referer'])
+                    // 这里设置请求头
+                    if (headers) {
+                        for (const key in headers) {
+                            xhr.setRequestHeader(key, headers[key]);
+                        }
+                    }
                 }
             });
             
@@ -87,7 +92,7 @@
             });
             
             hls.on(Hls.Events.ERROR, function(event, data) {
-                console.error('HLS Error:', data);
+                console.error('HLS Error:' + JSON.stringify(data));
                 if (data.fatal) {
                     switch(data.type) {
                         case Hls.ErrorTypes.NETWORK_ERROR:
