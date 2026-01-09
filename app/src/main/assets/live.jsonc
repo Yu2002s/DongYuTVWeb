@@ -37,6 +37,7 @@
     {
       "id": "common",
       "name": "simple",
+      "url": "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/html/simple_player.html",
       "script": {
         "init": [
           "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/common/play.js"
