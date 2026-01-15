@@ -87,15 +87,15 @@ class SimpleLivePlayerFragment : LivePlayerFragment() {
   }
 
   override fun onPageFinished(url: String) {
-    // super.onPageFinished(url)
+    super.onPageFinished(url)
 
     // 调试代码
-    requireContext().assets.open("js/jiangxi/init.js").use {
+    /*requireContext().assets.open("js/jiangxi/init.js").use {
       it.readBytes().toString(Charsets.UTF_8)
     }.let {
       val js = it.replace("{{m3u8Name}}", "tv_jxtv1.m3u8")
       webView.evaluateJavascript(js, null)
-    }
+    }*/
   }
 
   override fun play(channel: LiveChannelModel) {
