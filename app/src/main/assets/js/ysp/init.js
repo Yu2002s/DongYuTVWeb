@@ -161,3 +161,27 @@ function clearHeader() {
 
 
 clearHeader()
+
+;(function() {
+    window.intervalId = setInterval(() => {
+        const html = document.body.innerHTML
+        if (html.includes('节目已结束')) {
+            window.location.reload();
+        }
+    }, 3000)
+
+    let leaveTime = Date.now()
+
+    document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState == 'hidden') {
+      console.log('离开')
+      leaveTime = Date.now()
+    }
+    if (document.visibilityState == 'visible') {
+      console.log('进入')
+      if (Date.now() - leaveTime > 15000) {
+        window.location.reload()
+      }
+    }
+  })
+})();
