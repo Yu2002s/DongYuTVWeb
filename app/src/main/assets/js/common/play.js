@@ -1,4 +1,5 @@
 (function() {
-    console.log('{{liveUrl}}')
-    playLive('{{liveUrl}}')
+    playLive('{{liveUrl}}', {
+        Referer: '{{liveUrl}}'
+    })
 })();

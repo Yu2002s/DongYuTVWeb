@@ -599,15 +599,6 @@
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202412/005fd504f809ab28ec8cdd5d34d3886f0611ddefa20ebcc0f3f7dc176ad528c7.png?imageMogr2/format/webp",
           "streamId": "2019927403",
           "number": 62
-        },
-        {
-          "channelName": "香港卫视",
-          "tvLogo": "",
-          "number": 63,
-          "player": "common",
-          "args": {
-            "liveUrl": "https://www.hkstv.tv/webcast/livestream/mutfysrq/playlist.m3u8?hls_ctx=7144stj2"
-          }
         }
       ]
     },
@@ -1194,6 +1185,19 @@
           "channelName": "健康频道",
           "args": {
             "id": "99"
+          }
+        }
+      ]
+    },
+    {
+      "channelType": "香港",
+      "player": "common",
+      "channelList": [
+        {
+          "channelName": "香港卫视",
+          "player": "common",
+          "args": {
+            "liveUrl": "https://www.hkstv.tv/webcast/livestream/mutfysrq/playlist.m3u8?hls_ctx=7144stj2"
           }
         }
       ]
