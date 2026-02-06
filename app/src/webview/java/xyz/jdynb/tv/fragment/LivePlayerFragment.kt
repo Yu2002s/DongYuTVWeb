@@ -50,6 +50,11 @@ abstract class LivePlayerFragment : Fragment(), Playable {
 
     private const val JS_INTERFACE_NAME = "AndroidVideo"
 
+    /**
+     * 离开的最大时间
+     */
+    private const val MAX_LEAVE_TIME = 30 * 1000L
+
   }
 
   private var _binding: FragmentLivePlayerBinding? = null
@@ -152,7 +157,9 @@ abstract class LivePlayerFragment : Fragment(), Playable {
   }
 
   override fun refresh() {
-    binding.webview.reload()
+    mainViewModel.currentChannelModel.value?.let {
+      play(it)
+    }
   }
 
   /**
@@ -421,10 +428,17 @@ abstract class LivePlayerFragment : Fragment(), Playable {
     super.onResume()
     webView.onResume()
     webView.resumeTimers()
+    Log.i(TAG, "onResume")
+    val now = System.currentTimeMillis()
+    if (now - leaveTime > MAX_LEAVE_TIME) {
+      refresh()
+      leaveTime = now
+    }
   }
 
   override fun onPause() {
     super.onPause()
+    Log.i(TAG, "onPause")
     webView.onPause()
     webView.pauseTimers()
     leaveTime = System.currentTimeMillis()

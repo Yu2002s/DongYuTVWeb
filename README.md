@@ -18,8 +18,29 @@
 - 数字键: 换台
 - 菜单键：选择换台
 - 返回键：返回/退出
+- #号键：强制刷新当前频道（有问题时使用）
 
 > 使用老式的闭路电视操作，适合老人使用！
+
+## 开机自启动
+
+> 确保 App 已经打开过，并允许了悬浮窗权限
+> 不保证所有电视都支持，仅在原生系统虚拟机 Android 12 测试通过
+
+**如果上面的方法不奏效，可以尝试以下方法：**
+
+1. [进入电视的工厂模式](https://www.cnblogs.com/05-hust/p/17089031.html)
+2. 开启 USB 调试
+3. 使用无线调试或数据线连接电视和电脑(手机-需要安装终端)[电脑安装adb](https://blog.csdn.net/chengxuyuanyy/article/details/149743294) 手机可以安装MT管理器，自带终端
+4. 进入终端，输入以下命令
+```shell
+# 无线连接 adb connect ip:端口
+adb devices # 查看设备是否连接成功
+adb shell # 进入管理员模式
+cmd package set-home-activity "xyz.jdynb.tv/.MainActivity" # 设置默认的启动项
+reboot # 重启设备
+```
+> 注意：定制系统可能无效
 
 ## 自定义频道
 

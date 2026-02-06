@@ -1,7 +1,11 @@
 package xyz.jdynb.tv
 
+import android.Manifest
+import android.content.Intent
 import android.media.AudioManager
+import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
@@ -9,6 +13,8 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +24,9 @@ import xyz.jdynb.tv.databinding.ActivityMainBinding
 import xyz.jdynb.tv.dialog.ChannelListDialog
 import xyz.jdynb.tv.fragment.LivePlayerFragment
 import xyz.jdynb.tv.utils.WebViewUpgrade
+import kotlin.system.exitProcess
+import androidx.core.net.toUri
+import androidx.core.view.WindowInsetsControllerCompat
 
 class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main) {
 
@@ -48,10 +57,29 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
    */
   private var isUpgrade = false
 
+  private var isFirstResume = true
+
   override fun init() {
     super.init()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+      val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+      val activities = packageManager.queryIntentActivities(intent, 0)
+      if (activities.isNotEmpty()) {
+        intent.data = "package:$packageName".toUri()
+        AlertDialog.Builder(this)
+          .setTitle("需要悬浮窗权限")
+          .setMessage("请授予悬浮窗权限，用于实现开机自启动")
+          .setPositiveButton("确定") { _, _ ->
+            startActivity(intent)
+          }
+          .setNegativeButton("取消", null)
+          .show()
+      }
+    }
+
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     val insetsController = WindowCompat.getInsetsController(window, window.decorView)
+    insetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
     insetsController.hide(WindowInsetsCompat.Type.systemBars())
 
     // 判断cpu型号决定需不需要升级
@@ -69,6 +97,16 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
     binding.lifecycleOwner = this
 
     channelListDialog = ChannelListDialog(this, mainViewModel)
+  }
+
+  override fun onResume() {
+    super.onResume()
+    // 暂时不使用
+    /*if (isFirstResume) {
+      isFirstResume = false
+      return
+    }
+    livePlayerFragment?.refresh()*/
   }
 
   override fun initData() {
@@ -145,9 +183,6 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
        * 上
        */
       KeyEvent.KEYCODE_DPAD_UP -> {
-        if (channelListDialog.isShowing) {
-          return true
-        }
         mainViewModel.up()
       }
 
@@ -155,17 +190,11 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
        * 下
        */
       KeyEvent.KEYCODE_DPAD_DOWN -> {
-        if (channelListDialog.isShowing) {
-          return true
-        }
         mainViewModel.down()
       }
 
       // ENTER、OK（确认）
       KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_SPACE -> {
-        if (channelListDialog.isShowing) {
-          return true
-        }
         Log.d(TAG, "onKeyDown: Ok")
         livePlayerFragment?.resumeOrPause()
       }
@@ -183,9 +212,6 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
       }
 
       KeyEvent.KEYCODE_VOLUME_DOWN, KeyEvent.KEYCODE_DPAD_LEFT -> {
-        if (channelListDialog.isShowing) {
-          return true
-        }
         try {
           audioManager.adjustStreamVolume(
             AudioManager.STREAM_MUSIC,
@@ -197,9 +223,6 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
       }
 
       KeyEvent.KEYCODE_VOLUME_UP, KeyEvent.KEYCODE_DPAD_RIGHT -> {
-        if (channelListDialog.isShowing) {
-          return true
-        }
         val volume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
         if (volume < audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)) {
           try {
@@ -216,9 +239,6 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
 
       // 返回
       KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_ESCAPE -> {
-        if (channelListDialog.isShowing) {
-          return true
-        }
         if (mainViewModel.showCurrentChannel.value) {
           // 如果显示了当前频道
           mainViewModel.showCurrentChannel(false)
@@ -228,21 +248,22 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
             lastBackTime = System.currentTimeMillis()
             Toast.makeText(this, "再按一次返回键退出", Toast.LENGTH_SHORT).show()
           } else {
-            finish()
+            exitProcess(0)
           }
         }
       }
 
+      KeyEvent.KEYCODE_POUND -> {
+        livePlayerFragment?.refresh()
+      }
+
       // 主页
       KeyEvent.KEYCODE_HOME -> {
-
+        exitProcess(0)
       }
 
       // 菜单
       KeyEvent.KEYCODE_MENU, KeyEvent.KEYCODE_P -> {
-        if (channelListDialog.isShowing) {
-          return true
-        }
         binding.btnMenu.callOnClick()
       }
 

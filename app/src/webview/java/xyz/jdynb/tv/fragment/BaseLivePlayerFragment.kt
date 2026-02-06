@@ -37,7 +37,7 @@ open class BaseLivePlayerFragment: LivePlayerFragment() {
   }
 
   override fun refresh() {
-    play(currentChannelModel)
+    super.refresh()
   }
 
   override fun shouldOverride(url: String): Boolean {

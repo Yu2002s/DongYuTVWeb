@@ -47,7 +47,8 @@ class YspLivePlayerFragment : BaseLivePlayerFragment() {
   }
 
   override fun refresh() {
-    webView.loadUrl("${webView.url}?pid=${mainViewModel.currentChannelModel.value!!.pid}")
+    super.refresh()
+    // webView.loadUrl("${webView.url}?pid=${mainViewModel.currentChannelModel.value!!.pid}")
   }
 
   /**

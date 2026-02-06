@@ -28,6 +28,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!-- 开机自启动权限 -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".DongYuTVApplication"
@@ -57,6 +59,8 @@
 
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
@@ -77,7 +81,6 @@
             android:exported="true">
             <intent-filter android:priority="9999">
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" /> <!-- HTC 设备 -->
                 <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" /> <!-- HTC 设备 -->
                 <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
             </intent-filter>
@@ -89,6 +92,8 @@
             android:exported="false"
             android:isolatedProcess="false"
             android:process=":privileged_process0" />
+
+        <service android:name=".service.BootService" />
 
     </application>
 

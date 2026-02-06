@@ -6,7 +6,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import androidx.core.content.ContextCompat
 import xyz.jdynb.tv.MainActivity
+import xyz.jdynb.tv.service.BootService
 
 /**
  * 开机自启动广播接收器
@@ -26,7 +28,7 @@ class BootReceiver : BroadcastReceiver() {
     if (isBootIntent(action)) {
       try {
         // 延迟启动,避免系统刚启动时资源紧张
-        // 增加延迟时间到5秒,确保系统完全启动
+        // 增加延迟时间到3秒,确保系统完全启动
         android.os.Handler(context.mainLooper).postDelayed({
           startMainActivity(context)
           // 多次尝试将应用置于前台
@@ -35,7 +37,7 @@ class BootReceiver : BroadcastReceiver() {
               bringAppToFront(context)
             }, (i * 1000).toLong())
           }
-        }, 5000) // 延迟5秒启动
+        }, 3000) // 延迟3秒启动
       } catch (e: Exception) {
         Log.e(TAG, "Error starting app on boot", e)
       }
@@ -107,7 +109,7 @@ class BootReceiver : BroadcastReceiver() {
         // 重置任务
         addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
       }
-
+      ContextCompat.startForegroundService(context, Intent(context, BootService::class.java))
       context.startActivity(intent)
       Log.i(TAG, "Successfully started MainActivity on boot")
     } catch (e: Exception) {

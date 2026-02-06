@@ -33,8 +33,8 @@ android {
     minSdk = 21
     //noinspection ExpiredTargetSdkVersion
     targetSdk = 28
-    versionCode = 7
-    versionName = "1.0.6.1"
+    versionCode = 8
+    versionName = "1.0.6.2"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     signingConfig = signingConfigs.getByName("debug")
