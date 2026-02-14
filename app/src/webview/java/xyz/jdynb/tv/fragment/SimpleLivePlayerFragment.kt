@@ -14,7 +14,7 @@ class SimpleLivePlayerFragment : BaseLivePlayerFragment() {
 
   companion object {
 
-    private const val TAG = "SimpleLivePlayerFragment"
+    private const val TAG = "SimpleLivePlayer"
 
     // private const val PLAYER_URL = "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/html/simple_player.html"
     private const val PLAYER_URL = "file:///android_asset/html/simple_player.html"

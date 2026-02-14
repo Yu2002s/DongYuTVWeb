@@ -25,7 +25,7 @@
 ## 开机自启动
 
 1. 查找电视的一些设置、App，看看有没有应用自启动相关的设置，对本应用开启自启动。可百度或 Ai 搜索自启动相关文章
-2. 确保 App 已经打开过，并允许了悬浮窗权限
+2. 确保 App 已经打开过，并允许了**悬浮窗权限**
 3. 设置默认的桌面，一般按 Home键(主页键) 会提示设置默认桌面，可以设置为本App并选择始终，或查找电视相关设置和App设置默认桌面
 
 > 不保证所有电视都支持，仅在原生系统虚拟机 Android 12 测试通过
@@ -47,12 +47,12 @@ reboot # 重启设备
 
 ## 自定义频道
 
-频道完整配置文件 `main/assets/live-2.jsonc` [live-2.jsonc](https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/live-2.jsonc)
+频道完整配置文件 `main/assets/live-3.jsonc` [live-3.jsonc](https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/live-3.jsonc)
 
 最新调整:
 
 - 去除 `number` 频道号码
-- 变更 `live.jsonc` 为 `live-2.jsonc`
+- 变更 `live.jsonc` 为 `live-3.jsonc`
 
 ### 1. 对于没有验证的直播地址
 

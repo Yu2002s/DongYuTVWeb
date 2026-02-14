@@ -57,25 +57,24 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
    */
   private var isUpgrade = false
 
-  private var isFirstResume = true
-
   override fun init() {
     super.init()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+    // 悬浮窗权限改为手动授权，不对用户展示，以免影响体验
+    /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
       val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
       val activities = packageManager.queryIntentActivities(intent, 0)
       if (activities.isNotEmpty()) {
         intent.data = "package:$packageName".toUri()
         AlertDialog.Builder(this)
           .setTitle("需要悬浮窗权限")
-          .setMessage("请授予悬浮窗权限，用于实现开机自启动")
+          .setMessage("请授予悬浮窗权限，用于实现开机自启动\n\n按左右方向键选择【确认】或取消【取消】，不开启直接按返回键")
           .setPositiveButton("确定") { _, _ ->
             startActivity(intent)
           }
           .setNegativeButton("取消", null)
           .show()
       }
-    }
+    }*/
 
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     val insetsController = WindowCompat.getInsetsController(window, window.decorView)
