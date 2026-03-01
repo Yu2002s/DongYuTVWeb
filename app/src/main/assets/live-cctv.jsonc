@@ -1,0 +1,1381 @@
+{
+  // 播放器配置
+  "player": [
+    {
+      "id": "ysp",
+      "name": "ysp",
+      // 播放器名称，一般程序中枚举指定（扩展的话默认指定 simple）
+      "url": "https://www.yangshipin.cn/tv/home",
+      // 指定播放地址(name为simple时不需要指定)
+      // 播放器需要执行的脚本
+      "script": {
+        "async": false,
+        // 是否异步执行脚本（同步的话脚本会顺序执行）
+        // 页面加载完成初始化后需要执行的脚本
+        "init": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/ysp/init.js"
+        ],
+        // 指定频道播放时需要执行的脚本
+        "play": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/ysp/play.js"
+        ],
+        // 恢复或暂停播放需要执行的脚本
+        "resume_pause": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/ysp/play_pause.js"
+        ]
+      },
+      // 需要排除的资源文件
+      "exclude": {
+        "url": [],
+        // 需要排除的地址
+        "suffix": [
+          "webp"
+        ]
+        // 需要排除的地址后缀
+      }
+    },
+    {
+      "id": "cctv",
+      "name": "base",
+      "url": "https://tv.cctv.com/live/{{id}}",
+      "script": {
+        "init": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/cctv/init.js"
+        ],
+        "play": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/cctv/play.js"
+        ],
+        "resume_pause": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/cctv/resume_pause.js"
+        ]
+      },
+      // 需要排除的资源文件
+      "exclude": {
+        "url": [],
+        // 需要排除的地址
+        "suffix": []
+        // 需要排除的地址后缀
+      }
+    },
+    {
+      "id": "common",
+      "name": "simple",
+      // "url": "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/html/simple_player.html",
+      "script": {
+        "init": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/common/play.js"
+        ],
+        "play": [],
+        "resume_pause": []
+      }
+    },
+    {
+      "id": "guangxi",
+      "name": "base",
+      "url": "https://tv.gxtv.cn/channel/channelivePlay_{{id}}.html",
+      "script": {
+        "init": ["https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/guangxi/init.js"],
+        "play": ["https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/guangxi/play.js"],
+        "resume_pause": ["https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/guangxi/resume_pause.js"]
+      }
+    },
+    {
+      "id": "guangdong",
+      "name": "base",
+      "url": "https://www.gdtv.cn/tvChannelDetail/{{id}}",
+      "script": {
+        "init": ["https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/guangdong/init.js"],
+        "play": ["https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/guangdong/play.js"]
+      }
+    },
+    {
+      "id": "hebei",
+      "name": "simple",
+      "script": {
+        "init": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/hebei/init.js"
+        ],
+        "play": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/hebei/play.js"
+        ],
+        "resume_pause": []
+      }
+    },
+    {
+      "id": "henan",
+      "name": "simple",
+      "script": {
+        "init": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/henan/init.js"
+        ],
+        "play": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/henan/play.js"
+        ]
+      }
+    },
+    {
+      "id": "jiangsu",
+      "name": "simple",
+      "script": {
+        "init": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/jiangsu/init.js"
+        ],
+        "play": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/jiangsu/play.js"
+        ]
+      }
+    },
+    {
+      "id": "jiangxi",
+      "name": "simple",
+      "script": {
+        "init": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/jiangxi/init.js"
+        ],
+        "play": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/jiangxi/play.js"
+        ]
+      }
+    },
+    {
+      "id": "shandong",
+      "name": "simple",
+      "script": {
+        "init": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/shandong/init.js"
+        ],
+        "play": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/shandong/play.js"
+        ]
+      }
+    },
+    {
+      "id": "zhejiang",
+      "name": "simple",
+      "script": {
+        "init": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/zhejiang/init.js"
+        ],
+        "play": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/zhejiang/play.js"
+        ]
+      }
+    },
+    {
+      "id": "anhui",
+      "name": "simple",
+      "script": {
+        "init": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/anhui/init.js"
+        ],
+        "play": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/anhui/play.js"
+        ]
+      }
+    }
+  ],
+  // 播放频道列表
+  "channel": [
+    {
+      "channelType": "央视",
+      "player": "cctv",
+      "hidden": false,
+      "channelList": [
+        {
+          "channelName": "CCTV1",
+          "desc": "综合",
+          "args": {
+            "id": "cctv1"
+          }
+        },
+        {
+          "channelName": "CCTV2",
+          "desc": "财经",
+          "args": {
+            "id": "cctv2"
+          }
+        },
+        {
+          "channelName": "CCTV3",
+          "desc": "综艺",
+          "args": {
+            "id": "cctv3"
+          }
+        },
+        {
+          "channelName": "CCTV4",
+          "desc": "中文国际",
+          "args": {
+            "id": "cctv4"
+          }
+        },
+        {
+          "channelName": "CCTV5",
+          "desc": "体育",
+          "args": {
+            "id": "cctv5"
+          }
+        },
+        {
+          "channelName": "CCTV6",
+          "desc": "电影",
+          "args": {
+            "id": "cctv6"
+          }
+        },
+        {
+          "channelName": "CCTV7",
+          "desc": "国防军事",
+          "args": {
+            "id": "cctv7"
+          }
+        },
+        {
+          "channelName": "CCTV8",
+          "desc": "电视剧",
+          "args": {
+            "id": "cctv8"
+          }
+        },
+        {
+          "channelName": "CCTV9",
+          "desc": "记录",
+          "args": {
+            "id": "cctv9"
+          }
+        },
+        {
+          "channelName": "CCTV10",
+          "desc": "科教",
+          "args": {
+            "id": "cctv10"
+          }
+        },
+        {
+          "channelName": "CCTV11",
+          "desc": "戏曲",
+          "args": {
+            "id": "cctv11"
+          }
+        },
+        {
+          "channelName": "CCTV12",
+          "desc": "社会与法",
+          "args": {
+            "id": "cctv12"
+          }
+        },
+        {
+          "channelName": "CCTV13",
+          "desc": "新闻",
+          "args": {
+            "id": "cctv13"
+          }
+        },
+        {
+          "channelName": "CCTV14",
+          "desc": "少儿",
+          "args": {
+            "id": "cctv14"
+          }
+        },
+        {
+          "channelName": "CCTV15",
+          "desc": "音乐",
+          "args": {
+            "id": "cctv15"
+          }
+        },
+        {
+          "channelName": "CCTV16",
+          "desc": "奥林匹克",
+          "args": {
+            "id": "cctv16"
+          }
+        },
+        {
+          "channelName": "CCTV17",
+          "desc": "农业农村",
+          "args": {
+            "id": "cctv17"
+          }
+        },
+        {
+          "channelName": "CCTV4",
+          "desc": "中文国际(欧)",
+          "args": {
+            "id": "cctveurope"
+          }
+        },
+        {
+          "channelName": "CCTV-4",
+          "desc": "中文国际(美)",
+          "args": {
+            "id": "cctvamerica"
+          }
+        }
+      ]
+    },
+    {
+      // 播放频道类型
+      "channelType": "央视",
+      // 需要播放的播放器（播放器id)
+      "player": "ysp",
+      "hidden": true,
+      // 频道列表
+      "channelList": [
+        {
+          "channelName": "CCTV1",
+          "pid": "600001859",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/d57905b93540bd15f0c48230dbbbff7ee0d645ff539e38866e2d15c8b9f7dfcd.png?imageMogr2/format/webp",
+          "streamId": "2024078201",
+          "number": 1,
+          "desc": "综合"
+        },
+        {
+          "channelName": "CCTV2",
+          "pid": "600001800",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/20115388de0207131af17eac86c33049b95d69eaff064e55653a1b941810a006.png?imageMogr2/format/webp",
+          "streamId": "2024075401",
+          "number": 2,
+          "desc": "财经"
+        },
+        {
+          "channelName": "CCTV3",
+          "pid": "600001801",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/7b7a65c712450da3deb6ca66fbacf4f9aee00d3f20bd80eafb5ada01ec63eb3a.png?imageMogr2/format/webp",
+          "streamId": "2024068501",
+          "number": 3,
+          "desc": "综艺"
+        },
+        {
+          "channelName": "CCTV4",
+          "pid": "600001814",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/f357e58fdbcc076a3d65e1f958c942b2e14f14342c60736ceed98b092d35356a.png?imageMogr2/format/webp",
+          "streamId": "2024078301",
+          "number": 4,
+          "desc": "中文国际"
+        },
+        {
+          "channelName": "CCTV5",
+          "pid": "600001818",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/0a6a7138952675983a3d854df7688557b286d59aa06166edae51506f9204d655.png?imageMogr2/format/webp",
+          "streamId": "2024078401",
+          "number": 5,
+          "desc": "体育"
+        },
+        {
+          "channelName": "CCTV5+",
+          "pid": "600001817",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/649ad76a90bfef55b05db9fe52e006487280f619089099d5dc971e387fc6eff0.png?imageMogr2/format/webp",
+          "streamId": "2024078001",
+          "number": 6,
+          "desc": "体育赛事"
+        },
+        {
+          "channelName": "CCTV6",
+          "pid": "600108442",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/741515efda91f03f455df8a7da4ee11fa9329139c276435cf0a9e2af398d5bf2.png?imageMogr2/format/webp",
+          "streamId": "2013693901",
+          "number": 7,
+          "desc": "电影"
+        },
+        {
+          "channelName": "CCTV7",
+          "pid": "600004092",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/b29af94e295ebdf646cefb68122c429b9cd921f498ca20d2d8070252536f9ff9.png?imageMogr2/format/webp",
+          "streamId": "2024072001",
+          "number": 8,
+          "desc": "国防军事"
+        },
+        {
+          "channelName": "CCTV8",
+          "pid": "600001803",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/ad51de94426a0ba039e6dd6a8534ea98ecc813a6176bde87b4f18cc34d6d7590.png?imageMogr2/format/webp",
+          "streamId": "2024078501",
+          "number": 9,
+          "desc": "电视剧"
+        },
+        {
+          "channelName": "CCTV9",
+          "pid": "600004078",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/2ed1b4deeca179d5db806bb941790f82eb92a1b7299c1c38fe027f95a5caee5e.png?imageMogr2/format/webp",
+          "streamId": "2024078601",
+          "number": 10,
+          "desc": "记录"
+        },
+        {
+          "channelName": "CCTV10",
+          "pid": "600001805",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/aa6157ec65188cd41826e5a2f088c3d6d153205f5f6428258d12c59999e221aa.png?imageMogr2/format/webp",
+          "streamId": "2024078701",
+          "number": 11,
+          "desc": "科教"
+        },
+        {
+          "channelName": "CCTV11",
+          "pid": "600001806",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/ed12ed7c7a1034dae4350011fe039284c5d5a836506b28c9e32e3c75299625c0.png?imageMogr2/format/webp",
+          "streamId": "2027248701",
+          "number": 12,
+          "desc": "戏曲"
+        },
+        {
+          "channelName": "CCTV12",
+          "pid": "600001807",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/484083cffaa40df7e659565e8cb4d1cc740158a185512114167aa21fa0c59240.png?imageMogr2/format/webp",
+          "streamId": "2027248801",
+          "number": 13,
+          "desc": "社会与法"
+        },
+        {
+          "channelName": "CCTV13",
+          "pid": "600001811",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/266da7b43c03e2312186b4a999e0f060e8f15b10d2cc2c9aa32171819254cf1a.png?imageMogr2/format/webp",
+          "streamId": "2024079001",
+          "number": 14,
+          "desc": "新闻"
+        },
+        {
+          "channelName": "CCTV14",
+          "pid": "600001809",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/af6b603896938dc346fbb16abfc63c12cba54b0ec9d18770a15d347d115f12d5.png?imageMogr2/format/webp",
+          "streamId": "2027248901",
+          "number": 15,
+          "desc": "少儿"
+        },
+        {
+          "channelName": "CCTV15",
+          "pid": "600001815",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/2ceee92188ef684efe0d8b90839c4f3ad450d179dc64d59beff417059453af47.png?imageMogr2/format/webp",
+          "streamId": "2027249001",
+          "number": 16,
+          "desc": "音乐"
+        },
+        {
+          "channelName": "CCTV16-HD",
+          "pid": "600098637",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/53793fa7bacd3a93ff6dc5d2758418985e1f952a316c335d663b572d8bdcd74d.png?imageMogr2/format/webp",
+          "streamId": "2027249101",
+          "number": 17,
+          "desc": "奥林匹克"
+        },
+        {
+          "channelName": "CCTV16(4K）",
+          "pid": "600099502",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/53793fa7bacd3a93ff6dc5d2758418985e1f952a316c335d663b572d8bdcd74d.png?imageMogr2/format/webp",
+          "streamId": "2027249301",
+          "number": 18
+        },
+        {
+          "channelName": "CCTV17",
+          "pid": "600001810",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/ddef563072f8bad2bea5b9e52674cb7b4ed50efb20c26e61994dfbdf05c1e3c0.png?imageMogr2/format/webp",
+          "streamId": "2027249401",
+          "number": 19,
+          "desc": "农业农村"
+        },
+        {
+          "channelName": "CCTV4K",
+          "pid": "600002264",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/3e9d06fd7244d950df5838750f1c6ac3456e172b51caca2c16d2282125b111e8.png?imageMogr2/format/webp",
+          "streamId": "2027249501",
+          "number": 20
+        },
+        {
+          "channelName": "CCTV8K",
+          "pid": "600156816",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202503/df543dd2e337be8bf6aa06342d8d790992f7ae47b89403606253436e40409031.png?imageMogr2/format/webp",
+          "streamId": "2026774101",
+          "number": 21
+        },
+        {
+          "channelName": "CGTN",
+          "pid": "600014550",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/a72dff758ca1c17cd0ecc8cedc11b893d208f409d5e6302faa0e9d298848abc3.png?imageMogr2/format/webp",
+          "streamId": "2024181701",
+          "number": 22
+        },
+        {
+          "channelName": "CGTN法语频道",
+          "pid": "600084704",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/a8d0046a47433d952bf6ed17062deb8bd2184ba9aec0f7781df6bf9487a3ffcf.png?imageMogr2/format/webp",
+          "streamId": "2024181801",
+          "number": 23
+        },
+        {
+          "channelName": "CGTN俄语频道",
+          "pid": "600084758",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/bf0a820893cbaf20dd0333e27042e1ef9c8806e5b602b6a8c95af399db0bc77a.png?imageMogr2/format/webp",
+          "streamId": "2024181901",
+          "number": 24
+        },
+        {
+          "channelName": "CGTN阿拉伯语频道",
+          "pid": "600084782",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/2e44e2aa3e7a1cedf07fd0ae59fe69e86a60a2632660a006e3e9e7397b2d107e.png?imageMogr2/format/webp",
+          "streamId": "2024182001",
+          "number": 25
+        },
+        {
+          "channelName": "CGTN西班牙语频道",
+          "pid": "600084744",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202309/7c337e3dbe64402ec7e4678a619a4a6d95144e42f35161181ff78e143b7cf67a.png?imageMogr2/format/webp",
+          "streamId": "2024182101",
+          "number": 26
+        },
+        {
+          "channelName": "CGTN外语纪录频道",
+          "pid": "600084781",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202309/74d3ac436a7e374879578de1d87a941fbf566d39d5632b027c5097891ed32bd5.png?imageMogr2/format/webp",
+          "streamId": "2024182301",
+          "number": 27
+        },
+        {
+          "channelName": "CCTV风云剧场频道",
+          "pid": "600099658",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/4d549e53e6d0f632d5a633d1945280797b153e588f919221a07faa869812cc89.png?imageMogr2/format/webp",
+          "streamId": "2025637103",
+          "number": 28
+        },
+        {
+          "channelName": "CCTV第一剧场频道",
+          "pid": "600099655",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/a556bd7d93ce65e18f243a8892b5604f4faa994a4897315914216a710a706208.png?imageMogr2/format/webp",
+          "streamId": "2026874203",
+          "number": 29
+        },
+        {
+          "channelName": "CCTV怀旧剧场频道",
+          "pid": "600099620",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/5661bd04fecdb6e899f801147a22ab5d3a475bf2b62e30aec2c0023190ebc9b1.png?imageMogr2/format/webp",
+          "streamId": "2026874303",
+          "number": 30
+        }
+      ]
+    },
+    {
+      "channelType": "卫视",
+      "player": "ysp",
+      "hidden": true,
+      "channelList": [
+        {
+          "channelName": "北京卫视",
+          "pid": "600002309",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/f4f23633c578beea49a3841d88d3490100f029ee349059fa532869db889872c5.png?imageMogr2/format/webp",
+          "streamId": "2024052703",
+          "number": 31
+        },
+        {
+          "channelName": "江苏卫视",
+          "pid": "600002521",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/380ad685c0c1d5b2c902246b8d2df6d3f9b45e2837abcfe493075bbded597a31.png?imageMogr2/format/webp",
+          "streamId": "2024171103",
+          "number": 32
+        },
+        {
+          "channelName": "东方卫视",
+          "pid": "600002483",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/9bd372ca292a82ce3aa08772b07efc4af1f85c21d1f268ea33440c49e9a0a488.png?imageMogr2/format/webp",
+          "streamId": "2024054503",
+          "number": 33
+        },
+        {
+          "channelName": "浙江卫视",
+          "pid": "600002520",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/a66c836bd98ba3e41a2e9a570d4b9c50dedc6839e9de333e2e78212ad505f37e.png?imageMogr2/format/webp",
+          "streamId": "2024054703",
+          "number": 34
+        },
+        {
+          "channelName": "湖南卫视",
+          "pid": "600002475",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/4120e89d3079d08aa17d382f69a2308ec70839b278367763c34a34666c75cb88.png?imageMogr2/format/webp",
+          "streamId": "2024054803",
+          "number": 35
+        },
+        {
+          "channelName": "湖北卫视",
+          "pid": "600002508",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/7a6be5a2bb1dc53a945c016ff1f525dc4a84c51db371c15c89aa55404b0ba784.png?imageMogr2/format/webp",
+          "streamId": "2024171203",
+          "number": 36
+        },
+        {
+          "channelName": "广东卫视",
+          "pid": "600002485",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/28886880a4dc0f06fb7e0a528a1def0591d61a65870e29176ede0cc92033bbfd.png?imageMogr2/format/webp",
+          "streamId": "2024060903",
+          "number": 37
+        },
+        {
+          "channelName": "广西卫视",
+          "pid": "600002509",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/54b7e97cb816bb223fe05f3fc44da2c7820eb66e8550c19d23100f2c414ecc38.png?imageMogr2/format/webp",
+          "streamId": "2024060703",
+          "number": 38
+        },
+        {
+          "channelName": "黑龙江卫视",
+          "pid": "600002498",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/d8273ae9be698ce2db21f5b886ecac95a73429593f93713c60ed8c12c38bf0d3.png?imageMogr2/format/webp",
+          "streamId": "2024061003",
+          "number": 39
+        },
+        {
+          "channelName": "海南卫视",
+          "pid": "600002506",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/6e060391fde0469801fc3d84dbf204b4f8d650d251f17d7595a6964c0bb99e81.png?imageMogr2/format/webp",
+          "streamId": "2024055603",
+          "number": 40
+        },
+        {
+          "channelName": "重庆卫视",
+          "pid": "600002531",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/657651f411de2673d1770d9a78b44c1265704f7468cc41d4be7f51d630768494.png?imageMogr2/format/webp",
+          "streamId": "2024061103",
+          "number": 41
+        },
+        {
+          "channelName": "深圳卫视",
+          "pid": "600002481",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/d59fec04c902e3581c617136d02d4b9b8c4cbe64272781ddd3525e80c823edb7.png?imageMogr2/format/webp",
+          "streamId": "2024061303",
+          "number": 42
+        },
+        {
+          "channelName": "四川卫视",
+          "pid": "600002516",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/3276a414ae0eaa0f116f2045cd913367967d0c7c1e978e8621ac3879436c6ed7.png?imageMogr2/format/webp",
+          "streamId": "2024061403",
+          "number": 43
+        },
+        {
+          "channelName": "河南卫视",
+          "pid": "600002525",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/74925962148a6d31c85808b6cd4e444c2a54bab393d2c5fc85e960b50e22fa86.png?imageMogr2/format/webp",
+          "streamId": "2024059703",
+          "number": 44
+        },
+        {
+          "channelName": "福建东南卫视",
+          "pid": "600002484",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/3208fe6564a293c21b711333fb3edb05bb5b406cff840573c9a8d839680a1579.png?imageMogr2/format/webp",
+          "streamId": "2024061503",
+          "number": 45
+        },
+        {
+          "channelName": "贵州卫视",
+          "pid": "600002490",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/4eb45f4781d33d872af027dc01c941559aab55667dd99cc5c22bef7037807b13.png?imageMogr2/format/webp",
+          "streamId": "2024061603",
+          "number": 46
+        },
+        {
+          "channelName": "江西卫视",
+          "pid": "600002503",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/3c760d0d00463855890e8a1864ea4a6b6dd66b90c29b4ac714a4b17c16519871.png?imageMogr2/format/webp",
+          "streamId": "2024061703",
+          "number": 47
+        },
+        {
+          "channelName": "辽宁卫视",
+          "pid": "600002505",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/ac4ed6058a87c101ae7147ebc38905d0cae047fb73fd277ee5049b84f52bda36.png?imageMogr2/format/webp",
+          "streamId": "2024171303",
+          "number": 48
+        },
+        {
+          "channelName": "安徽卫视",
+          "pid": "600002532",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/f35fa04b51b1ee4984b03578b65403570868ebca03c6c01e11b097f999a58d9b.png?imageMogr2/format/webp",
+          "streamId": "2024171403",
+          "number": 49
+        },
+        {
+          "channelName": "河北卫视",
+          "pid": "600002493",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/d545becdc81c60197b08c7f47380705e4665ed3fe55efc8b855e486f6e655378.png?imageMogr2/format/webp",
+          "streamId": "2024171503",
+          "number": 50
+        },
+        {
+          "channelName": "山东卫视",
+          "pid": "600002513",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/22d403f07a7cf5410b3ad3ddb65a11aa229a32475fac213f5344c9f0ec330ca1.png?imageMogr2/format/webp",
+          "streamId": "2024171603",
+          "number": 51
+        },
+        {
+          "channelName": "天津卫视",
+          "pid": "600152137",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202411/2642bf96eaf49fdc6b08db2cf6a3d8a7c30824bbcc199985e70e8b8846c5d14d.png?imageMogr2/format/webp",
+          "streamId": "2019927003",
+          "number": 52
+        },
+        {
+          "channelName": "吉林卫视",
+          "pid": "600190405",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202411/cfe6b0f01c7e381471b774f5a9f615e1bb70b946ad658da9ed6fcae28d752881.png?imageMogr2/format/webp",
+          "streamId": "2025561503",
+          "number": 53
+        },
+        {
+          "channelName": "陕西卫视",
+          "pid": "600190400",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202411/b63ce6fd91a92076273ea2d4679bfbe367ece51a114b54b79a66bc8de5831fa0.png?imageMogr2/format/webp",
+          "streamId": "2025561103",
+          "number": 54
+        },
+        {
+          "channelName": "宁夏卫视",
+          "pid": "600190737",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202411/8392c1ee75dca2a13f6dc0efa37519be4284764fecd65415a1a9f55b11534c5b.png?imageMogr2/format/webp",
+          "streamId": "2025608503",
+          "number": 55
+        },
+        {
+          "channelName": "内蒙古卫视",
+          "pid": "600190401",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202411/fe60396ae9ead3125d763146d8bc1e9b51ed8e19e8dc61600e28cc0b2f2d28c7.png?imageMogr2/format/webp",
+          "streamId": "2025561203",
+          "number": 56
+        },
+        {
+          "channelName": "云南卫视",
+          "pid": "600190402",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202411/907600c544719ffdaa6b6fa177d91b530dc9ce38e3dfd43a14ea7c805a7df97d.png?imageMogr2/format/webp",
+          "streamId": "2025561303",
+          "number": 57
+        },
+        {
+          "channelName": "山西卫视",
+          "pid": "600190407",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202411/d9fe4441f6adcfe9fd7ee2e45bf46d2a355b0fa48ff10dbba12978d2f8cf9780.png?imageMogr2/format/webp",
+          "streamId": "2025560803",
+          "number": 58
+        },
+        {
+          "channelName": "青海卫视",
+          "pid": "600190406",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202411/182e779878c85642049514a6e033f6be41aa8bf5f489fadc6f63dfc50863c36d.png?imageMogr2/format/webp",
+          "streamId": "2025559103",
+          "number": 59
+        },
+        {
+          "channelName": "西藏卫视",
+          "pid": "600190403",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202411/37f9668cded5cc19848cfe7dcaf717de4acc47667dde656ba2646aba372eebbe.png?imageMogr2/format/webp",
+          "streamId": "2025558003",
+          "number": 60
+        },
+        {
+          "channelName": "中国教育电视台1频道",
+          "pid": "600171827",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202412/2b9301a4795c7f23b7ec7ed651d8c7df002ce8c608168970485999b03d29f783.png?imageMogr2/format/webp",
+          "streamId": "2022823801",
+          "number": 61
+        },
+        {
+          "channelName": "新疆卫视",
+          "pid": "600152138",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202412/005fd504f809ab28ec8cdd5d34d3886f0611ddefa20ebcc0f3f7dc176ad528c7.png?imageMogr2/format/webp",
+          "streamId": "2019927403",
+          "number": 62
+        }
+      ]
+    },
+    {
+      "channelType": "河北",
+      "player": "hebei",
+      "channelList": [
+        {
+          "channelName": "河北卫视",
+          "tvLogo": "https://web.cmc.hebtv.com/cms/rmt0336/upload/Image/9/9tpklm/2025/07/18/30aaea69a1de46a881cef5d759d30b3e.png",
+          "number": 64
+        },
+        {
+          "channelName": "经济生活",
+          "tvLogo": "https://web.cmc.hebtv.com/cms/rmt0336/upload/Image/9/9tpklm/2025/07/18/adecee678ddd44c0a4deb60b2f9a998f.png",
+          "number": 65
+        },
+        {
+          "channelName": "三农频道",
+          "tvLogo": "https://web.cmc.hebtv.com/cms/rmt0336/upload/Image/9/9tpklm/2025/07/18/1ce75956a2994fea8a263a2305e5850d.png",
+          "number": 66
+        },
+        {
+          "channelName": "河北都市",
+          "tvLogo": "https://web.cmc.hebtv.com/cms/rmt0336/upload/Image/9/9tpklm/2025/07/18/fd8cd90c9c62436f9b582cfa9e99236e.png",
+          "number": 67
+        },
+        {
+          "channelName": "河北影视剧",
+          "tvLogo": "https://web.cmc.hebtv.com/cms/rmt0336/upload/Image/9/9tpklm/2025/07/18/a60dc4f8fd8241b893663e53e42c9c9e.png",
+          "number": 68
+        },
+        {
+          "channelName": "少儿科教",
+          "tvLogo": "https://web.cmc.hebtv.com/cms/rmt0336/upload/Image/9/9tpklm/2025/07/18/787c59373af7476d8d3bea2ec446c047.png",
+          "number": 69
+        },
+        {
+          "channelName": "文旅·公共",
+          "tvLogo": "https://web.cmc.hebtv.com/cms/rmt0336/upload/Image/9/9tpklm/2025/07/18/5666e0c8381f47afa7d14bdfebb69cd3.png",
+          "number": 70
+        },
+        {
+          "channelName": "三佳购物",
+          "tvLogo": "https://web.cmc.hebtv.com/cms/rmt0336/upload/Image/9/9tpklm/2025/07/18/ef010e11f31548e589ddb15fcef020fd.png",
+          "number": 71
+        }
+      ]
+    },
+    {
+      "channelType": "河南",
+      "player": "henan",
+      "channelList": [
+        {
+          "number": 72,
+          "channelName": "河南卫视"
+        },
+        {
+          "number": 73,
+          "channelName": "新闻频道"
+        },
+        {
+          "number": 74,
+          "channelName": "都市频道"
+        },
+        {
+          "number": 75,
+          "channelName": "民生频道"
+        },
+        {
+          "number": 76,
+          "channelName": "法治频道"
+        },
+        {
+          "number": 79,
+          "channelName": "电视剧频道"
+        },
+        {
+          "number": 80,
+          "channelName": "梨园频道"
+        },
+        {
+          "number": 81,
+          "channelName": "文物宝库"
+        },
+        {
+          "number": 82,
+          "channelName": "武术频道"
+        },
+        {
+          "number": 83,
+          "channelName": "睛彩中原"
+        },
+        {
+          "number": 84,
+          "channelName": "移动戏曲频道"
+        },
+        {
+          "number": 85,
+          "channelName": "象视界"
+        },
+        {
+          "number": 86,
+          "channelName": "国学频道"
+        },
+        {
+          "number": 87,
+          "channelName": "欢腾购物"
+        }
+      ]
+    },
+    {
+      "channelType": "江苏",
+      "player": "jiangsu",
+      "channelList": [
+        {
+          "tvLogo": "https://images.jstv.com/images/2024/01/12/202401121516401705043800994_639_b_40x34.png",
+          "channelName": "江苏卫视",
+          "number": 88,
+          "args": {
+            "liveUrl": "https://litchi-play-encrypted-site.jstv.com/applive/jswspro.m3u8"
+          }
+        },
+        {
+          "tvLogo": "https://images.jstv.com/images/2024/09/20/202409202305231726844723412_157_b_398x328.png",
+          "channelName": "江苏卫视4K超高清",
+          "number": 89,
+          "args": {
+            "liveUrl": "https://litchi-play-encrypted-site.jstv.com/4klive/jsws4kpro.m3u8"
+          }
+        },
+        {
+          "tvLogo": "https://images.jstv.com/images/2024/01/12/202401121516551705043815640_894_b_40x34.png",
+          "channelName": "江苏城市",
+          "number": 90,
+          "args": {
+            "liveUrl": "https://litchi-play-encrypted-site.jstv.com/applive/jscspro.m3u8"
+          }
+        },
+        {
+          "tvLogo": "https://images.jstv.com/images/2024/01/12/202401121517071705043827659_264_b_40x34.png",
+          "channelName": "江苏综艺",
+          "number": 91,
+          "args": {
+            "liveUrl": "https://litchi-play-encrypted-site.jstv.com/applive/jszypro.m3u8"
+          }
+        },
+        {
+          "tvLogo": "https://images.jstv.com/images/2024/01/12/202401121517241705043844403_956_b_40x34.png",
+          "channelName": "江苏影视",
+          "number": 92,
+          "args": {
+            "liveUrl": "https://litchi-play-encrypted-site.jstv.com/applive/jsyspro.m3u8"
+          }
+        },
+        {
+          "tvLogo": "https://images.jstv.com/images/2024/01/12/202401121517351705043855024_367_b_40x34.png",
+          "channelName": "江苏新闻",
+          "number": 93,
+          "args": {
+            "liveUrl": "https://litchi-play-encrypted-site.jstv.com/applive/jsxwpro.m3u8"
+          }
+        },
+        {
+          "tvLogo": "https://images.jstv.com/images/2024/01/12/202401121519131705043953879_401_b_40x34.png",
+          "channelName": "江苏教育",
+          "number": 94,
+          "args": {
+            "liveUrl": "https://litchi-play-encrypted-site.jstv.com/applive/jsjypro.m3u8"
+          }
+        },
+        {
+          "tvLogo": "https://images.jstv.com/images/2024/01/12/202401121518151705043895007_268_b_40x34.png",
+          "channelName": "体育休闲",
+          "number": 95,
+          "args": {
+            "liveUrl": "https://litchi-play-encrypted-site.jstv.com/applive/jsxxpro.m3u8"
+          }
+        },
+        {
+          "tvLogo": "https://images.jstv.com/images/2024/01/12/202401121518251705043905628_960_b_40x34.png",
+          "channelName": "优漫卡通",
+          "number": 96,
+          "args": {
+            "liveUrl": "https://litchi-play-encrypted-site.jstv.com/applive/ymktpro.m3u8"
+          }
+        },
+        {
+          "tvLogo": "https://images.jstv.com/images/2024/01/12/202401121518361705043916952_462_b_40x34.png",
+          "channelName": "江苏国际",
+          "number": 97,
+          "args": {
+            "liveUrl": "https://litchi-play-encrypted-site.jstv.com/applive/jsgjpro.m3u8"
+          }
+        }
+      ]
+    },
+    {
+      "channelType": "江西",
+      "player": "jiangxi",
+      "hidden": true,
+      "channelList": [
+        {
+          "tvLogo": "",
+          "channelName": "江西卫视",
+          "args": {
+            "m3u8Name": "tv_jxtv1.m3u8"
+          },
+          "number": 98
+        },
+        {
+          "tvLogo": "",
+          "channelName": "都市频道",
+          "args": {
+            "m3u8Name": "tv_jxtv2.m3u8"
+          },
+          "number": 99
+        },
+        {
+          "tvLogo": "",
+          "channelName": "经济生活频道",
+          "args": {
+            "m3u8Name": "tv_jxtv3.m3u8"
+          },
+          "number": 100
+        },
+        {
+          "tvLogo": "",
+          "channelName": "公共·农业频道",
+          "args": {
+            "m3u8Name": "tv_jxtv5.m3u8"
+          },
+          "number": 101
+        },
+        {
+          "tvLogo": "",
+          "channelName": "少儿频道",
+          "args": {
+            "m3u8Name": "tv_jxtv6.m3u8"
+          },
+          "number": 102
+        },
+        {
+          "tvLogo": "",
+          "channelName": "新闻频道",
+          "args": {
+            "m3u8Name": "tv_jxtv7.m3u8"
+          },
+          "number": 103
+        },
+        {
+          "tvLogo": "",
+          "channelName": "移动电视频道",
+          "args": {
+            "m3u8Name": "tv_jxtv8.m3u8"
+          },
+          "number": 104
+        }
+      ]
+    },
+    {
+      "channelType": "山东",
+      "player": "shandong",
+      "channelList": [
+        {
+          "number": 105,
+          "tvLogo": "",
+          "channelName": "山东卫视",
+          "args": { "channelId": "24581" }
+        },
+        {
+          "number": 106,
+          "tvLogo": "",
+          "channelName": "齐鲁频道",
+          "args": { "channelId": "24584" }
+        },
+        {
+          "number": 107,
+          "tvLogo": "",
+          "channelName": "综艺频道",
+          "args": { "channelId": "24593" }
+        },
+        {
+          "number": 108,
+          "tvLogo": "",
+          "channelName": "新闻频道",
+          "args": { "channelId": "24602" }
+        },
+        {
+          "number": 109,
+          "tvLogo": "",
+          "channelName": "农科频道",
+          "args": { "channelId": "24599" }
+        },
+        {
+          "number": 110,
+          "tvLogo": "",
+          "channelName": "少儿频道",
+          "args": { "channelId": "24605" }
+        },
+        {
+          "number": 111,
+          "tvLogo": "",
+          "channelName": "体育频道",
+          "args": { "channelId": "24587" }
+        },
+        {
+          "number": 112,
+          "tvLogo": "",
+          "channelName": "文旅频道",
+          "args": { "channelId": "24590" }
+        }
+      ]
+    },
+    {
+      "channelType": "浙江",
+      "player": "zhejiang",
+      "channelList": [
+        {
+          "number": 113,
+          "channelName": "浙江卫视",
+          "tvLogo": "http://oss.cztv.com/ucc/20200123/4aaea824fa3e4f8391a6243509de7011.png",
+          "args": { "code": "01" }
+        },
+        {
+          "number": 114,
+          "channelName": "钱江都市",
+          "tvLogo": "http://oss.cztv.com/image/uc/user_20200120/22682936202001201527561695077536.png",
+          "args": { "code": "02" }
+        },
+        {
+          "number": 115,
+          "channelName": "经济生活",
+          "tvLogo": "http://oss.cztv.com/ucc/20200123/fb0b3cff52e248e38b05be65c87869ad.png",
+          "args": { "code": "03" }
+        },
+        {
+          "number": 116,
+          "channelName": "教科影视",
+          "tvLogo": "http://oss.cztv.com/ucc/20200123/821f9a2695c24835aac3665ef4b2e9a1.png",
+          "args": { "code": "04" }
+        },
+        {
+          "number": 117,
+          "channelName": "民生休闲",
+          "tvLogo": "http://oss.cztv.com/ucc/20200123/dde8c15d034d45468c0fe1cd247805a3.png",
+          "args": { "code": "06" }
+        },
+        {
+          "number": 118,
+          "channelName": "新闻",
+          "tvLogo": "http://oss.cztv.com/uploads/2023-06-20/1687261802752146585_newsliveicon.png",
+          "args": { "code": "07" }
+        },
+        {
+          "number": 119,
+          "channelName": "少儿频道",
+          "tvLogo": "http://oss.cztv.com/ucc/20200123/312d8aea2f2a4f678b084d2bd8dbcb05.png",
+          "args": { "code": "08" }
+        },
+        {
+          "number": 120,
+          "channelName": "浙江国际",
+          "tvLogo": "http://oss.cztv.com/ucc/20200123/ad3c07c7910e475a8631e4cff5a9431c.png",
+          "args": { "code": "10" }
+        },
+        {
+          "number": 121,
+          "channelName": "好易购",
+          "tvLogo": "http://oss.cztv.com/uploads/2023-06-20/1687261764728924223_haoyigouicon.png",
+          "args": { "code": "11" }
+        },
+        {
+          "number": 122,
+          "channelName": "之江纪录",
+          "tvLogo": "https://oss.cztv.com/ucc/20221019/c797cd82a3d44ca8a54f19a7e636b8f6.jpg",
+          "args": { "code": "12" }
+        }
+      ]
+    },
+    {
+      "channelType": "安徽",
+      "player": "anhui",
+      "channelList": [
+        {
+          "number": 123,
+          "tvLogo": "https://image.ahtv.cn/2021012210f12b01689743e3d415947bf449fbd3.jpg",
+          "channelName": "安徽卫视"
+        },
+        {
+          "number": 124,
+          "tvLogo": "https://image.ahtv.cn/20210202e34fe2c5ae0f7d2e277508618b1edb34.jpg",
+          "channelName": "经济生活"
+        },
+        {
+          "number": 125,
+          "tvLogo": "https://image.ahtv.cn/20210202370aac2caf7ceb06c5150ff1fc83a13c.jpg",
+          "channelName": "综艺体育"
+        },
+        {
+          "number": 126,
+          "tvLogo": "https://image.ahtv.cn/2021020248b7d344e7b29577fb84878d1d3bfafd.jpg",
+          "channelName": "影视频道"
+        },
+        {
+          "number": 127,
+          "tvLogo": "https://image.ahtv.cn/20210122c9e4bae963a30d400b17f576d33c100f.jpg",
+          "channelName": "安徽公共"
+        },
+        {
+          "number": 128,
+          "tvLogo": "https://image.ahtv.cn/202101221943fa60c4d19ddafa6ed7084813276a.jpg",
+          "channelName": "农业·科教"
+        },
+        {
+          "number": 129,
+          "tvLogo": "https://image.ahtv.cn/20210202851404cef529356babe3512fd17ce91f.jpg",
+          "channelName": "安徽国际"
+        },
+        {
+          "number": 130,
+          "tvLogo": "https://image.ahtv.cn/2021020270a9f8acec670518ab80a1281f9dbb68.jpg",
+          "channelName": "移动电视"
+        }
+      ]
+    },
+    {
+      "channelType": "广西",
+      "player": "guangxi",
+      "channelList": [
+        {
+          "channelName": "广西卫视",
+          "args": {
+            "id": "e7a7ab7df9fe11e88bcfe41f13b60c62"
+          }
+        },
+        {
+          "channelName": "综艺旅游",
+          "args": {
+            "id": "f3335975f9fe11e88bcfe41f13b60c62"
+          }
+        },
+        {
+          "channelName": "都市频道",
+          "args": {
+            "id": "fdbaf085f9fe11e88bcfe41f13b60c62"
+          }
+        },
+        {
+          "channelName": "影视频道",
+          "args": {
+            "id": "5e923d82058e11e9ba67e41f13b60c62"
+          }
+        },
+        {
+          "channelName": "新闻频道",
+          "args": {
+            "id": "9dfd8600075811e9ba67e41f13b60c62"
+          }
+        },
+        {
+          "channelName": "国际频道",
+          "args": {
+            "id": "bfa17b64157f11e999f0e41f13b60c62"
+          }
+        },
+        {
+          "channelName": "移动数字",
+          "args": {
+            "id": "78dbfd44e6b74ab687204d2d8113cbf5"
+          }
+        }
+      ]
+    },
+    {
+      "channelType": "广东",
+      "player": "guangdong",
+      "channelList": [
+        {
+          "channelName": "广东卫视",
+          "args": {
+            "id": "43"
+          }
+        },
+        {
+          "channelName": "广东珠江",
+          "args": {
+            "id": "44"
+          }
+        },
+        {
+          "channelName": "广东新闻",
+          "args": {
+            "id": "45"
+          }
+        },
+        {
+          "channelName": "广东民生",
+          "args": {
+            "id": "48"
+          }
+        },
+        {
+          "channelName": "广东体育",
+          "args": {
+            "id": "47"
+          }
+        },
+        {
+          "channelName": "大湾区",
+          "args": {
+            "id": "51"
+          }
+        },
+        {
+          "channelName": "广东影视",
+          "args": {
+            "id": "53"
+          }
+        },
+        {
+          "channelName": "4k超高清",
+          "args": {
+            "id": "16"
+          }
+        },
+        {
+          "channelName": "广东少儿",
+          "args": {
+            "id": "54"
+          }
+        },
+        {
+          "channelName": "嘉佳卡通",
+          "args": {
+            "id": "66"
+          }
+        },
+        {
+          "channelName": "岭南戏曲",
+          "args": {
+            "id": "15"
+          }
+        },
+        {
+          "channelName": "广东移动",
+          "args": {
+            "id": "74"
+          }
+        },
+        {
+          "channelName": "广东经典剧",
+          "args": {
+            "id": "100"
+          }
+        },
+        {
+          "channelName": "纪录片",
+          "args": {
+            "id": "94"
+          }
+        },
+        {
+          "channelName": "生活频道",
+          "args": {
+            "id": "102"
+          }
+        },
+        {
+          "channelName": "文化频道",
+          "args": {
+            "id": "75"
+          }
+        },
+        {
+          "channelName": "健康频道",
+          "args": {
+            "id": "99"
+          }
+        }
+      ]
+    },
+    {
+      "channelType": "香港",
+      "player": "common",
+      "channelList": [
+        {
+          "channelName": "香港卫视",
+          "player": "common",
+          "args": {
+            "liveUrl": "https://www.hkstv.tv/webcast/livestream/mutfysrq/playlist.m3u8?hls_ctx=7144stj2"
+          }
+        }
+      ]
+    }
+  ]
+}
