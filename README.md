@@ -59,6 +59,8 @@ reboot # 重启设备
 
 部分电视系统内核的版本低，所以需要使用X5内核，这个需要自己自行编译此项目，需要一定的android基础。
 
+如果不懂开发，可以使用此版本: [CCTV版本，低内核版本使用](https://jdy2002.lanzoue.com/id2BO3ji7axg)
+
 1. 在[腾讯浏览服务](https://x5.tencent.com/tbs/x5/apps/list) 登录账号，之后创建应用，上传打包后的 apk
 2. 进行实名认证
 3. 在应用列表点击`查看应用`，打开[版本配置列表](https://x5.tencent.com/tbs/x5/app/24e3be34042f4f11a854aee8a956d584/x5public/config)
