@@ -1,7 +1,9 @@
-package xyz.jdynb.tv
+package xyz.jdynb.tv.ui.activity
 
 import android.content.Intent
 import com.drake.engine.base.EngineToolbarActivity
+import xyz.jdynb.tv.DongYuTVApplication
+import xyz.jdynb.tv.R
 import xyz.jdynb.tv.databinding.ActivityCrashBinding
 
 /**
@@ -15,9 +17,9 @@ class CrashActivity : EngineToolbarActivity<ActivityCrashBinding>(R.layout.activ
 
     @JvmStatic
     fun actionStart(log: String) {
-      DongYuTVApplication.context.startActivity(
+      DongYuTVApplication.Companion.context.startActivity(
         Intent(
-          DongYuTVApplication.context,
+          DongYuTVApplication.Companion.context,
           CrashActivity::class.java
         ).apply {
           addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

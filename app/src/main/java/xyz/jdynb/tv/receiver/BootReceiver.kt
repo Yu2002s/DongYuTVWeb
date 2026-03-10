@@ -4,13 +4,13 @@ import android.app.ActivityManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.util.Log
 import androidx.core.content.ContextCompat
 import xyz.jdynb.music.utils.SpUtils.getRequired
 import xyz.jdynb.tv.MainActivity
 import xyz.jdynb.tv.constants.SPKeyConstants
 import xyz.jdynb.tv.service.BootService
+import xyz.jdynb.tv.ui.activity.SplashActivity
 
 /**
  * 开机自启动广播接收器
@@ -38,7 +38,7 @@ class BootReceiver : BroadcastReceiver() {
         // 延迟启动,避免系统刚启动时资源紧张
         // 增加延迟时间到3秒,确保系统完全启动
         android.os.Handler(context.mainLooper).postDelayed({
-          startMainActivity(context)
+          startApp(context)
           // 多次尝试将应用置于前台
           for (i in 1..3) {
             android.os.Handler(context.mainLooper).postDelayed({
@@ -101,9 +101,9 @@ class BootReceiver : BroadcastReceiver() {
   /**
    * 启动主 Activity
    */
-  private fun startMainActivity(context: Context) {
+  private fun startApp(context: Context) {
     try {
-      val intent = Intent(context, MainActivity::class.java).apply {
+      val intent = Intent(context, SplashActivity::class.java).apply {
         // 必须添加 FLAG_ACTIVITY_NEW_TASK,因为从非 Activity 的 Context 启动
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         // 将应用带到前台,非常重要!

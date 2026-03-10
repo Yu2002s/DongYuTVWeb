@@ -63,7 +63,8 @@ object UpdateUtils {
       } else {
         Toast.makeText(context, "当前已是最新版本", Toast.LENGTH_SHORT).show()
       }
-    } catch (_: Exception) {
+    } catch (e: Exception) {
+      Log.e(TAG, "检查更新异常: $e")
     }
   }
 

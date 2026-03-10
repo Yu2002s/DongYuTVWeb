@@ -26,6 +26,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
+        <TextView
+            android:textSize="19sp"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@android:color/holo_red_light"
+            android:text="注意: TV端可能无法直接更新，请访问本App Gitee仓库获取更新"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
         <ProgressBar
             android:indeterminate="@{m.progress == 0}"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"

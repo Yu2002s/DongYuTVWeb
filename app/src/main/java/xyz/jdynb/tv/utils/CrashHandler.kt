@@ -3,7 +3,7 @@ package xyz.jdynb.tv.utils
 import android.os.Build
 import androidx.annotation.OptIn
 import androidx.core.content.pm.PackageInfoCompat
-import xyz.jdynb.tv.CrashActivity
+import xyz.jdynb.tv.ui.activity.CrashActivity
 import xyz.jdynb.tv.DongYuTVApplication
 import java.io.PrintWriter
 import java.io.StringWriter

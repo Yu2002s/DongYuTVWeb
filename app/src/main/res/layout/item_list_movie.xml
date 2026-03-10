@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="m"
+            type="xyz.jdynb.tv.model.MovieModel" />
+        
+        <import type="com.drake.engine.databinding.GlideDataBindingComponent" />
+    </data>
+    
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_movie"
+        android:focusable="true"
+        android:background="@drawable/bg_select"
+        android:padding="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+        <ImageView
+            android:id="@+id/thumb"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            corner="@{10}"
+            img="@{m.thumbUrl}"
+            tools:src="@tools:sample/avatars"
+            android:layout_width="80dp"
+            android:layout_height="110dp" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_marginStart="10dp"
+            tools:text="士兵突击"
+            android:text="@{m.title}"
+            android:textSize="23sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/thumb"
+            app:layout_constraintTop_toTopOf="@id/thumb"
+            app:layout_constraintEnd_toStartOf="@id/category"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toEndOf="@id/name"
+            gone="@{m.category != null}"
+            android:id="@+id/category"
+            android:text="@{m.category}"
+            tools:text="电影"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            gone="@{m.director != null}"
+            android:id="@+id/director"
+            android:text="@{`导演: ` + m.director}"
+            tools:text="导演:张艺谋"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/name"
+            app:layout_constraintTop_toBottomOf="@id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_marginStart="8dp"
+            gone="@{m.year != null}"
+            android:id="@+id/year"
+            android:text="@{`年份: ` + m.year}"
+            tools:text="年份: 2002"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@id/director"
+            app:layout_constraintStart_toEndOf="@id/director"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            gone="@{m.actor != null}"
+            android:id="@+id/actor"
+            android:text="@{`演员: ` + m.actor}"
+            tools:text="演员:王宝强,张学友,张国立,张铁林"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/name"
+            app:layout_constraintTop_toBottomOf="@id/director"
+            app:layout_constraintEnd_toEndOf="@id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/intro"
+            android:text="@{`简介: ` + m.introduction}"
+            tools:text="简介:王宝强,张学友,张国立,张铁林"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:maxLines="2"
+            app:layout_constraintStart_toStartOf="@id/name"
+            app:layout_constraintTop_toBottomOf="@id/actor"
+            app:layout_constraintEnd_toEndOf="@id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+        
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    
+</layout>

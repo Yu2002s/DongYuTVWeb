@@ -7,49 +7,89 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:padding="30dp"
-            android:orientation="vertical"
+        <ScrollView
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
 
-            <Button
-                android:clickable="true"
-                android:focusable="true"
-                android:text="返回"
-                android:id="@+id/btn_back"
-                android:textSize="19sp"
-                android:background="@drawable/bg_select"
+            <LinearLayout
+                android:padding="30dp"
+                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content">
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:textColor="@color/white"
-                android:layout_marginTop="16dp"
-                android:focusable="true"
-                android:padding="10dp"
-                android:background="@drawable/bg_select"
-                tools:checked="true"
-                android:id="@+id/sw_reverse_direction"
-                android:text="反转方向键"
-                android:textSize="19sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                <Button
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="返回"
+                    android:id="@+id/btn_back"
+                    android:textSize="19sp"
+                    android:background="@drawable/bg_select"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:textColor="@color/white"
-                android:layout_marginTop="10dp"
-                android:focusable="true"
-                android:padding="10dp"
-                android:background="@drawable/bg_select"
-                tools:checked="true"
-                android:id="@+id/sw_boot"
-                android:textSize="19sp"
-                android:text="开机自启动"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                <androidx.appcompat.widget.SwitchCompat
+                    android:textColor="@color/white"
+                    android:layout_marginTop="16dp"
+                    android:focusable="true"
+                    android:padding="10dp"
+                    android:background="@drawable/bg_select"
+                    tools:checked="true"
+                    android:id="@+id/sw_reverse_direction"
+                    android:text="反转方向键"
+                    android:textSize="19sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-        </LinearLayout>
+                <androidx.appcompat.widget.SwitchCompat
+                    android:textColor="@color/white"
+                    android:layout_marginTop="10dp"
+                    android:focusable="true"
+                    android:padding="10dp"
+                    android:background="@drawable/bg_select"
+                    tools:checked="true"
+                    android:id="@+id/sw_boot"
+                    android:textSize="19sp"
+                    android:text="开机自启动"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:textColor="@color/white"
+                    android:layout_marginTop="10dp"
+                    android:focusable="true"
+                    android:padding="10dp"
+                    android:background="@drawable/bg_select"
+                    tools:checked="true"
+                    android:id="@+id/sw_home"
+                    android:textSize="19sp"
+                    android:text="主页默认搜索页"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <Button
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="检查更新"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/btn_check_update"
+                    android:textSize="19sp"
+                    android:background="@drawable/bg_select"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <Button
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="捐赠我"
+                    android:id="@+id/btn_donate"
+                    android:textSize="19sp"
+                    android:background="@drawable/bg_select"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+        </ScrollView>
 
         <LinearLayout
             android:gravity="center"
@@ -68,6 +108,16 @@
                 android:layout_marginTop="10dp"
                 android:text="@string/app_name"
                 android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:text="作者: 冬日暖雨"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:text="Gitee、Github: 搜索 DongYuTVWeb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 

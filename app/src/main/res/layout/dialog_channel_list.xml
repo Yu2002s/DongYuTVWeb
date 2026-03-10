@@ -29,6 +29,17 @@
                 android:focusable="true"
                 android:background="@drawable/bg_select"
                 android:textSize="17sp"
+                android:id="@+id/btn_search"
+                android:text="搜索"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+
+            <Button
+                android:layout_marginStart="8dp"
+                android:focusable="true"
+                android:background="@drawable/bg_select"
+                android:textSize="17sp"
                 android:id="@+id/btn_refresh"
                 android:text="刷新"
                 android:layout_width="wrap_content"
@@ -48,14 +59,6 @@
                 android:layout_marginStart="8dp"
                 tools:text="15秒无操作后自动返回"
                 android:id="@+id/tv_tips"
-                android:textSize="20sp"
-                android:textColor="@color/white"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:layout_marginStart="10dp"
-                android:text="双击频道换台"
                 android:textSize="20sp"
                 android:textColor="@color/white"
                 android:layout_width="wrap_content"

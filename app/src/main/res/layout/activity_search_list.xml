@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:layout_margin="10dp"
+            android:background="@drawable/bg_select"
+            android:textColor="@color/white"
+            android:id="@+id/btn_back"
+            hit="@{true}"
+            android:text="返回"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <com.drake.statelayout.StateLayout
+            android:id="@+id/state"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_search_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                app:spanCount="2" />
+
+        </com.drake.statelayout.StateLayout>
+    </LinearLayout>
+
+</layout>

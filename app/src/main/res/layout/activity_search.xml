@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:padding="10dp">
+
+            <GridLayout
+                android:id="@+id/grid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:columnCount="4"
+                android:orientation="horizontal"
+                android:rowCount="8">
+
+                <Button
+                    android:layout_margin="4dp"
+                    android:id="@+id/btn_back"
+                    hit="@{true}"
+                    android:layout_columnSpan="2"
+                    android:layout_gravity="fill"
+                    android:background="@drawable/bg_select"
+                    android:focusable="true"
+                    android:text="返回直播" />
+
+                <Button
+                    android:layout_margin="4dp"
+                    android:id="@+id/btn_setting"
+                    hit="@{true}"
+                    android:layout_columnSpan="2"
+                    android:layout_gravity="fill"
+                    android:background="@drawable/bg_select"
+                    android:focusable="true"
+                    android:text="设置" />
+
+                <TextView
+                    android:id="@+id/tv_keyword"
+                    android:layout_columnSpan="4"
+                    android:layout_gravity="fill"
+                    android:background="@drawable/bg_select"
+                    android:focusable="false"
+                    android:gravity="center_horizontal"
+                    android:hint="请输入关键字搜索"
+                    android:padding="8dp"
+                    android:textColor="@color/white"
+                    android:textSize="23sp"
+                    android:textStyle="bold"
+                    tools:text="@string/app_name" />
+
+                <Button
+                    android:id="@+id/btn_delete"
+                    hit="@{true}"
+                    android:layout_columnSpan="1"
+                    android:layout_gravity="fill"
+                    android:background="@drawable/bg_select"
+                    android:focusable="true"
+                    android:text="删除" />
+
+                <Button
+                    android:id="@+id/btn_clear"
+                    hit="@{true}"
+                    android:layout_columnSpan="1"
+                    android:layout_gravity="fill"
+                    android:background="@drawable/bg_select"
+                    android:focusable="true"
+                    android:text="清空" />
+
+            </GridLayout>
+
+        </ScrollView>
+
+        <com.drake.statelayout.StateLayout
+            android:id="@+id/state"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp"
+                app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                app:spanCount="2" />
+
+        </com.drake.statelayout.StateLayout>
+
+    </LinearLayout>
+
+</layout>

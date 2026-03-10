@@ -30,6 +30,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".DongYuTVApplication"
@@ -49,10 +50,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="30">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.activity.SplashActivity"
+            android:excludeFromRecents="false"
             android:exported="true"
             android:launchMode="singleTask"
-            android:excludeFromRecents="false"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -64,7 +65,30 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".CrashActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:excludeFromRecents="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape">
+
+        </activity>
+
+        <activity android:name=".ui.activity.CrashActivity" />
+
+        <activity
+            android:name=".ui.activity.SearchActivity"
+            android:excludeFromRecents="false"
+            android:screenOrientation="landscape" />
+
+        <activity
+            android:name=".ui.activity.VideoActivity"
+            android:excludeFromRecents="false"
+            android:screenOrientation="landscape" />
+
+        <activity
+            android:name=".ui.activity.SearchListActivity"
+            android:excludeFromRecents="false"
+            android:screenOrientation="landscape" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -88,7 +112,10 @@
             </intent-filter>
         </receiver>
 
-        <meta-data android:name="com.tencent.smtt.multiprocess.NUM_PRIVILEGED_SERVICES" android:value="1" />
+        <meta-data
+            android:name="com.tencent.smtt.multiprocess.NUM_PRIVILEGED_SERVICES"
+            android:value="1" />
+
         <service
             android:name="com.tencent.smtt.services.ChildProcessService$Privileged0"
             android:exported="false"

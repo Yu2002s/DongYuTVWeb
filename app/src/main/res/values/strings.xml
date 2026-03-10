@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DongYuTvWeb</string>
+    <string name="error_tips">加载失败</string>
+    <string name="empty_tips">数据为空</string>
 </resources>

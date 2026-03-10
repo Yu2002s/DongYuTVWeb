@@ -125,6 +125,12 @@ dependencies {
   implementation(libs.androidx.fragment)
   // https://mvnrepository.com/artifact/androidx.activity/activity-ktx
   implementation(libs.androidx.activity.ktx)
+  implementation(libs.glide)
+  implementation(libs.media3.exoplayer)
+  implementation(libs.media3.exoplayer.hls)
+  implementation(libs.media3.ui)
+  implementation(libs.media3.ui.leanback)
+  implementation(libs.okhttp)
   implementation("io.github.jonanorman.android.webviewup:core:0.1.0")
   implementation("io.github.jonanorman.android.webviewup:download-source:0.1.0")
   implementation(libs.androidx.localbroadcastmanager)

@@ -35,6 +35,7 @@ import com.drake.engine.utils.NetworkUtils
 import kotlinx.coroutines.delay
 import xyz.jdynb.music.utils.SpUtils.getRequired
 import xyz.jdynb.tv.constants.SPKeyConstants
+import xyz.jdynb.tv.ui.activity.SearchActivity
 
 class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main) {
 
@@ -235,6 +236,11 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
       // 刷新
       R.id.btn_refresh -> {
         livePlayerFragment?.refresh()
+      }
+
+      // 搜索
+      R.id.btn_search -> {
+        startActivity(Intent(this, SearchActivity::class.java))
       }
     }
   }

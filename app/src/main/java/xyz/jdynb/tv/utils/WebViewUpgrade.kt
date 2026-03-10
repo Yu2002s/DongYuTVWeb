@@ -19,7 +19,7 @@ object WebViewUpgrade {
   /**
    * 最低支持的 WebView 版本
    */
-  private const val WEBVIEW_MIN_VERSION = 75
+  private const val WEBVIEW_MIN_VERSION = 85
 
   /**
    * WebView 内核下载地址

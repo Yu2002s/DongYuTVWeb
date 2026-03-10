@@ -1,5 +1,6 @@
 package xyz.jdynb.tv.dialog
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -24,7 +25,7 @@ import xyz.jdynb.tv.databinding.DialogChannelListBinding
 import xyz.jdynb.tv.databinding.ItemListGroupBinding
 import xyz.jdynb.tv.model.LiveChannelTypeModel
 import xyz.jdynb.tv.model.LiveChannelModel
-import xyz.jdynb.tv.utils.UpdateUtils
+import xyz.jdynb.tv.ui.activity.SearchActivity
 import xyz.jdynb.tv.utils.isTv
 
 class ChannelListDialog(
@@ -180,9 +181,14 @@ class ChannelListDialog(
       }
     }*/
 
+    binding.btnSearch.setOnClickListener {
+      dismiss()
+      context.startActivity(Intent(context, SearchActivity::class.java))
+    }
+
     binding.btnSetting.setOnClickListener {
       dismiss()
-      SettingDialog(it.context, mainViewModel).show()
+      SettingDialog(it.context).show()
     }
   }
 

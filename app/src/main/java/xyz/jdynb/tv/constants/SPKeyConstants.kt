@@ -26,6 +26,11 @@ class SPKeyConstants {
      * 是否开机自启动
      */
     const val BOOT_AUTO_START = "boot_auto_start"
+
+    /**
+     * 主页默认搜索页
+     */
+    const val HOME_DEFAULT_SEARCH = "home_default_search"
   }
 
 }

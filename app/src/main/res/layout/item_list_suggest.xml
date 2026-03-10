@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="m"
+            type="java.lang.String" />
+
+    </data>
+
+    <TextView
+        android:focusable="true"
+        android:text="@{m}"
+        android:id="@+id/item_name"
+        android:padding="8dp"
+        android:textSize="23sp"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_select"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</layout>

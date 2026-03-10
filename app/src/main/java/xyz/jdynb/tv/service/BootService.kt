@@ -18,6 +18,7 @@ import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import xyz.jdynb.tv.MainActivity
+import xyz.jdynb.tv.ui.activity.SplashActivity
 
 /**
  * 启动服务
@@ -104,7 +105,7 @@ class BootService: Service() {
 
       Log.w(TAG, "App task not found, trying alternative method")
       // 备用方案:重新启动 Activity
-      val intent = Intent(context, MainActivity::class.java).apply {
+      val intent = Intent(context, SplashActivity::class.java).apply {
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT)
       }
