@@ -15,10 +15,15 @@ public class AESUtils {
 
     @Nullable
     public static String encrypt(String data, String key, String iv) {
+        return encrypt(data, key, iv, "AES/CBC/NoPadding");
+    }
+
+    @Nullable
+    public static String encrypt(String data, String key, String iv, String algorithm) {
         try {
             byte[] raw = key.getBytes(StandardCharsets.UTF_8);
             SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
-            Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
+            Cipher cipher = Cipher.getInstance(algorithm);
             IvParameterSpec ivParameterSpec = new IvParameterSpec(iv.getBytes());
             cipher.init(Cipher.ENCRYPT_MODE, skeySpec, ivParameterSpec);
             byte[] encrypted = cipher.doFinal(data.getBytes());
@@ -34,10 +39,15 @@ public class AESUtils {
 
     @Nullable
     public static String decrypt(String data, String key, String iv) {
+        return decrypt(data, key, iv, "AES/CBC/NoPadding");
+    }
+
+    @Nullable
+    public static String decrypt(String data, String key, String iv, String algorithm) {
         try {
             byte[] raw = key.getBytes(StandardCharsets.UTF_8);
             SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
-            Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
+            Cipher cipher = Cipher.getInstance(algorithm);
             IvParameterSpec ivParameterSpec = new IvParameterSpec(iv.getBytes());
             cipher.init(Cipher.DECRYPT_MODE, skeySpec, ivParameterSpec);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

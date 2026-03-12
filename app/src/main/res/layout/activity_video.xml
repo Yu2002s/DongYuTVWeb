@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <FrameLayout
         android:background="@color/black"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -15,6 +15,16 @@
             app:show_buffering="when_playing"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    </LinearLayout>
+
+        <top.littlefogcat.easydanmaku.ui.DanmakuView
+            android:id="@+id/danmakuView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+       <!-- <com.bytedance.danmaku.render.engine.DanmakuView
+            android:id="@+id/danmakuView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>-->
+    </FrameLayout>
 
 </layout>

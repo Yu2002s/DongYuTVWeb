@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="DanmakuView">
+        <attr name="antiCoverEnabled" format="boolean" />
+        <attr name="showFps" format="boolean" />
+    </declare-styleable>
+</resources>

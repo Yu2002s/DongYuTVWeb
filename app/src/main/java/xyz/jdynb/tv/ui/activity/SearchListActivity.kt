@@ -2,7 +2,6 @@ package xyz.jdynb.tv.ui.activity
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
@@ -42,7 +41,7 @@ class SearchListActivity :
       binding.state.showLoading()
 
       val result =
-        NetworkUtils.request<PageModel<MovieModel>>(Api.SEARCH, mapOf(PARAM_KEYWORD to keyword))
+        NetworkUtils.requestSuspendResult<PageModel<MovieModel>>(Api.SEARCH, mapOf(PARAM_KEYWORD to keyword))
 
       result.onSuccess {
         binding.state.showContent()

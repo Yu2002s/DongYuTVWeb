@@ -22,8 +22,10 @@ dependencyResolutionManagement {
     maven {
       setUrl("https://maven.mozilla.org/maven2/")
     }
+    maven { setUrl("https://artifact.bytedance.com/repository/releases/") }
   }
 }
 
 rootProject.name = "DongYuTvWeb"
 include(":app")
+include(":easydanmaku")

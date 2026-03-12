@@ -3,7 +3,6 @@ package xyz.jdynb.tv.utils
 import android.util.Log
 import com.drake.engine.utils.EncryptUtil
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
@@ -20,9 +19,10 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.StandardCharsets
-import kotlin.coroutines.suspendCoroutine
 
 object NetworkUtils {
+
+  const val TAG = "NetworkUtils"
 
   val json = Json {
     ignoreUnknownKeys = true
@@ -34,6 +34,7 @@ object NetworkUtils {
   private const val CONFIG_URL = "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/config.json"
 
   val okHttpClient = OkHttpClient.Builder()
+    .connectTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
     .build()
 
   fun getBaseUrl(): String {
@@ -50,6 +51,14 @@ object NetworkUtils {
       }
     }
     return baseUrl
+  }
+
+  fun getRealRequestUrl(path: String, params: Map<String, String>? = null): String {
+    var url = path + "?${params?.toQueryString()}"
+    if (!path.startsWith("http")) {
+      url = getBaseUrl() + url
+    }
+    return url
   }
 
   fun String.inputStream(
@@ -79,8 +88,8 @@ object NetworkUtils {
   @Throws(IOException::class)
   fun createConnection(url: String, method: String = "GET"): HttpURLConnection {
     val connection = URL(url).openConnection() as HttpURLConnection
-    connection.connectTimeout = 6000
-    connection.readTimeout = 6000
+    connection.connectTimeout = 10000
+    connection.readTimeout = 10000
     connection.requestMethod = method
     connection.setRequestProperty("Accept", "*/*")
     return connection
@@ -124,26 +133,62 @@ object NetworkUtils {
     return content
   }
 
-  suspend inline fun <reified T> request(
-    path: String,
-    params: Map<String, String>? = null,
-  ): Result<T> {
-    Log.i("NetworkUtils", "BASE_URL: ${Api.BASE_URL} request: $path, params: $params")
-    return runCatching {
-      val result = withContext(Dispatchers.IO) {
-        val url = getBaseUrl() + path + "?${params?.toQueryString()}"
-        val responseBody = getResponseBody(url)
-        requireNotNull(responseBody) { "Response body is null" }
-        json.decodeFromString(Json.serializersModule.serializer<ResultModel<T>>(), responseBody)
+  suspend inline fun <reified T> requestSuspendCache(url: String, params: Map<String, String>? = null): Result<T> {
+    return withContext(Dispatchers.IO) {
+      runCatching {
+        val fullUrl = getRealRequestUrl(url, params)
+        Log.i(TAG, "fullUrl: $fullUrl")
+        val responseBody = getResponseBody(fullUrl)
+        val key = EncryptUtil.encryptMD5ToString(fullUrl)
+        val file = File(DongYuTVApplication.context.externalCacheDir, key)
+        if (responseBody != null) {
+          file.writeText(responseBody)
+          getBodyStringEntity(responseBody, true)
+        } else if (file.exists()) {
+          val cachedBody = file.readText()
+          if (cachedBody.isEmpty()) {
+            throw IOException("Cached response body is empty")
+          } else {
+            getBodyStringEntity(cachedBody, true)
+          }
+        } else {
+          throw IOException("Response body is null")
+        }
       }
-      if (result.code != 200) {
-        throw RuntimeException(result.msg)
-      }
-      result.data
     }
   }
 
-  suspend inline fun <reified T> request(request: Request) = withContext(Dispatchers.IO) {
+  @Throws(Exception::class)
+  inline fun <reified T> requestSyncResult(path: String, params: Map<String, String>? = null) = runCatching {
+    requestSync<T>(path, params)
+  }
+
+  @Throws(Exception::class)
+  inline fun <reified T> requestSync(path: String, params: Map<String, String>? = null): T {
+    val url = getRealRequestUrl(path, params)
+    val responseBody = getResponseBody(url)
+    return getBodyStringEntity<T>(responseBody)
+  }
+
+  inline fun <reified T> requestSync(request: Request): Result<T> {
+    return runCatching {
+      getBodyEntity<T>(request, true)
+    }
+  }
+
+  suspend inline fun <reified T> requestSuspendResult(
+    path: String,
+    params: Map<String, String>? = null,
+  ): Result<T> {
+    Log.i(TAG, "BASE_URL: ${Api.BASE_URL} request: $path, params: $params")
+    return runCatching {
+      withContext(Dispatchers.IO) {
+        requestSync<T>(path, params)
+      }
+    }
+  }
+
+  suspend inline fun <reified T> requestSuspend(request: Request) = withContext(Dispatchers.IO) {
     runCatching {
       withContext(Dispatchers.IO) {
         getBodyEntity<T>(request)
@@ -151,18 +196,36 @@ object NetworkUtils {
     }
   }
 
-  inline fun <reified T> requestBlock(request: Request): Result<T> {
-    return runCatching {
-      getBodyEntity<T>(request)
-    }
-  }
-
-  inline fun <reified T> getBodyEntity(request: Request): T {
+  @Throws(Exception::class)
+  inline fun <reified T> getBodyEntity(request: Request, raw: Boolean = false): T {
     val response = okHttpClient.newCall(request).execute()
     val responseBody = response.body?.string()
+    return getBodyStringEntity(responseBody, raw)
+  }
+
+  @Throws(Exception::class)
+  inline fun <reified T> getBodyStringEntity(responseBody: String?, raw: Boolean = false): T {
     requireNotNull(responseBody) { "Response body is null" }
-    Log.i("NetworkUtils", "responseBody: $responseBody")
-    return json.decodeFromString(Json.serializersModule.serializer<T>(), responseBody)
+    if (BuildConfig.DEBUG) {
+      Log.i(TAG, "responseBody: $responseBody, T: ${T::class.java}")
+    }
+    if (T::class == String::class) {
+      return responseBody as T
+    }
+    val serializersModule = if (raw) {
+      Json.serializersModule.serializer<T>()
+    } else {
+      json.serializersModule.serializer<ResultModel<T>>()
+    }
+    val result =
+      json.decodeFromString(serializersModule, responseBody)
+    if (result is ResultModel<*>) {
+      if (result.code != 200) {
+        throw RuntimeException(result.msg)
+      }
+      return result.data as T
+    }
+    return result as T
   }
 
   fun Map<String, String>?.toQueryString(): String {

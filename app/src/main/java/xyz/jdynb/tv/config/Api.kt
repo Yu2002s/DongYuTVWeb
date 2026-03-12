@@ -13,4 +13,8 @@ object Api {
   const val SEARCH_SUGGEST = "/search/suggest"
 
   const val SEARCH = "/search"
+
+  const val GET_PARSE_RULE = "/video/get-parse-rule"
+
+  const val DECRYPT_VIDEO = "/video/decrypt"
 }

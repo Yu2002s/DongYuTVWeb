@@ -1,14 +1,16 @@
 package xyz.jdynb.tv.ui.activity
 
 import android.content.Intent
-import android.net.http.UrlRequest
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.widget.ImageView
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
-import androidx.annotation.NonNull
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
@@ -33,25 +35,22 @@ import com.drake.engine.utils.EncryptUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.FormBody
-import okhttp3.Request
-import org.json.JSONObject
+import xyz.jdynb.music.utils.SpUtils.getRequired
 import xyz.jdynb.tv.DongYuTVApplication
 import xyz.jdynb.tv.R
-import xyz.jdynb.tv.config.Api
+import xyz.jdynb.tv.constants.SPKeyConstants
 import xyz.jdynb.tv.databinding.ActivityVideoBinding
-import xyz.jdynb.tv.databinding.ItemSelectionBinding
+import xyz.jdynb.tv.dialog.VideoSettingDialog
+import xyz.jdynb.tv.media.ApiUriResolve
 import xyz.jdynb.tv.model.MovieModel
 import xyz.jdynb.tv.model.VideoProgressModel
-import xyz.jdynb.tv.model.response.XMResolveResponse
-import xyz.jdynb.tv.utils.AESUtils
-import xyz.jdynb.tv.utils.EncryptUtils.md5
+import xyz.jdynb.tv.model.response.DanmakuResponse
 import xyz.jdynb.tv.utils.NetworkUtils
+import xyz.jdynb.tv.utils.ParseUtils
 import xyz.jdynb.tv.utils.getSerializableForKey
 import xyz.jdynb.tv.utils.putSerializable
 import java.io.File
 import java.io.IOException
-import java.net.URLEncoder
 
 
 class VideoActivity : EngineActivity<ActivityVideoBinding>(R.layout.activity_video),
@@ -109,9 +108,9 @@ class VideoActivity : EngineActivity<ActivityVideoBinding>(R.layout.activity_vid
             // 按修改时间排序（从旧到新），删除最旧的文件
             files.sortedBy { it.lastModified() }
               .take(files.size - MAX_SAVE_PROGRESS_COUNT)  // 取最旧的 N 个文件（需要删除的数量）
-              .forEach { 
+              .forEach {
                 Log.d(TAG, "删除旧的进度文件：${it.name}")
-                it.delete() 
+                it.delete()
               }
           }
           currentVideoProgressFile = File(
@@ -165,16 +164,57 @@ class VideoActivity : EngineActivity<ActivityVideoBinding>(R.layout.activity_vid
   @UnstableApi
   override fun initView() {
 
-    binding.playerView.setShowSubtitleButton(true)
+    val insetsController = WindowCompat.getInsetsController(window, window.decorView)
+    insetsController.systemBarsBehavior =
+      WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    insetsController.hide(WindowInsetsCompat.Type.systemBars())
+
+    binding.danmakuView.setDanmakuOpacity(0.8f)
+    binding.danmakuView.setShowFPS(false)
+    binding.danmakuView.setActionOnFrame {
+      binding.danmakuView.time = player.currentPosition
+    }
+
+    binding.playerView.setShowSubtitleButton(false)
     // binding.playerView.setShowRewindButton(true)
     binding.playerView.setShowPlayButtonIfPlaybackIsSuppressed(true)
     binding.playerView.setControllerVisibilityListener(PlayerView.ControllerVisibilityListener { visibility ->
       isShowControl = visibility == PlayerControlView.VISIBLE
     })
+
     createVideoPlayer()
     player.addListener(this)
 
     title = findViewById(R.id.exo_title)
+
+    binding.danmakuView.setTextScale(SPKeyConstants.DANMAKU_SIZE.getRequired(1.0f))
+    binding.danmakuView.setDanmakuOpacity(SPKeyConstants.DANMAKU_ALPHA.getRequired(1.0f))
+    binding.danmakuView.setDisplayArea(SPKeyConstants.DANMAKU_AREA.getRequired(0.5f))
+    binding.danmakuView.isVisible = (SPKeyConstants.ENABLE_DANMAKU.getRequired(true))
+
+    val imageButton: ImageButton =
+      binding.playerView.findViewById(androidx.media3.ui.R.id.exo_settings)
+    imageButton.setOnClickListener {
+      VideoSettingDialog(this).also {
+        it.onDanmakuVisibilityListener = { visible ->
+          binding.danmakuView.isVisible = visible
+        }
+
+        it.onDanmakuSizeListener = { size ->
+          binding.danmakuView.setTextScale(size)
+        }
+
+        it.onDanmakuAlphaListener = { alpha ->
+          binding.danmakuView.setDanmakuOpacity(alpha)
+        }
+
+        it.onDanmakuAreaListener = { area ->
+          binding.danmakuView.setDisplayArea(area)
+        }
+
+      }.show()
+    }
+
     selectionRv = findViewById(R.id.rv_selection)
     selectionRv.divider {
       setDivider(8, true)
@@ -250,74 +290,6 @@ class VideoActivity : EngineActivity<ActivityVideoBinding>(R.layout.activity_vid
     binding.playerView.hideController()
   }
 
-  @UnstableApi
-  private class ApiUriResolve : ResolvingDataSource.Resolver {
-
-    @Throws(Exception::class)
-    override fun resolveDataSpec(dataSpec: DataSpec): DataSpec {
-      // 只处理 HTTP/HTTPS 请求
-      if (dataSpec.uri.scheme != "http" && dataSpec.uri.scheme != "https") {
-        return dataSpec
-      }
-
-      // 如果是已经解析过的真实地址（包含特定域名或路径），直接返回
-      val uriString = dataSpec.uri.toString()
-      // Log.i(TAG, "原始请求 URI: $uriString")
-
-      // 检查是否是 m3u8 或 ts 文件请求
-      val isM3u8 = uriString.contains(".m3u8", ignoreCase = true)
-      val isTS = uriString.contains(".ts", ignoreCase = true)
-
-      if (isTS || isM3u8 || uriString.contains("cdn.hls.one")) {
-        return dataSpec
-      }
-
-      // 只对初始的 m3u8 请求进行 API 解析，后续的 ts 分片不解析
-      /*if (!isM3u8 || uriString.startsWith("http://")) { // 假设真实地址是 http 开头
-        Log.d(TAG, "非 m3u8 请求或已是真实地址，跳过解析")
-        return dataSpec
-      }*/
-
-      try {
-        val urlEncoded = URLEncoder.encode(uriString, "UTF-8")
-        val now = System.currentTimeMillis()
-        val key = "$now$urlEncoded".md5()
-
-        // Log.i(TAG, "key: $key")
-        val sign = AESUtils.encrypt(key, key.md5(), "fUU9eRmkYzsgbkEK") ?: ""
-        val formBody = FormBody.Builder()
-          .add("tm", now.toString())
-          .add("url", urlEncoded)
-          .add("key", key)
-          .add("sign", sign)
-          .build()
-        val request = Request.Builder()
-          .url("https://202.189.8.170/Api")
-          .post(formBody)
-          .build()
-        val result = NetworkUtils.requestBlock<XMResolveResponse>(request).getOrThrow()
-
-        val decrypt = AESUtils.decrypt(result.data, result.key, result.iv)
-          ?: throw NullPointerException("decrypt is null")
-        // Log.i(TAG, "decrypt: $decrypt")
-        val json = decrypt.replace("tg:@xmflv", "")
-          .replace("\u0003\u0003\u0003", "")
-        // Log.i(TAG, "json: $json")
-        val jsonObject = JSONObject(json)
-        val url = jsonObject.getString("url")
-        Log.i(TAG, "解析后的真实 URL: $url")
-
-        // 使用真实 URL 重建 DataSpec
-        return dataSpec.buildUpon()
-          .setUri(url)
-          .build()
-      } catch (e: Exception) {
-        Log.e(TAG, "API 解析失败", e)
-        throw e
-      }
-    }
-  }
-
   private val progressRunnable = object : Runnable {
     override fun run() {
       val currentProgress = player.currentPosition
@@ -359,16 +331,38 @@ class VideoActivity : EngineActivity<ActivityVideoBinding>(R.layout.activity_vid
     handler.removeCallbacks(progressRunnable)
   }
 
+  private fun loadDanmaku(mediaItem: MediaItem?) {
+    if (SPKeyConstants.ENABLE_DANMAKU.getRequired(true)) {
+      lifecycleScope.launch {
+        val result = NetworkUtils.requestSuspendCache<DanmakuResponse>(
+          "https://dmku.hls.one/",
+          mapOf("ac" to "dm", "url" to mediaItem?.localConfiguration?.uri.toString())
+        )
+        result.onSuccess {
+          binding.danmakuView.setDanmakus(it.danmuku.map { item ->
+            item.toDanmakuItem()
+          })
+        }
+          .onFailure {
+            Log.e(TAG, "获取弹幕失败", it)
+          }
+      }
+    }
+  }
+
   override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
     Log.i(
       TAG,
       "onMediaItemTransition: ${mediaItem?.localConfiguration?.uri}, currentMediaItemIndex: ${player.currentMediaItemIndex}"
     )
     selectionRv.bindingAdapter.setChecked(player.currentMediaItemIndex, true)
+
+    loadDanmaku(mediaItem)
   }
 
   override fun onIsPlayingChanged(isPlaying: Boolean) {
     super.onIsPlayingChanged(isPlaying)
+
     if (isPlaying) {
       runProgress()
     } else {

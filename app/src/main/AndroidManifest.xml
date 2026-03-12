@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-sdk tools:overrideLibrary="androidx.javascriptengine" />
+
     <uses-feature
         android:name="android.software.leanback"
         android:required="false" />
@@ -37,7 +39,6 @@
         android:allowBackup="true"
         android:banner="@mipmap/ic_launcher"
         android:dataExtractionRules="@xml/data_extraction_rules"
-        android:extractNativeLibs="true"
         android:fullBackupContent="@xml/backup_rules"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"

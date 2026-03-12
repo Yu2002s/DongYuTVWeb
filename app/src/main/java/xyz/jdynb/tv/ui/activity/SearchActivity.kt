@@ -8,7 +8,6 @@ import android.widget.Button
 import android.widget.GridLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.view.isInvisible
 import androidx.core.view.setMargins
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.lifecycleScope
@@ -31,6 +30,7 @@ class SearchActivity : EngineActivity<ActivitySearchBinding>(R.layout.activity_s
   private var searchJob: Job? = null
 
   override fun initData() {
+
   }
 
   private fun getSuggestList(keyword: String) {
@@ -43,7 +43,7 @@ class SearchActivity : EngineActivity<ActivitySearchBinding>(R.layout.activity_s
     searchJob?.cancel(null)
     searchJob = lifecycleScope.launch {
       binding.rv.models =
-        NetworkUtils.request<List<String>>(Api.SEARCH_SUGGEST, mapOf("keyword" to keyword))
+        NetworkUtils.requestSuspendResult<List<String>>(Api.SEARCH_SUGGEST, mapOf("keyword" to keyword))
           .onFailure {
             binding.state.showError(it)
             Log.e("SearchActivity", "Error fetching search suggestions", it)
@@ -57,7 +57,7 @@ class SearchActivity : EngineActivity<ActivitySearchBinding>(R.layout.activity_s
     super.onClick(v)
     when (v.id) {
       R.id.btn_back -> {
-        finishAll()
+        finish()
         startActivity(Intent(this, MainActivity::class.java))
       }
 

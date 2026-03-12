@@ -34,8 +34,8 @@ android {
     minSdk = 21
     //noinspection ExpiredTargetSdkVersion
     targetSdk = 28
-    versionCode = 11
-    versionName = "1.0.6.5"
+    versionCode = 12
+    versionName = "1.0.7"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     signingConfig = signingConfigs.getByName("debug")
@@ -135,6 +135,9 @@ dependencies {
   implementation("io.github.jonanorman.android.webviewup:download-source:0.1.0")
   implementation(libs.androidx.localbroadcastmanager)
   "x5Implementation"(files("libs/tbs_sdk-44382-202411081743-release.aar"))
+  implementation(project(":easydanmaku"))
+  implementation("androidx.javascriptengine:javascriptengine:1.0.0")
+  // implementation("com.github.bytedance:danmaku-render-engine:0.1.0")
   // "geckoImplementation"("org.mozilla.geckoview:geckoview:93.0.20210927210923")
   // implementation(files("libs/tbs_sdk-44382-202411081743-release.aar"))
   // "x5Implementation"(project(":x5core_arm64_v8a"))

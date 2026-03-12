@@ -65,7 +65,7 @@ class SettingDialog(context: Context) :
 
     binding.btnDonate.setOnClickListener {
       val imageView = ImageView(context).apply {
-        layoutParams = ViewGroup.LayoutParams(250, 250)
+        layoutParams = ViewGroup.LayoutParams(400, 400)
       }
       val inputStream = context.assets.open("images/qrcode.png")
       val readBytes = inputStream.readBytes()
