@@ -1,12 +1,17 @@
 package xyz.jdynb.tv.ui.activity
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Color
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.GridLayout
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.setMargins
 import androidx.core.widget.doAfterTextChanged
@@ -23,14 +28,21 @@ import xyz.jdynb.tv.R
 import xyz.jdynb.tv.config.Api
 import xyz.jdynb.tv.databinding.ActivitySearchBinding
 import xyz.jdynb.tv.dialog.SettingDialog
+import xyz.jdynb.tv.dialog.UserAuthDialog
 import xyz.jdynb.tv.utils.NetworkUtils
 
 class SearchActivity : EngineActivity<ActivitySearchBinding>(R.layout.activity_search) {
 
   private var searchJob: Job? = null
 
-  override fun initData() {
+  private val userAuthBroadcastReceiver = UserAuthBroadcastReceiver()
 
+  private var userAuthDialog: UserAuthDialog? = null // Initialize the dialog but keep it nullable
+
+  override fun initData() {
+    lifecycleScope.launch {
+      NetworkUtils.requestSuspendResult<Unit>("/user/checkLogin")
+    }
   }
 
   private fun getSuggestList(keyword: String) {
@@ -100,6 +112,9 @@ class SearchActivity : EngineActivity<ActivitySearchBinding>(R.layout.activity_s
     }
 
     binding.btnDelete.requestFocus()
+
+    val intent = IntentFilter("xyz.jdynb.tv.UNAUTHORIZED")
+    registerReceiver(userAuthBroadcastReceiver, intent)
   }
 
   private fun createTextView(char: Char): TextView {
@@ -119,6 +134,21 @@ class SearchActivity : EngineActivity<ActivitySearchBinding>(R.layout.activity_s
 
   override fun onDestroy() {
     super.onDestroy()
+    unregisterReceiver(userAuthBroadcastReceiver)
     searchJob?.cancel(null)
+  }
+
+  private inner class UserAuthBroadcastReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+      if (intent?.action == "xyz.jdynb.tv.UNAUTHORIZED") {
+        Toast.makeText(this@SearchActivity, "登录过期，请返回首页验证", Toast.LENGTH_LONG).show()
+        if (userAuthDialog == null) {
+          userAuthDialog = UserAuthDialog(this@SearchActivity).apply { show() }
+        }
+      } else if (intent?.action == "xyz.jdynb.tv.AUTHORIZED") {
+        userAuthDialog?.dismiss()
+        userAuthDialog = null
+      }
+    }
   }
 }

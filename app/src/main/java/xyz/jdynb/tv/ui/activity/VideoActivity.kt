@@ -336,7 +336,8 @@ class VideoActivity : EngineActivity<ActivityVideoBinding>(R.layout.activity_vid
       lifecycleScope.launch {
         val result = NetworkUtils.requestSuspendCache<DanmakuResponse>(
           "https://dmku.hls.one/",
-          mapOf("ac" to "dm", "url" to mediaItem?.localConfiguration?.uri.toString())
+          mapOf("ac" to "dm", "url" to mediaItem?.localConfiguration?.uri.toString()),
+          raw = true
         )
         result.onSuccess {
           binding.danmakuView.setDanmakus(it.danmuku.map { item ->

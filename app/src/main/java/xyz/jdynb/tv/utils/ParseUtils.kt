@@ -1,6 +1,5 @@
 package xyz.jdynb.tv.utils
 
-import android.util.Log
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -33,7 +32,7 @@ object ParseUtils {
       .post(fromBodyBuilder.build())
       .build()
 
-    val result = NetworkUtils.requestSync<String>(request).getOrThrow()
+    val result = NetworkUtils.requestSyncResult<String>(request, true).getOrThrow()
 
     val jsonElement = NetworkUtils.json.parseToJsonElement(result)
     val jsonObject = jsonElement.jsonObject
@@ -69,7 +68,7 @@ object ParseUtils {
         .url("https://202.189.8.170/Api")
         .post(formBody)
         .build()
-      val result = NetworkUtils.requestSync<XMResolveResponse>(request).getOrThrow()
+      val result = NetworkUtils.requestSyncResult<XMResolveResponse>(request, true).getOrThrow()
 
       val decrypt = AESUtils.decrypt(result.data, result.key, result.iv)
         ?: throw NullPointerException("decrypt is null")

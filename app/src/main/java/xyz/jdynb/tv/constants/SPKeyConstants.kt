@@ -51,6 +51,16 @@ class SPKeyConstants {
      * 弹幕区域
      */
     const val DANMAKU_AREA = "danmaku_area"
+
+    /**
+     * 用户凭证
+     */
+    const val USER_AUTH = "user_auth"
+
+    /**
+     * Cookie
+     */
+    const val COOKIE = "cookie"
   }
 
 }
