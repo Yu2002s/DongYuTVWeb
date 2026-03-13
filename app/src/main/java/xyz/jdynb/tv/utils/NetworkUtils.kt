@@ -3,10 +3,14 @@ package xyz.jdynb.tv.utils
 import android.content.Intent
 import android.util.Log
 import com.drake.engine.utils.EncryptUtil
+import io.nerdythings.okhttp.profiler.OkHttpProfilerInterceptor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
+import okhttp3.Cookie
+import okhttp3.CookieJar
+import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
@@ -26,6 +30,7 @@ import xyz.jdynb.tv.model.ResultModel
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
+import java.net.CookieStore
 import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.StandardCharsets
@@ -43,25 +48,15 @@ object NetworkUtils {
 
   private const val CONFIG_URL = "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/config.json"
 
+  val persistentCookieJar = PersistentCookieJar()
+
   val okHttpClient = OkHttpClient.Builder()
     .connectTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
-    .addInterceptor { chain ->
-      var request = chain.request()
-
-      val cookie = SPKeyConstants.COOKIE.getRequired<String>("")
-      if (cookie.isNotEmpty()) {
-        request = request.newBuilder()
-          .addHeader("Cookie", cookie)
-          .build()
+    .cookieJar(persistentCookieJar)
+    .also {
+      if (BuildConfig.DEBUG) {
+        it.addInterceptor(OkHttpProfilerInterceptor())
       }
-
-      val response = chain.proceed(request)
-      val setCookie = response.header("Set-Cookie")
-      if (!setCookie.isNullOrEmpty()) {
-        Log.i(TAG, "setCookie: $setCookie")
-        SPKeyConstants.COOKIE.put(setCookie)
-      }
-      response
     }
     .build()
 
@@ -82,7 +77,7 @@ object NetworkUtils {
   }
 
   fun getRealRequestUrl(path: String, params: Map<String, String>? = null): String {
-    var url = path + "?${params?.toQueryString()}"
+    var url = path + "?${params.toQueryString()}"
     if (!path.startsWith("http")) {
       url = Api.BASE_URL + url
     }
@@ -297,7 +292,7 @@ object NetworkUtils {
         return result.data as T
       } else if (result.code == 401) {
         SPKeyConstants.USER_AUTH.remove()
-        SPKeyConstants.COOKIE.remove()
+        persistentCookieJar.clearAllCookies()
         // Unauthorized
         DongYuTVApplication.context.sendBroadcast(
           Intent(IntentActionConstants.UN_AUTHORIZED)
@@ -313,7 +308,7 @@ object NetworkUtils {
   }
 
   fun Map<String, String>?.toQueryString(): String {
-    return this?.map { "${it.key}=${it.value}" }?.joinToString("&") ?: ""
+    return (this?.map { "${it.key}=${it.value}" }?.joinToString("&")) ?: ""
   }
 
 }

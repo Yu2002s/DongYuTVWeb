@@ -136,7 +136,7 @@ dependencies {
   implementation(libs.androidx.localbroadcastmanager)
   "x5Implementation"(files("libs/tbs_sdk-44382-202411081743-release.aar"))
   implementation(project(":easydanmaku"))
-  implementation("androidx.javascriptengine:javascriptengine:1.0.0")
+  implementation("io.nerdythings:okhttp-profiler:1.1.1")
   // implementation("com.github.bytedance:danmaku-render-engine:0.1.0")
   // "geckoImplementation"("org.mozilla.geckoview:geckoview:93.0.20210927210923")
   // implementation(files("libs/tbs_sdk-44382-202411081743-release.aar"))

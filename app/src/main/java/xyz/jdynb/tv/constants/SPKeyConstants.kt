@@ -60,7 +60,7 @@ class SPKeyConstants {
     /**
      * Cookie
      */
-    const val COOKIE = "cookie"
+    const val COOKIE = "user_cookie"
   }
 
 }
