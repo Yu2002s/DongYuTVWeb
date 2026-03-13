@@ -20,6 +20,7 @@
                 android:layout_height="wrap_content"/>
 
             <Switch
+                android:textColor="@color/white"
                 android:layout_marginTop="10dp"
                 android:focusable="true"
                 android:text="开启弹幕"

@@ -34,6 +34,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
+        <TextView
+            android:textSize="16sp"
+            android:layout_gravity="center_horizontal"
+            android:text="@{m.content}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
 
         <ProgressBar
             android:indeterminate="@{m.progress == 0}"
@@ -81,6 +88,15 @@
                 android:layout_height="wrap_content"/>
 
         </LinearLayout>
+
+        <TextView
+            android:autoLink="web"
+            android:layout_marginTop="8dp"
+            android:textSize="14sp"
+            android:layout_gravity="center_horizontal"
+            android:text="Gitee: https://gitee.com/jdy2002/DongYuTVWeb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 

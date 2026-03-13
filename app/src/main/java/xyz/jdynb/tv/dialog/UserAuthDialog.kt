@@ -12,25 +12,19 @@ import androidx.core.view.forEach
 import androidx.core.view.setMargins
 import com.bumptech.glide.Glide
 import com.drake.engine.base.EngineDialog
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import okhttp3.FormBody
-import okhttp3.Request
 import xyz.jdynb.music.utils.SpUtils.put
 import xyz.jdynb.tv.R
 import xyz.jdynb.tv.config.Api
+import xyz.jdynb.tv.constants.IntentActionConstants
 import xyz.jdynb.tv.constants.SPKeyConstants
 import xyz.jdynb.tv.databinding.DialogUserAuthBinding
-import xyz.jdynb.tv.model.ResultModel
 import xyz.jdynb.tv.model.UserAuthModel
 import xyz.jdynb.tv.utils.NetworkUtils
 import kotlin.concurrent.thread
 
 class UserAuthDialog(context: Context) :
   EngineDialog<DialogUserAuthBinding>(context, R.style.Theme_SimpleDialog) {
-
-  private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -62,7 +56,7 @@ class UserAuthDialog(context: Context) :
                 v.post {
                   dismiss()
                   Toast.makeText(context, "验证成功。", Toast.LENGTH_LONG).show()
-                  context.sendBroadcast(Intent("xyz.jdynb.tv.AUTHORIZED").also { intent ->
+                  context.sendBroadcast(Intent(IntentActionConstants.AUTHORIZED).also { intent ->
                     intent.`package` = context.packageName
                   })
                 }

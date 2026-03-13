@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class ResultModel<T>(
   val code: Int = 400,
   val msg: String = "",
-  val data: T?
+  val data: T? = null
 )

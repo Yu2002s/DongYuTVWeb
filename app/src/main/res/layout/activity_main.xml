@@ -81,7 +81,7 @@
                 android:textColor="@color/black"
                 android:alpha="0.7"
                 android:backgroundTint="#FFFFFF"
-                android:text="换台"
+                android:text="菜单"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

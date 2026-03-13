@@ -8,7 +8,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import xyz.jdynb.tv.BuildConfig
+import xyz.jdynb.tv.config.Api
 import xyz.jdynb.tv.dialog.UpdateDialog
+import xyz.jdynb.tv.exception.ResultDataNullException
 import xyz.jdynb.tv.model.UpdateModel
 import java.net.HttpURLConnection
 import java.net.URL
@@ -34,36 +36,21 @@ object UpdateUtils {
   suspend fun checkUpdate(context: Context) {
     try {
       val updateModel = withContext(Dispatchers.IO) {
-        if (BuildConfig.DEBUG) {
-          return@withContext UpdateModel(
-            versionCode = 9999,
-            url = "https://lz.qaiu.top/parser?url=https://jdy2002.lanzoue.com/iU10g3fp8mpe"
-          )
-        }
-        val connection: HttpURLConnection =
-          URL(CHECK_UPDATE_URL).openConnection() as HttpURLConnection
-        connection.inputStream.use { inputStream ->
-          val content = inputStream.readBytes().toString(StandardCharsets.UTF_8)
-          Log.i(TAG, "content: $content")
-          val json = Json {
-            ignoreUnknownKeys = true
-            encodeDefaults = true
-          }
-          json.decodeFromString<UpdateModel>(content)
-        }
+        NetworkUtils.requestSuspend<UpdateModel>(Api.CHECK_UPDATE, mapOf("versionCode" to AppUtils.getAppVersionCode().toString()))
       }
       Log.i(TAG, "updateModel: $updateModel")
-      if (AppUtils.getAppVersionCode() < updateModel.versionCode) {
-        // 发现新版本
-        UpdateDialog(context, updateModel).run {
-          setCancelable(false)
-          setCanceledOnTouchOutside(false)
-          show()
-        }
-      } else {
-        Toast.makeText(context, "当前已是最新版本", Toast.LENGTH_SHORT).show()
+      // 发现新版本
+      UpdateDialog(context, updateModel).run {
+        setCancelable(false)
+        setCanceledOnTouchOutside(false)
+        show()
       }
     } catch (e: Exception) {
+      if (e is ResultDataNullException) {
+        Toast.makeText(context, "当前已是最新版本", Toast.LENGTH_SHORT).show()
+      } else {
+        Toast.makeText(context, "检查更新异常", Toast.LENGTH_SHORT).show()
+      }
       Log.e(TAG, "检查更新异常: $e")
     }
   }

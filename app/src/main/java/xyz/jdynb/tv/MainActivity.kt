@@ -235,7 +235,7 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
 
       // 刷新
       R.id.btn_refresh -> {
-        livePlayerFragment?.refresh()
+        handleChannelTypeChange()
       }
 
       // 搜索

@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 import xyz.jdynb.tv.MainActivity
 import xyz.jdynb.tv.R
 import xyz.jdynb.tv.config.Api
+import xyz.jdynb.tv.constants.IntentActionConstants
 import xyz.jdynb.tv.databinding.ActivitySearchBinding
 import xyz.jdynb.tv.dialog.SettingDialog
 import xyz.jdynb.tv.dialog.UserAuthDialog
@@ -113,7 +114,8 @@ class SearchActivity : EngineActivity<ActivitySearchBinding>(R.layout.activity_s
 
     binding.btnDelete.requestFocus()
 
-    val intent = IntentFilter("xyz.jdynb.tv.UNAUTHORIZED")
+    val intent = IntentFilter(IntentActionConstants.AUTHORIZED)
+    intent.addAction(IntentActionConstants.UN_AUTHORIZED)
     registerReceiver(userAuthBroadcastReceiver, intent)
   }
 
@@ -140,12 +142,12 @@ class SearchActivity : EngineActivity<ActivitySearchBinding>(R.layout.activity_s
 
   private inner class UserAuthBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-      if (intent?.action == "xyz.jdynb.tv.UNAUTHORIZED") {
+      if (intent?.action == IntentActionConstants.UN_AUTHORIZED) {
         Toast.makeText(this@SearchActivity, "登录过期，请返回首页验证", Toast.LENGTH_LONG).show()
         if (userAuthDialog == null) {
           userAuthDialog = UserAuthDialog(this@SearchActivity).apply { show() }
         }
-      } else if (intent?.action == "xyz.jdynb.tv.AUTHORIZED") {
+      } else if (intent?.action == IntentActionConstants.AUTHORIZED) {
         userAuthDialog?.dismiss()
         userAuthDialog = null
       }

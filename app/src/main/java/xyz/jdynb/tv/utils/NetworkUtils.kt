@@ -16,7 +16,11 @@ import xyz.jdynb.music.utils.SpUtils.remove
 import xyz.jdynb.tv.BuildConfig
 import xyz.jdynb.tv.DongYuTVApplication
 import xyz.jdynb.tv.config.Api
+import xyz.jdynb.tv.constants.IntentActionConstants
 import xyz.jdynb.tv.constants.SPKeyConstants
+import xyz.jdynb.tv.exception.NotLoginException
+import xyz.jdynb.tv.exception.ResultDataNullException
+import xyz.jdynb.tv.exception.ResultStatusException
 import xyz.jdynb.tv.model.ConfigModel
 import xyz.jdynb.tv.model.ResultModel
 import java.io.File
@@ -80,7 +84,7 @@ object NetworkUtils {
   fun getRealRequestUrl(path: String, params: Map<String, String>? = null): String {
     var url = path + "?${params?.toQueryString()}"
     if (!path.startsWith("http")) {
-      url = getBaseUrl() + url
+      url = Api.BASE_URL + url
     }
     return url
   }
@@ -188,13 +192,21 @@ object NetworkUtils {
   }
 
   @Throws(Exception::class)
-  inline fun <reified T> requestSyncResult(path: String, params: Map<String, String>? = null, raw: Boolean = false) =
+  inline fun <reified T> requestSyncResult(
+    path: String,
+    params: Map<String, String>? = null,
+    raw: Boolean = false
+  ) =
     runCatching {
       requestSync<T>(path, params, raw = raw)
     }
 
   @Throws(Exception::class)
-  inline fun <reified T> requestSync(path: String, params: Map<String, String>? = null, raw: Boolean = false): T {
+  inline fun <reified T> requestSync(
+    path: String,
+    params: Map<String, String>? = null,
+    raw: Boolean = false
+  ): T {
     val url = getRealRequestUrl(path, params)
     val responseBody = getResponseBody(url)
     return getBodyStringEntity<T>(responseBody, raw = raw)
@@ -206,7 +218,11 @@ object NetworkUtils {
     }
   }
 
-  inline fun <reified T> requestSyncResult(path: String, formBody: RequestBody, raw: Boolean = false): Result<T> {
+  inline fun <reified T> requestSyncResult(
+    path: String,
+    formBody: RequestBody,
+    raw: Boolean = false
+  ): Result<T> {
     val request = Request.Builder()
       .url(getRealRequestUrl(path))
       .post(formBody)
@@ -227,18 +243,23 @@ object NetworkUtils {
     }
   }
 
-  suspend inline fun <reified T> requestSuspend(path: String, params: Map<String, String>? = null, raw: Boolean = false) =
+  suspend inline fun <reified T> requestSuspend(
+    path: String,
+    params: Map<String, String>? = null,
+    raw: Boolean = false
+  ) =
     withContext(Dispatchers.IO) {
       requestSync<T>(path, params, raw = raw)
     }
 
-  suspend inline fun <reified T> requestSuspend(request: Request, raw: Boolean = false) = withContext(Dispatchers.IO) {
-    runCatching {
-      withContext(Dispatchers.IO) {
-        getBodyEntity<T>(request, raw = raw)
+  suspend inline fun <reified T> requestSuspend(request: Request, raw: Boolean = false) =
+    withContext(Dispatchers.IO) {
+      runCatching {
+        withContext(Dispatchers.IO) {
+          getBodyEntity<T>(request, raw = raw)
+        }
       }
     }
-  }
 
   @Throws(Exception::class)
   inline fun <reified T> getBodyEntity(request: Request, raw: Boolean = false): T {
@@ -249,7 +270,7 @@ object NetworkUtils {
 
   @Throws(Exception::class)
   inline fun <reified T> getBodyStringEntity(responseBody: String?, raw: Boolean = false): T {
-    requireNotNull(responseBody) { "Response body is null" }
+    requireNotNull(responseBody) { "服务器响应异常，请稍后重试" }
     if (BuildConfig.DEBUG) {
       Log.i(TAG, "responseBody: $responseBody, T: ${T::class.java}")
     }
@@ -257,7 +278,7 @@ object NetworkUtils {
       return responseBody as T
     }
     val serializersModule = if (raw) {
-      Json.serializersModule.serializer<T>()
+      json.serializersModule.serializer<T>()
     } else {
       json.serializersModule.serializer<ResultModel<T>>()
     }
@@ -265,18 +286,27 @@ object NetworkUtils {
       json.decodeFromString(serializersModule, responseBody)
     if (result is ResultModel<*>) {
       if (result.code == 200) {
-        return if (raw) result as T else result.data as T
+        if (raw) {
+          return result as T
+        }
+
+        if (result.data == null) {
+          // Result data is null
+          throw ResultDataNullException(result.msg)
+        }
+        return result.data as T
       } else if (result.code == 401) {
         SPKeyConstants.USER_AUTH.remove()
         SPKeyConstants.COOKIE.remove()
         // Unauthorized
-        DongYuTVApplication.context.sendBroadcast(Intent("xyz.jdynb.tv.UNAUTHORIZED")
-          .also {
-            it.`package` = DongYuTVApplication.context.packageName
-          })
-        throw RuntimeException("Unauthorized")
+        DongYuTVApplication.context.sendBroadcast(
+          Intent(IntentActionConstants.UN_AUTHORIZED)
+            .also {
+              it.`package` = DongYuTVApplication.context.packageName
+            })
+        throw NotLoginException(result.msg)
       } else {
-        throw RuntimeException(result.msg)
+        throw ResultStatusException(result.msg)
       }
     }
     return result as T

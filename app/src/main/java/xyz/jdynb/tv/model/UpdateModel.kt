@@ -6,7 +6,13 @@ import kotlinx.serialization.Serializable
 import xyz.jdynb.tv.BR
 
 @Serializable
-data class UpdateModel(var versionCode: Int = 0, var url: String = ""): BaseObservable() {
+data class UpdateModel(
+  var versionName: String = "",
+  var versionCode: Int = 0,
+  var url: String = "",
+  var content: String = "",
+  var updateTime: String = "",
+): BaseObservable() {
 
   @get:Bindable
   var closeTime: Int = 15

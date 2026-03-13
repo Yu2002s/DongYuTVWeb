@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.net.http.SslError
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -87,6 +89,8 @@ abstract class LivePlayerFragment : Fragment(), Playable {
   protected var isPageFinished = false
 
   private var leaveTime = System.currentTimeMillis()
+
+  private val handler = Handler(Looper.getMainLooper())
 
   inner class VideoJavaScriptInterface {
     /**
@@ -378,6 +382,11 @@ abstract class LivePlayerFragment : Fragment(), Playable {
       ) {
         // super.onReceivedError(view, request, error)
         view?.loadUrl("file:///android_asset/html/error.html")
+        handler.removeCallbacksAndMessages(null)
+        handler.postDelayed({
+          // 尝试刷新当前页面
+          onLoadUrl(playerConfig.url, currentChannelModel)
+        }, 2000L)
       }
     }
   }
@@ -456,6 +465,7 @@ abstract class LivePlayerFragment : Fragment(), Playable {
 
   override fun onDestroyView() {
     super.onDestroyView()
+    handler.removeCallbacksAndMessages(null)
     webView.destroy()
     _binding = null
   }
