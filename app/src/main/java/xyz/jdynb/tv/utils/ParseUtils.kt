@@ -10,6 +10,7 @@ import xyz.jdynb.tv.config.Api
 import xyz.jdynb.tv.model.ParseModel
 import xyz.jdynb.tv.model.response.XMResolveResponse
 import xyz.jdynb.tv.utils.EncryptUtils.md5
+import java.net.URLDecoder
 import java.net.URLEncoder
 
 object ParseUtils {
@@ -29,6 +30,8 @@ object ParseUtils {
     }
     val request = Request.Builder()
       .url(requestUrl)
+      .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+      .addHeader("Origin", "https://jx.xmflv.cc")
       .post(fromBodyBuilder.build())
       .build()
 
@@ -66,6 +69,8 @@ object ParseUtils {
         .build()
       val request = Request.Builder()
         .url("https://202.189.8.170/Api")
+        .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+        .addHeader("Origin", "https://jx.xmflv.cc")
         .post(formBody)
         .build()
       val result = NetworkUtils.requestSyncResult<XMResolveResponse>(request, true).getOrThrow()

@@ -76,6 +76,21 @@ class SettingDialog(context: Context) :
         .setView(imageView)
         .show()
     }
+
+    binding.btnFeedback.setOnClickListener {
+      Toast.makeText(context, "请扫码关注公众号", Toast.LENGTH_SHORT).show()
+      val imageView = ImageView(context).apply {
+        layoutParams = ViewGroup.LayoutParams(400, 400)
+      }
+      val inputStream = context.assets.open("images/qrcode_mp.jpg")
+      val readBytes = inputStream.readBytes()
+      Glide.with(context)
+        .load(readBytes)
+        .into(imageView)
+      AlertDialog.Builder(context)
+        .setView(imageView)
+        .show()
+    }
   }
 
   override fun initData() {

@@ -131,8 +131,12 @@ class VideoActivity : EngineActivity<ActivityVideoBinding>(R.layout.activity_vid
         }
       }
 
-      selectionRv.models =
-        movieModel.items ?: listOf(MovieModel.Item(name = "1", url = movieModel.url!!))
+      selectionRv.models = if (movieModel.items.isNullOrEmpty()) {
+        listOf(MovieModel.Item(name = "1", url = movieModel.url!!))
+      } else {
+        movieModel.items
+      }
+
       Log.i(TAG, "movieModel: $movieModel")
 
       if (movieModel.items.isNullOrEmpty()) {
@@ -356,7 +360,9 @@ class VideoActivity : EngineActivity<ActivityVideoBinding>(R.layout.activity_vid
       TAG,
       "onMediaItemTransition: ${mediaItem?.localConfiguration?.uri}, currentMediaItemIndex: ${player.currentMediaItemIndex}"
     )
-    selectionRv.bindingAdapter.setChecked(player.currentMediaItemIndex, true)
+    if (!selectionRv.models.isNullOrEmpty()) {
+      selectionRv.bindingAdapter.setChecked(player.currentMediaItemIndex, true)
+    }
 
     loadDanmaku(mediaItem)
   }

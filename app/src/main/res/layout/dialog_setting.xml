@@ -78,10 +78,22 @@
                     android:layout_height="wrap_content"/>
 
                 <Button
+                    android:layout_marginTop="10dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:text="捐赠我"
                     android:id="@+id/btn_donate"
+                    android:textSize="19sp"
+                    android:background="@drawable/bg_select"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <Button
+                    android:layout_marginTop="10dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="问题反馈"
+                    android:id="@+id/btn_feedback"
                     android:textSize="19sp"
                     android:background="@drawable/bg_select"
                     android:layout_width="wrap_content"
@@ -117,7 +129,8 @@
                 android:layout_height="wrap_content"/>
 
             <TextView
-                android:text="Gitee、Github: 搜索 DongYuTVWeb"
+                android:gravity="center_horizontal"
+                android:text="Gitee、Github: 搜索 DongYuTVWeb\nQQ交流反馈群: 1038112042"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 

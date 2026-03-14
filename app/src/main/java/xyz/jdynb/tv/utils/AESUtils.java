@@ -33,6 +33,7 @@ public class AESUtils {
                 return android.util.Base64.encodeToString(encrypted, android.util.Base64.DEFAULT);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

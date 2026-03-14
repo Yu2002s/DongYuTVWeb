@@ -2,6 +2,16 @@
 
 轻松在电视上观看直播，操作简单，适合家中老人使用，使用 WebView JavaScript 注入方式实现
 
+## 交流/反馈
+
+- QQ 群
+
+[交流/反馈QQ群](./screenshots/qrcode_1773500386502.jpg)
+
+- 公众号
+
+[公众号](./app/src/main/assets/images/qrcode_mp.jpg)
+
 ## 操作
 
 - 方向上: 上一个频道
