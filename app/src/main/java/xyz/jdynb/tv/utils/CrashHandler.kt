@@ -3,10 +3,20 @@ package xyz.jdynb.tv.utils
 import android.os.Build
 import androidx.annotation.OptIn
 import androidx.core.content.pm.PackageInfoCompat
+import androidx.lifecycle.lifecycleScope
+import com.drake.engine.utils.AppUtils
+import com.drake.engine.utils.DeviceUtils
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import xyz.jdynb.tv.ui.activity.CrashActivity
 import xyz.jdynb.tv.DongYuTVApplication
+import xyz.jdynb.tv.config.Api
+import xyz.jdynb.tv.model.AppCrashLogModel
 import java.io.PrintWriter
 import java.io.StringWriter
+import kotlin.concurrent.thread
 import kotlin.system.exitProcess
 
 /**
@@ -78,6 +88,18 @@ class CrashHandler : Thread.UncaughtExceptionHandler {
     stringBuilder.append("\n\n  ************错误日志***********\n\n")
     stringBuilder.append(writer.toString())
     return stringBuilder.toString()
+  }
+
+  fun addLog(log: String) {
+    thread {
+      try {
+        val appCrashLog = AppCrashLogModel(content = log)
+        val requestBody = NetworkUtils.json.encodeToString(appCrashLog)
+          .toRequestBody(contentType = "application/json".toMediaTypeOrNull())
+        NetworkUtils.requestSyncResult<Unit?>(Api.APP_CRASH, requestBody)
+      } catch (_: Exception) {
+      }
+    }
   }
 
 }

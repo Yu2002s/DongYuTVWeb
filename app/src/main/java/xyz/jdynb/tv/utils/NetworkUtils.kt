@@ -8,14 +8,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
-import okhttp3.Cookie
-import okhttp3.CookieJar
-import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
-import xyz.jdynb.music.utils.SpUtils.getRequired
-import xyz.jdynb.music.utils.SpUtils.put
 import xyz.jdynb.music.utils.SpUtils.remove
 import xyz.jdynb.tv.BuildConfig
 import xyz.jdynb.tv.DongYuTVApplication
@@ -30,7 +25,6 @@ import xyz.jdynb.tv.model.ResultModel
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
-import java.net.CookieStore
 import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.StandardCharsets
@@ -224,12 +218,12 @@ object NetworkUtils {
 
   inline fun <reified T> requestSyncResult(
     path: String,
-    formBody: RequestBody,
+    body: RequestBody,
     raw: Boolean = false
   ): Result<T> {
     val request = Request.Builder()
       .url(getRealRequestUrl(path))
-      .post(formBody)
+      .post(body)
       .build()
     return requestSyncResult<T>(request, raw = raw)
   }

@@ -21,6 +21,7 @@ import android.webkit.WebResourceResponse
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -37,6 +38,8 @@ import xyz.jdynb.tv.event.Playable
 import xyz.jdynb.tv.model.LiveChannelModel
 import xyz.jdynb.tv.model.LiveModel
 import xyz.jdynb.tv.model.LivePlayerModel
+import xyz.jdynb.tv.model.response.main
+import xyz.jdynb.tv.utils.CrashHandler
 import xyz.jdynb.tv.utils.JsManager.execJs
 import xyz.jdynb.tv.utils.NetworkUtils.inputStream
 import xyz.jdynb.tv.utils.toArray
@@ -90,8 +93,6 @@ abstract class LivePlayerFragment : Fragment(), Playable {
 
   private var leaveTime = System.currentTimeMillis()
 
-  private val handler = Handler(Looper.getMainLooper())
-
   inner class VideoJavaScriptInterface {
     /**
      * 视频播放事件
@@ -112,7 +113,15 @@ abstract class LivePlayerFragment : Fragment(), Playable {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     playerName = LivePlayer.getLivePlayerForClass(this.javaClass).player
-    val player = mainViewModel.currentChannelModel.value?.player ?: return
+    val player = mainViewModel.currentChannelModel.value?.player
+    if (player == null) {
+      CrashHandler.getInstance().addLog(
+        "########player is null########\n\ncurrentChannelModel: $currentChannelModel," +
+            " liveModel: ${mainViewModel.liveModel}"
+      )
+      // 尝试重启activity
+      activity?.recreate()
+    }
     playerConfig = mainViewModel.liveModel.player.find { it.id == player } ?: LiveModel.Player()
     Log.i(TAG, "playerConfig: $playerConfig")
   }
@@ -380,13 +389,7 @@ abstract class LivePlayerFragment : Fragment(), Playable {
         request: WebResourceRequest?,
         error: WebResourceError?
       ) {
-        // super.onReceivedError(view, request, error)
-        view?.loadUrl("file:///android_asset/html/error.html")
-        handler.removeCallbacksAndMessages(null)
-        handler.postDelayed({
-          // 尝试刷新当前页面
-          onLoadUrl(playerConfig.url, currentChannelModel)
-        }, 2000L)
+        super.onReceivedError(view, request, error)
       }
     }
   }
@@ -465,7 +468,6 @@ abstract class LivePlayerFragment : Fragment(), Playable {
 
   override fun onDestroyView() {
     super.onDestroyView()
-    handler.removeCallbacksAndMessages(null)
     webView.destroy()
     _binding = null
   }

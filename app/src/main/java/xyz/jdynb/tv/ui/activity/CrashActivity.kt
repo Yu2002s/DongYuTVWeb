@@ -1,10 +1,25 @@
 package xyz.jdynb.tv.ui.activity
 
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import com.drake.engine.base.EngineToolbarActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import okhttp3.FormBody
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import xyz.jdynb.tv.DongYuTVApplication
 import xyz.jdynb.tv.R
+import xyz.jdynb.tv.config.Api
 import xyz.jdynb.tv.databinding.ActivityCrashBinding
+import xyz.jdynb.tv.model.AppCrashLogModel
+import xyz.jdynb.tv.utils.NetworkUtils
 
 /**
  * App全局闪退处理
@@ -34,11 +49,29 @@ class CrashActivity : EngineToolbarActivity<ActivityCrashBinding>(R.layout.activ
     binding.restartApp.setOnClickListener {
       finish()
     }
+
+    binding.restartApp.requestFocus()
+
+    Toast.makeText(this, "3秒后自动重启", Toast.LENGTH_SHORT).show()
+
+    Handler(Looper.getMainLooper()).postDelayed({
+      binding.restartApp.callOnClick()
+    }, 3000L)
   }
 
   override fun initData() {
     intent?.getStringExtra(PARAM_LOG)?.let { log ->
       binding.tvCrashContent.text = log
+
+      lifecycleScope.launch(Dispatchers.IO) {
+        try {
+          val appCrashLog = AppCrashLogModel(content = log)
+          val requestBody = NetworkUtils.json.encodeToString(appCrashLog)
+            .toRequestBody(contentType = "application/json".toMediaTypeOrNull())
+          NetworkUtils.requestSyncResult<Unit?>(Api.APP_CRASH, requestBody)
+        } catch (_: Exception) {
+        }
+      }
     }
   }
 }
