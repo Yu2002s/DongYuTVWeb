@@ -185,6 +185,16 @@
           "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/shanxi/play.js"
         ]
       }
+    },
+    {
+      "id": "chongqing",
+      "name": "base",
+      "url": "https://www.cbg.cn/web/list/4918/1.html?5DEFC70C1A4AOD5173881C62BD4ACAD0",
+      "script": {
+        "init": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/chongqing/init.js"
+        ]
+      }
     }
   ],
   // 播放频道列表
@@ -1473,6 +1483,15 @@
           "args": {
             "liveUrl": "http://stream.snrtv.com/sxbc-yd-vBMTY4.m3u8"
           }
+        }
+      ]
+    },
+    {
+      "channelType": "重庆",
+      "player": "chongqing",
+      "channelList": [
+        {
+          "channelName": "重庆卫视"
         }
       ]
     },

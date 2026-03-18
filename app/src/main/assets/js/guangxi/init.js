@@ -8,7 +8,8 @@
             videoDiv.style.background = "#000"
             videoDiv.style.position = "fixed"
             videoDiv.style.top = "0"
-            videoDiv.style.left = "0"
+            videoDiv.style.left = "50%"
+            videoDiv.style.transform = "translateX(-50%)"
             videoDiv.style['z-index'] = 99999
             const scaleW = screen.width / 940
             const scaleH = screen.height / 570
@@ -32,6 +33,14 @@
         const nav = document.querySelector('.Gxntv_nav')
         if (nav && nav.style.display !== 'none') {
             nav.style.display = 'none'
+        }
+        const liveList = document.querySelector('.Live_list')
+        if (liveList && liveList.style.display !== 'none') {
+            liveList.style.display = 'none'
+        }
+        const header = document.querySelector('.Header')
+        if (header && header.style.display !== 'none') {
+            header.style.display = 'none'
         }
         if (i++ > 20) {
             clearInterval(timerId)

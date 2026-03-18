@@ -71,11 +71,11 @@ class UpdateDialog(context: Context, private val updateModel: UpdateModel) :
       scope.launch(Dispatchers.Main) {
         val file = File(context.externalCacheDir, "update.apk")
         withContext(Dispatchers.IO) {
+          Log.i(TAG, "url: ${updateModel.url}")
           val url = URL(updateModel.url).openConnection() as HttpURLConnection
-          url.doInput = true
-          url.doOutput = true
           url.connectTimeout = 10000
           url.readTimeout = 10000
+          url.requestMethod = "GET"
           val fos = FileOutputStream(file)
           url.inputStream.use { inputStream ->
             updateModel.progress = (100 * inputStream.available() / url.contentLength)

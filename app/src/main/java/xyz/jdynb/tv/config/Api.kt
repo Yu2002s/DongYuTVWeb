@@ -6,7 +6,7 @@ object Api {
 
   val BASE_URL: String = if (/*!BuildConfig.DEBUG*/true) {
     // "http://tv.jdynb.xyz"
-    "http://47.103.74.108:8005"
+    "http://tv.jdynb.xyz"
   } else {
     "http://192.168.1.42:8080"
   }

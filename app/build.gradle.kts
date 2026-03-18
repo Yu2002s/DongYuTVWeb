@@ -34,7 +34,7 @@ android {
     minSdk = 21
     //noinspection ExpiredTargetSdkVersion
     targetSdk = 28
-    versionCode = 16
+    versionCode = 15
     versionName = "1.0.9-fix"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
