@@ -73,6 +73,7 @@
                     android:layout_height="wrap_content"/>
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:visibility="gone"
                     android:textColor="@color/white"
                     android:layout_marginTop="10dp"
                     android:focusable="true"

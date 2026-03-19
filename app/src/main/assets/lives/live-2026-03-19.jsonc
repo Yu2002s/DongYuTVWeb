@@ -655,80 +655,91 @@
         },
         {
           "channelName": "CCTV4K",
-          "pid": "600002264",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/3e9d06fd7244d950df5838750f1c6ac3456e172b51caca2c16d2282125b111e8.png?imageMogr2/format/webp",
-          "streamId": "2027249501",
-          "number": 20
+          "args": {
+            "pid": "600002264",
+            "streamId": "2027249501"
+          }
         },
         {
           "channelName": "CCTV8K",
-          "pid": "600156816",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202503/df543dd2e337be8bf6aa06342d8d790992f7ae47b89403606253436e40409031.png?imageMogr2/format/webp",
-          "streamId": "2026774101",
-          "number": 21
+          "args": {
+            "pid": "600156816",
+            "streamId": "2026774101"
+          }
         },
         {
           "channelName": "CGTN",
-          "pid": "600014550",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/a72dff758ca1c17cd0ecc8cedc11b893d208f409d5e6302faa0e9d298848abc3.png?imageMogr2/format/webp",
-          "streamId": "2024181701",
-          "number": 22
+          "args": {
+            "pid": "600014550",
+            "streamId": "2024181701"
+          }
         },
         {
           "channelName": "CGTN法语频道",
-          "pid": "600084704",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/a8d0046a47433d952bf6ed17062deb8bd2184ba9aec0f7781df6bf9487a3ffcf.png?imageMogr2/format/webp",
-          "streamId": "2024181801",
-          "number": 23
+          "args": {
+            "pid": "600084704",
+            "streamId": "2024181801"
+          }
         },
         {
           "channelName": "CGTN俄语频道",
-          "pid": "600084758",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/bf0a820893cbaf20dd0333e27042e1ef9c8806e5b602b6a8c95af399db0bc77a.png?imageMogr2/format/webp",
-          "streamId": "2024181901",
-          "number": 24
+          "args": {
+            "pid": "600084758",
+            "streamId": "2024181901"
+          }
         },
         {
           "channelName": "CGTN阿拉伯语频道",
-          "pid": "600084782",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/2e44e2aa3e7a1cedf07fd0ae59fe69e86a60a2632660a006e3e9e7397b2d107e.png?imageMogr2/format/webp",
-          "streamId": "2024182001",
-          "number": 25
+          "args": {
+            "pid": "600084782",
+            "streamId": "2024182001"
+          }
         },
         {
           "channelName": "CGTN西班牙语频道",
-          "pid": "600084744",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202309/7c337e3dbe64402ec7e4678a619a4a6d95144e42f35161181ff78e143b7cf67a.png?imageMogr2/format/webp",
-          "streamId": "2024182101",
-          "number": 26
+          "args": {
+            "pid": "600084744",
+            "streamId": "2024182101"
+          }
         },
         {
           "channelName": "CGTN外语纪录频道",
-          "pid": "600084781",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202309/74d3ac436a7e374879578de1d87a941fbf566d39d5632b027c5097891ed32bd5.png?imageMogr2/format/webp",
-          "streamId": "2024182301",
-          "number": 27
+          "args": {
+            "pid": "600084781",
+            "streamId": "2024182301"
+          }
         },
         {
           "channelName": "CCTV风云剧场频道",
-          "pid": "600099658",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/4d549e53e6d0f632d5a633d1945280797b153e588f919221a07faa869812cc89.png?imageMogr2/format/webp",
-          "streamId": "2025637103",
-          "number": 28
+          "args": {
+            "pid": "600099658",
+            "streamId": "2025637103"
+          }
         },
         {
           "channelName": "CCTV第一剧场频道",
-          "pid": "600099655",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/a556bd7d93ce65e18f243a8892b5604f4faa994a4897315914216a710a706208.png?imageMogr2/format/webp",
-          "streamId": "2026874203",
-          "number": 29
+          "args": {
+            "pid": "600099655",
+            "streamId": "2026874203"
+          }
         },
         {
           "channelName": "CCTV怀旧剧场频道",
-          "pid": "600099620",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/5661bd04fecdb6e899f801147a22ab5d3a475bf2b62e30aec2c0023190ebc9b1.png?imageMogr2/format/webp",
-          "streamId": "2026874303",
-          "number": 30
+          "args": {
+            "pid": "600099620",
+            "streamId": "2026874303"
+          }
         }
       ]
     },
@@ -1785,7 +1796,7 @@
       "player": "chongqing",
       "channelList": [
         {
-          "channelName": "重庆卫视"
+          "channelName": "重庆新闻"
         }
       ]
     },

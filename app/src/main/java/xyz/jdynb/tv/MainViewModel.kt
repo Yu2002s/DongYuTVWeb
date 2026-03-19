@@ -145,6 +145,7 @@ class MainViewModel : ViewModel() {
     .onEach {
       // 设置当前的频道分类
       _currentChannelType.value = it.channelType
+      _currentChannelPlayer.value = it.player
       // 保存当前的频道信息
       SPKeyConstants.CURRENT_CHANNEL.put(json.encodeToString(it))
     }
@@ -169,14 +170,6 @@ class MainViewModel : ViewModel() {
     // Log.i(TAG, "liveContent: $liveContent")
     // 反序列化赋值给 liveModel 对象
     _liveModel = json.decodeFromString<LiveModel>(liveContent)
-    /*val showCCTV = SPKeyConstants.CCTV_CHANNEL.getRequired<Boolean>(false)
-    liveModel.channel.forEach {
-      if (it.player == "ysp") {
-        it.hidden = showCCTV
-      } else if (it.player == "cctv" *//*|| it.player == "custom"*//*) {
-        it.hidden = !showCCTV
-      }
-    }*/
     // 频道类型列表
     _channelTypeModelList.value =
       liveModel.channel.filter {
@@ -257,10 +250,10 @@ class MainViewModel : ViewModel() {
    */
   val currentChannelType = _currentChannelType.asStateFlow()
 
+  private var _currentChannelPlayer = MutableStateFlow("")
+
   @OptIn(ExperimentalCoroutinesApi::class)
-  val currentChannelPlayer = currentChannelModel.flatMapConcat {
-    flowOf(it?.player)
-  }
+  val currentChannelPlayer = _currentChannelPlayer.asStateFlow()
 
   init {
     viewModelScope.launch {

@@ -147,6 +147,9 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
   override fun initData() {
     lifecycleScope.launch {
       mainViewModel.currentChannelPlayer.collect {
+        if (it.isEmpty()) {
+          return@collect
+        }
         handleChannelPlayerChange(it)
       }
     }
@@ -204,6 +207,11 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
     val currentChannelModel = mainViewModel.currentChannelModel.value
     if (currentChannelModel == null) {
       Toast.makeText(this, "请等待初始化之后操作", Toast.LENGTH_SHORT).show()
+      return
+    }
+
+    if (currentChannelModel.children.isEmpty()) {
+      Toast.makeText(this, "当前频道没有子频道", Toast.LENGTH_SHORT).show()
       return
     }
 
@@ -291,8 +299,8 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
 
   override fun dispatchTouchEvent(event: MotionEvent): Boolean {
     mainViewModel.showActions()
-    if (SPKeyConstants.OK_CHANNEL.getRequired<Boolean>(false)) {
-      return super.onTouchEvent(event)
+    if (!SPKeyConstants.SLIDE_SWITCH_CHANNEL.getRequired<Boolean>(false)) {
+      return super.dispatchTouchEvent(event)
     }
     when (event.action) {
       MotionEvent.ACTION_DOWN -> {

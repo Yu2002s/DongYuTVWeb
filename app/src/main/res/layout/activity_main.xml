@@ -66,6 +66,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:translationZ="10dp"
             gone="@{m.showActions}"
             android:id="@+id/btn_action"
             android:layout_marginTop="20dp"
@@ -124,6 +125,7 @@
         </LinearLayout>
 
         <Button
+            android:translationZ="10dp"
             gone="@{m.showActions}"
             hit="@{true}"
             android:layout_marginStart="50dp"
@@ -138,6 +140,7 @@
             android:layout_height="wrap_content" />
 
         <Button
+            android:translationZ="10dp"
             gone="@{m.showActions}"
             android:layout_marginEnd="50dp"
             android:layout_gravity="center_vertical|end"
