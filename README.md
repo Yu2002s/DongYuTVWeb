@@ -12,6 +12,15 @@
 
 [公众号](./app/src/main/assets/images/qrcode_mp.jpg)
 
+## 下载
+
+应该如何下载呢？
+
+1. 请在 [release](https://gitee.com/jdy2002/DongYuTvWeb/releases) 下载。
+2. 如果你用的是手机，一般内核版本高，可以在 `release` 下载体积最小的，电视则下载体积大的。
+3. 一般android版本高的话，下载体积最小的就行，实在不行都可以下载试试。
+4. 市面上一般设备是64位的，请下载文件以`app_arm64`开头的文件, 老设备下载 `app_arm32` 开头的。
+
 ## 操作
 
 - 方向上: 上一个频道
@@ -67,20 +76,7 @@ reboot # 重启设备
 
 ## X5内核
 
-部分电视系统内核的版本低，所以需要使用X5内核，这个需要自己自行编译此项目，需要一定的android基础。
-
-如果不懂开发，可以使用此版本: [CCTV版本，低内核版本使用](https://jdy2002.lanzoue.com/id2BO3ji7axg)
-
-1. 在[腾讯浏览服务](https://x5.tencent.com/tbs/x5/apps/list) 登录账号，之后创建应用，上传打包后的 apk
-2. 进行实名认证
-3. 在应用列表点击`查看应用`，打开[版本配置列表](https://x5.tencent.com/tbs/x5/app/24e3be34042f4f11a854aee8a956d584/x5public/config)
-4. 获取配置文件，将下载的配置文件，替换 `app/src/x5/assets/tbs/config.tbs` 文件
-5. 修改 `app/src/main/build.gradle` 文件，编辑 `signingConfigs` 签名配置, 选择构建分支为 `x5`，重新进行打包构建 apk
-6. 运行安装完成后，查看是否成功
-
-### 接入文档
-
-[X5网页引擎（公网版）接入文档](https://x5.tencent.com/docs.html#public_net_x5)
+软件已内置X5内核，如果你设备安装失败会有问题请反馈！具体看【下载】
 
 ## 自定义频道
 

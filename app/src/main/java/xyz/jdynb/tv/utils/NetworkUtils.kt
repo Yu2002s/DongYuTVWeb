@@ -11,7 +11,7 @@ import kotlinx.serialization.serializer
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
-import xyz.jdynb.music.utils.SpUtils.remove
+import xyz.jdynb.tv.utils.SpUtils.remove
 import xyz.jdynb.tv.BuildConfig
 import xyz.jdynb.tv.DongYuTVApplication
 import xyz.jdynb.tv.config.Api
@@ -29,7 +29,6 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.StandardCharsets
 import kotlin.random.Random
-import kotlin.random.nextInt
 
 object NetworkUtils {
 

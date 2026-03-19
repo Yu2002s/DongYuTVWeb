@@ -15,6 +15,7 @@ constraintlayout = "2.2.1"
 ksp = "2.0.21-1.0.27"
 brv = "1.6.1"
 engine = "0.0.74"
+okhttpProfiler = "1.1.1"
 recyclerview = "1.4.0"
 kotlinxCoroutines = "1.10.2"
 localbroadcastmanager = "1.0.0"
@@ -44,6 +45,7 @@ brv = { group = "com.github.liangjingkanji", name = "BRV", version.ref = "brv" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 androidx-localbroadcastmanager = { module = "androidx.localbroadcastmanager:localbroadcastmanager", version.ref = "localbroadcastmanager" }
+okhttp-profiler = { module = "io.nerdythings:okhttp-profiler", version.ref = "okhttpProfiler" }
 tbssdk = { module = "com.tencent.tbs:tbssdk", version.ref = "tbssdk" }
 webx5core_arm64_v8a = { module = "com.github.HeartHappy.webX5Core:webx5core_arm64_v8a", version.ref = "webx5core_arm64_v8a" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }

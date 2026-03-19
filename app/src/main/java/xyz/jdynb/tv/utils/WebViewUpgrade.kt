@@ -66,10 +66,16 @@ object WebViewUpgrade {
   }
 
   fun getWebViewVersionNumber(): Int {
-    val systemWebViewPackageVersion = WebViewUpgrade.getSystemWebViewPackageVersion()
+    var systemWebViewPackageVersion = WebViewUpgrade.getSystemWebViewPackageVersion()
     Log.i(TAG, "version: $systemWebViewPackageVersion, system: ${getCurrentLocalWebViewVersion()}")
     if (systemWebViewPackageVersion.isNullOrEmpty()) {
-      return Int.MAX_VALUE
+      try {
+        val packageInfo =
+          DongYuTVApplication.context.packageManager.getPackageInfo("com.google.android.webview", 0)
+        systemWebViewPackageVersion = packageInfo.versionName
+      } catch (_: Exception) {
+        return Int.MAX_VALUE
+      }
     }
     val index = systemWebViewPackageVersion.indexOf(".")
     if (index > 0) {

@@ -85,7 +85,16 @@ class SPKeyConstants {
     /**
      * 是否更新WebView
      */
-    const val UPDATE_WEBVIEW = ""
+    const val UPDATE_WEBVIEW = "update_webview"
+
+    /**
+     * 是否安装X5内核
+     */
+    const val IS_INSTALL_X5 = "is_install_x5"
+    /**
+     * 滑动换台
+     */
+    const val SLIDE_SWITCH_CHANNEL = "slide_switch_channel"
   }
 
 }

@@ -48,6 +48,8 @@ class ChannelListDialog(
 
   var onRefreshListener: (() -> Unit)? = null
 
+  var onSwitchSourceListener: (() -> Unit)? = null
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.dialog_channel_list)
@@ -189,6 +191,10 @@ class ChannelListDialog(
     binding.btnSetting.setOnClickListener {
       dismiss()
       SettingDialog(it.context).show()
+    }
+
+    binding.btnSwitchChannel.setOnClickListener {
+      onSwitchSourceListener?.invoke()
     }
   }
 

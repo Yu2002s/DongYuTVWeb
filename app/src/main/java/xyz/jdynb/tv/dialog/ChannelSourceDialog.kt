@@ -2,6 +2,7 @@ package xyz.jdynb.tv.dialog
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.dividerSpace
@@ -12,10 +13,11 @@ import xyz.jdynb.tv.R
 import xyz.jdynb.tv.databinding.DialogChannelSourceBinding
 import xyz.jdynb.tv.model.LiveChannelModel
 import xyz.jdynb.tv.model.LiveChannelTypeModel
+import xyz.jdynb.tv.utils.SpUtils.get
+import xyz.jdynb.tv.utils.SpUtils.put
 
 class ChannelSourceDialog(
   context: Context,
-  private val channelTypeModels: List<LiveChannelTypeModel>,
   private val currentChannelModel: LiveChannelModel
 ) : EngineDialog<DialogChannelSourceBinding>(context, R.style.ChannelDialogStyle) {
 
@@ -27,41 +29,40 @@ class ChannelSourceDialog(
   var onChannelChange: ((LiveChannelModel) -> Unit)? = null
 
   override fun initData() {
+    Log.i("ChannelSourceDialog", "initData: $currentChannelModel")
   }
 
   override fun initView() {
     setMaxWidth()
+
+    binding.tvTitle.text = currentChannelModel.channelType + " " + currentChannelModel.channelName
+
     binding.rvType.dividerSpace(30).setup {
       singleMode = true
-      addType<LiveChannelTypeModel>(R.layout.item_list_source)
+      addType<LiveChannelModel>(R.layout.item_list_channel)
 
       onChecked { position, checked, allChecked ->
-        val model = getModel<LiveChannelTypeModel>(position)
+        val model = getModel<LiveChannelModel>(position)
         model.isSelected = checked
       }
 
-      R.id.tv_group.onClick {
-        val model = getModel<LiveChannelTypeModel>()
-        val channel = model.channelList.find { it.channelName == currentChannelModel.channelName }
-        if (channel == null) {
-          Toast.makeText(context, "没有找到当前频道", Toast.LENGTH_SHORT).show()
-          return@onClick
-        }
-        onChannelChange?.invoke(channel)
+      R.id.tv_channel.onClick {
+        val model = getModel<LiveChannelModel>()
+        setChecked(modelPosition, true)
+        modelPosition.put("channel_config_${currentChannelModel.channelType}", currentChannelModel.channelName)
+        onChannelChange?.invoke(model)
         dismiss()
       }
-    }.models = channelTypeModels
+    }.models = currentChannelModel.children.toMutableList()
 
-    val position = channelTypeModels
-      .indexOfFirst {
-        it.source == currentChannelModel.source
-      }
+    val index = "channel_config_${currentChannelModel.channelType}".get<Int>(
+      currentChannelModel.channelName,
+      0
+    ) ?: 0
 
-    if (position != -1) {
-      binding.rvType.bindingAdapter.setChecked(position, true)
-      binding.rvType.post {
-        binding.rvType.getChildAt(position).requestFocus()
-      }
+    binding.rvType.bindingAdapter.setChecked(index, true)
+    binding.rvType.post {
+      binding.rvType.getChildAt(index).requestFocus()
     }
   }
 }

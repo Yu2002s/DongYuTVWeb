@@ -34,8 +34,8 @@ android {
     minSdk = 21
     //noinspection ExpiredTargetSdkVersion
     targetSdk = 28
-    versionCode = 15
-    versionName = "1.0.9-fix"
+    versionCode = 16
+    versionName = "1.0.10"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     signingConfig = signingConfigs.getByName("debug")
@@ -61,19 +61,37 @@ android {
     jvmTarget = "11"
   }
 
-  flavorDimensions("example")
+  flavorDimensions("cpu", "example")
 
   productFlavors {
+    create("arm32") {
+      dimension = "cpu"
+      ndk {
+        abiFilters.add("armeabi-v7a")
+        abiFilters.add("armeabi")
+      }
+    }
+
+    create("arm64") {
+      dimension = "cpu"
+      ndk {
+        abiFilters.add("arm64-v8a")
+      }
+    }
+
     create("webview") {
+      dimension = "example"
       // 默认配置
     }
 
     // X5 内核已收费，不支持，如果你有付费的，请开启注释，并按照文档进行配置
     create("x5") {
+      dimension = "example"
     }
 
     // 限制太多，不支持
     /*create("gecko") {
+      dimension = "example"
       applicationIdSuffix = ".gecko"
     }*/
   }
@@ -82,7 +100,7 @@ android {
     abi {
       isEnable = true // 开启不同cpu apk 拆分
       reset() // 重置默认的cpu平台
-      include("armeabi-v7a", "arm64-v8a", "x86", "armeabi") // 只打包 v8、v7两种架构的安装包
+      include("armeabi-v7a", "arm64-v8a", "armeabi") // 只打包 v8、v7两种架构的安装包
       isUniversalApk = true // 全量包
     }
   }*/
@@ -134,16 +152,14 @@ dependencies {
   implementation("io.github.jonanorman.android.webviewup:core:0.1.0")
   implementation("io.github.jonanorman.android.webviewup:download-source:0.1.0")
   implementation(libs.androidx.localbroadcastmanager)
-  "x5Implementation"(files("libs/tbs_sdk-44382-202411081743-release.aar"))
+  // "x5Implementation"(files("libs/tbs_sdk-44382-202411081743-release.aar"))
   implementation(project(":easydanmaku"))
-  implementation("io.nerdythings:okhttp-profiler:1.1.1")
-  // implementation("com.github.bytedance:danmaku-render-engine:0.1.0")
+  implementation(libs.okhttp.profiler)
   // "geckoImplementation"("org.mozilla.geckoview:geckoview:93.0.20210927210923")
-  // implementation(files("libs/tbs_sdk-44382-202411081743-release.aar"))
   // "x5Implementation"(project(":x5core_arm64_v8a"))
   // "x5Implementation"("com.github.HeartHappy.webX5Core:webx5core_armeabi_v7a:1.0.2")
   // implementation(project(":x5core_arm64_v8a"))
-  // "x5Implementation"(libs.tbssdk)
+  implementation(libs.tbssdk)
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit)
   androidTestImplementation(libs.androidx.espresso.core)

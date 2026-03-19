@@ -4,8 +4,8 @@ import android.content.Context
 import android.os.Bundle
 import android.widget.SeekBar
 import com.drake.engine.base.EngineDialog
-import xyz.jdynb.music.utils.SpUtils.getRequired
-import xyz.jdynb.music.utils.SpUtils.put
+import xyz.jdynb.tv.utils.SpUtils.getRequired
+import xyz.jdynb.tv.utils.SpUtils.put
 import xyz.jdynb.tv.R
 import xyz.jdynb.tv.constants.SPKeyConstants
 import xyz.jdynb.tv.databinding.DialogVideoSettingBinding

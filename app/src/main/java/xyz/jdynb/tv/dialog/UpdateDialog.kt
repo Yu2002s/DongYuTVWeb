@@ -16,18 +16,13 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
-import xyz.jdynb.music.utils.SpUtils.put
 import xyz.jdynb.tv.R
 import xyz.jdynb.tv.databinding.DialogUpdateBinding
 import xyz.jdynb.tv.model.UpdateModel
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
-import java.nio.charset.StandardCharsets
-import kotlin.concurrent.thread
 
 /**
  * 更新弹窗

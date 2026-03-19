@@ -14,20 +14,17 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
-import xyz.jdynb.music.utils.SpUtils.get
-import xyz.jdynb.music.utils.SpUtils.getRequired
-import xyz.jdynb.music.utils.SpUtils.put
+import xyz.jdynb.tv.utils.SpUtils.getRequired
+import xyz.jdynb.tv.utils.SpUtils.put
 import xyz.jdynb.tv.constants.SPKeyConstants
 import xyz.jdynb.tv.enums.LivePlayer
 import xyz.jdynb.tv.fragment.LivePlayerFragment
@@ -35,6 +32,7 @@ import xyz.jdynb.tv.model.LiveChannelModel
 import xyz.jdynb.tv.model.LiveChannelTypeModel
 import xyz.jdynb.tv.model.LiveModel
 import xyz.jdynb.tv.utils.NetworkUtils
+import xyz.jdynb.tv.utils.SpUtils.get
 
 class MainViewModel : ViewModel() {
 
@@ -46,7 +44,7 @@ class MainViewModel : ViewModel() {
      * 直播配置地址
      */
     private const val LIVE_CONFIG_URL =
-      "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/live-3.jsonc"
+      "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/lives/live-2026-03-19.jsonc"
 
   }
 
@@ -127,7 +125,21 @@ class MainViewModel : ViewModel() {
       }
       // 保存当前的频道索引
       SPKeyConstants.CURRENT_INDEX.put(it)
-      flowOf(channelModelList.value.getOrNull(it) ?: getDefaultChannelModel())
+      val currentChannelModel = channelModelList.value.getOrNull(it) ?: getDefaultChannelModel()
+      if (currentChannelModel.children.isNotEmpty()) {
+        // 如果有子频道，则读取子频道的配置并设置
+        // 读取保存的索引
+        val index = "channel_config_${currentChannelModel.channelType}".get<Int>(currentChannelModel.channelName, 0) ?: 0
+        Log.i(TAG, "index: $index, ${currentChannelModel.channelName}")
+        val savedChannelModel = currentChannelModel.children.getOrNull(index) ?: currentChannelModel.children.first()
+        if (savedChannelModel.player.isNotEmpty()) {
+          currentChannelModel.player = savedChannelModel.player
+        }
+        if (savedChannelModel.args.isNotEmpty()) {
+          currentChannelModel.args = savedChannelModel.args
+        }
+      }
+      flowOf(currentChannelModel)
     }
     // 改变时都会执行这里
     .onEach {
@@ -153,18 +165,18 @@ class MainViewModel : ViewModel() {
    */
   private suspend fun init() = withContext(Dispatchers.IO) {
     // 读取网络上的配置文件
-    val liveContent = NetworkUtils.getResponseBodyCache(LIVE_CONFIG_URL, "live-3.jsonc")
+    val liveContent = NetworkUtils.getResponseBodyCache(LIVE_CONFIG_URL, "lives/live-2026-03-19.jsonc")
     // Log.i(TAG, "liveContent: $liveContent")
     // 反序列化赋值给 liveModel 对象
     _liveModel = json.decodeFromString<LiveModel>(liveContent)
-    val showCCTV = SPKeyConstants.CCTV_CHANNEL.getRequired<Boolean>(false)
+    /*val showCCTV = SPKeyConstants.CCTV_CHANNEL.getRequired<Boolean>(false)
     liveModel.channel.forEach {
       if (it.player == "ysp") {
         it.hidden = showCCTV
-      } else if (it.player == "cctv" /*|| it.player == "custom"*/) {
+      } else if (it.player == "cctv" *//*|| it.player == "custom"*//*) {
         it.hidden = !showCCTV
       }
-    }
+    }*/
     // 频道类型列表
     _channelTypeModelList.value =
       liveModel.channel.filter {
@@ -197,7 +209,13 @@ class MainViewModel : ViewModel() {
     }.filter { !it.hidden }.onEachIndexed { index, model ->
       // 统一设置频道号码
       model.number = index + 1 // 设置频道序号
-    }//distinctBy { it.number }.sortedBy { it.number } // 去重，并且升序排序
+    }.onEach {
+      it.children.forEach { child ->
+        child.number = it.number
+      }
+    }
+
+    //distinctBy { it.number }.sortedBy { it.number } // 去重，并且升序排序
   }
 
   /**
@@ -205,12 +223,11 @@ class MainViewModel : ViewModel() {
    */
   private fun getDefaultChannelModel() = LiveChannelModel(
     channelName = "CCTV1",
-    pid = "600001859",
     tvLogo = "https://resources.yangshipin.cn/assets/oms/image/202306/d57905b93540bd15f0c48230dbbbff7ee0d645ff539e38866e2d15c8b9f7dfcd.png?imageMogr2/format/webp",
-    streamId = "2024078201",
     channelType = "央视",
     number = 1,
-    player = "ysp"
+    player = "ysp",
+    args = mapOf("pid" to "600001859", "streamId" to "2024078201")
   )
 
   /**

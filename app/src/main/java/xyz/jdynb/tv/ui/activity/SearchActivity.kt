@@ -11,7 +11,6 @@ import android.widget.Button
 import android.widget.GridLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.setMargins
 import androidx.core.widget.doAfterTextChanged
@@ -23,7 +22,7 @@ import com.drake.brv.utils.setup
 import com.drake.engine.base.EngineActivity
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import xyz.jdynb.music.utils.SpUtils.getRequired
+import xyz.jdynb.tv.utils.SpUtils.getRequired
 import xyz.jdynb.tv.MainActivity
 import xyz.jdynb.tv.R
 import xyz.jdynb.tv.config.Api

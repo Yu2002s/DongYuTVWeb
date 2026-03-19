@@ -3,9 +3,9 @@
   "player": [
     {
       "id": "ysp",
-      "name": "ysp",
+      "name": "base",
       // 播放器名称，一般程序中枚举指定（扩展的话默认指定 simple）
-      "url": "https://www.yangshipin.cn/tv/home",
+      "url": "https://www.yangshipin.cn/tv/home?pid={{pid}}",
       // 指定播放地址(name为simple时不需要指定)
       // 播放器需要执行的脚本
       "script": {
@@ -237,147 +237,6 @@
   // 播放频道列表
   "channel": [
     {
-      "channelType": "央视",
-      "source": "CCTV(稳定，清晰度低)",
-      "player": "cctv",
-      "hidden": true,
-      "channelList": [
-        {
-          "channelName": "CCTV1",
-          "desc": "综合",
-          "args": {
-            "id": "cctv1"
-          }
-        },
-        {
-          "channelName": "CCTV2",
-          "desc": "财经",
-          "args": {
-            "id": "cctv2"
-          }
-        },
-        {
-          "channelName": "CCTV3",
-          "desc": "综艺",
-          "args": {
-            "id": "cctv3"
-          }
-        },
-        {
-          "channelName": "CCTV4",
-          "desc": "中文国际",
-          "args": {
-            "id": "cctv4"
-          }
-        },
-        {
-          "channelName": "CCTV5",
-          "desc": "体育",
-          "args": {
-            "id": "cctv5"
-          }
-        },
-        {
-          "channelName": "CCTV6",
-          "desc": "电影",
-          "args": {
-            "id": "cctv6"
-          }
-        },
-        {
-          "channelName": "CCTV7",
-          "desc": "国防军事",
-          "args": {
-            "id": "cctv7"
-          }
-        },
-        {
-          "channelName": "CCTV8",
-          "desc": "电视剧",
-          "args": {
-            "id": "cctv8"
-          }
-        },
-        {
-          "channelName": "CCTV9",
-          "desc": "记录",
-          "args": {
-            "id": "cctv9"
-          }
-        },
-        {
-          "channelName": "CCTV10",
-          "desc": "科教",
-          "args": {
-            "id": "cctv10"
-          }
-        },
-        {
-          "channelName": "CCTV11",
-          "desc": "戏曲",
-          "args": {
-            "id": "cctv11"
-          }
-        },
-        {
-          "channelName": "CCTV12",
-          "desc": "社会与法",
-          "args": {
-            "id": "cctv12"
-          }
-        },
-        {
-          "channelName": "CCTV13",
-          "desc": "新闻",
-          "args": {
-            "id": "cctv13"
-          }
-        },
-        {
-          "channelName": "CCTV14",
-          "desc": "少儿",
-          "args": {
-            "id": "cctv14"
-          }
-        },
-        {
-          "channelName": "CCTV15",
-          "desc": "音乐",
-          "args": {
-            "id": "cctv15"
-          }
-        },
-        {
-          "channelName": "CCTV16",
-          "desc": "奥林匹克",
-          "args": {
-            "id": "cctv16"
-          }
-        },
-        {
-          "channelName": "CCTV17",
-          "desc": "农业农村",
-          "args": {
-            "id": "cctv17"
-          }
-        },
-        {
-          "channelName": "CCTV4",
-          "desc": "中文国际(欧)",
-          "args": {
-            "id": "cctveurope"
-          }
-        },
-        {
-          "channelName": "CCTV-4",
-          "desc": "中文国际(美)",
-          "args": {
-            "id": "cctvamerica"
-          }
-        }
-      ]
-    },
-    {
       // 播放频道类型
       "channelType": "央视",
       "source": "YangShiPing(清晰，设备要求高)",
@@ -389,113 +248,333 @@
         {
           "channelName": "CCTV1",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/d57905b93540bd15f0c48230dbbbff7ee0d645ff539e38866e2d15c8b9f7dfcd.png?imageMogr2/format/webp",
-          "streamId": "2024078201",
-          "number": 1,
-          "desc": "综合"
+          "desc": "综合",
+          // 子频道
+          "children": [
+            {
+              "channelName": "CCTV1-1",
+              "player": "ysp",
+              "args": {
+                "pid": "600001859",
+                "streamId": "2024078201"
+              }
+            },
+            {
+              "channelName": "CCTV1-2",
+              "player": "cctv",
+              "args": {
+                "id": "cctv1"
+              }
+            }
+          ]
         },
         {
           "channelName": "CCTV2",
-          "pid": "600001800",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/20115388de0207131af17eac86c33049b95d69eaff064e55653a1b941810a006.png?imageMogr2/format/webp",
-          "streamId": "2024075401",
-          "number": 2,
-          "desc": "财经"
+          "desc": "财经",
+          "children": [
+            {
+              "channelName": "CCTV2-1",
+              "player": "ysp",
+              "args": {
+                "pid": "600001800",
+                "streamId": "2024075401"
+              }
+            },
+            {
+              "channelName": "CCTV2-2",
+              "player": "cctv",
+              "args": {
+                "id": "cctv2"
+              }
+            }
+          ]
         },
         {
           "channelName": "CCTV3",
-          "pid": "600001801",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/7b7a65c712450da3deb6ca66fbacf4f9aee00d3f20bd80eafb5ada01ec63eb3a.png?imageMogr2/format/webp",
-          "streamId": "2024068501",
-          "number": 3,
-          "desc": "综艺"
+          "desc": "综艺",
+          "children": [
+            {
+              "channelName": "CCTV3-1",
+              "player": "ysp",
+              "args": {
+                "pid": "600001801",
+                "streamId": "2024068501"
+              }
+            },
+            {
+              "channelName": "CCTV3-2",
+              "player": "cctv",
+              "args": {
+                "id": "cctv3"
+              }
+            }
+          ]
         },
         {
           "channelName": "CCTV4",
-          "pid": "600001814",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/f357e58fdbcc076a3d65e1f958c942b2e14f14342c60736ceed98b092d35356a.png?imageMogr2/format/webp",
-          "streamId": "2024078301",
-          "number": 4,
-          "desc": "中文国际"
+          "desc": "中文国际",
+          "children": [
+            {
+              "channelName": "CCTV4-1",
+              "player": "ysp",
+              "args": {
+                "pid": "600001814",
+                "streamId": "2024078301"
+              }
+            },
+            {
+              "channelName": "CCTV4-2",
+              "player": "cctv",
+              "args": {
+                "id": "cctv4"
+              }
+            },
+            {
+              "channelName": "CCTV4(欧)",
+              "player": "cctv",
+              "args": {
+                "id": "cctveurope"
+              }
+            },
+            {
+              "channelName": "CCTV4(美)",
+              "player": "cctv",
+              "args": {
+                "id": "cctvamerica"
+              }
+            }
+          ]
         },
         {
           "channelName": "CCTV5",
-          "pid": "600001818",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/0a6a7138952675983a3d854df7688557b286d59aa06166edae51506f9204d655.png?imageMogr2/format/webp",
-          "streamId": "2024078401",
-          "number": 5,
-          "desc": "体育"
+          "desc": "体育",
+          "children": [
+            {
+              "channelName": "CCTV5-1",
+              "player": "ysp",
+              "args": {
+                "pid": "600001818",
+                "streamId": "2024078401"
+              }
+            },
+            {
+              "channelName": "CCTV5+",
+              "player": "ysp",
+              "args": {
+                "pid": "600001817",
+                "streamId": "2024078001"
+              }
+            },
+            {
+              "channelName": "CCTV5-2",
+              "player": "cctv",
+              "args": {
+                "id": "cctv5"
+              }
+            }
+          ]
         },
         {
           "channelName": "CCTV6",
-          "pid": "600108442",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/741515efda91f03f455df8a7da4ee11fa9329139c276435cf0a9e2af398d5bf2.png?imageMogr2/format/webp",
-          "streamId": "2013693901",
-          "number": 7,
-          "desc": "电影"
+          "desc": "电影",
+          "children": [
+            {
+              "channelName": "CCTV6-1",
+              "player": "ysp",
+              "args": {
+                "pid": "600108442",
+                "streamId": "2013693901"
+              }
+            },
+            {
+              "channelName": "CCTV6-2",
+              "player": "cctv",
+              "args": {
+                "id": "cctv6"
+              }
+            }
+          ]
         },
         {
           "channelName": "CCTV7",
-          "pid": "600004092",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/b29af94e295ebdf646cefb68122c429b9cd921f498ca20d2d8070252536f9ff9.png?imageMogr2/format/webp",
-          "streamId": "2024072001",
-          "number": 8,
-          "desc": "国防军事"
+          "desc": "国防军事",
+          "children": [
+            {
+              "channelName": "CCTV7-1",
+              "player": "ysp",
+              "args": {
+                "pid": "600004092",
+                "streamId": "2024072001"
+              }
+            },
+            {
+              "channelName": "CCTV7-2",
+              "player": "cctv",
+              "args": {
+                "id": "cctv7"
+              }
+            }
+          ]
         },
         {
           "channelName": "CCTV8",
-          "pid": "600001803",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/ad51de94426a0ba039e6dd6a8534ea98ecc813a6176bde87b4f18cc34d6d7590.png?imageMogr2/format/webp",
-          "streamId": "2024078501",
-          "number": 9,
-          "desc": "电视剧"
+          "desc": "电视剧",
+          "children": [
+            {
+              "channelName": "CCTV8-1",
+              "player": "ysp",
+              "args": {
+                "pid": "600001803",
+                "streamId": "2024078501"
+              }
+            },
+            {
+              "channelName": "CCTV8-2",
+              "player": "cctv",
+              "args": {
+                "id": "cctv8"
+              }
+            }
+          ]
         },
         {
           "channelName": "CCTV9",
-          "pid": "600004078",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/2ed1b4deeca179d5db806bb941790f82eb92a1b7299c1c38fe027f95a5caee5e.png?imageMogr2/format/webp",
-          "streamId": "2024078601",
-          "number": 10,
-          "desc": "记录"
+          "desc": "记录",
+          "children": [
+            {
+              "channelName": "CCTV9-1",
+              "player": "ysp",
+              "args": {
+                "pid": "600004078",
+                "streamId": "2024078601"
+              }
+            },
+            {
+              "channelName": "CCTV9-2",
+              "player": "cctv",
+              "args": {
+                "id": "cctv9"
+              }
+            }
+          ]
         },
         {
           "channelName": "CCTV10",
-          "pid": "600001805",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/aa6157ec65188cd41826e5a2f088c3d6d153205f5f6428258d12c59999e221aa.png?imageMogr2/format/webp",
-          "streamId": "2024078701",
-          "number": 11,
-          "desc": "科教"
+          "desc": "科教",
+          "children": [
+            {
+              "channelName": "CCTV10-1",
+              "player": "ysp",
+              "args": {
+                "pid": "600001805",
+                "streamId": "2024078701"
+              }
+            },
+            {
+              "channelName": "CCTV10-2",
+              "player": "cctv",
+              "args": {
+                "id": "cctv10"
+              }
+            }
+          ]
         },
         {
           "channelName": "CCTV11",
-          "pid": "600001806",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/ed12ed7c7a1034dae4350011fe039284c5d5a836506b28c9e32e3c75299625c0.png?imageMogr2/format/webp",
-          "streamId": "2027248701",
-          "number": 12,
-          "desc": "戏曲"
+          "desc": "戏曲",
+          "children": [
+            {
+              "channelName": "CCTV11-1",
+              "player": "ysp",
+              "args": {
+                "pid": "600001806",
+                "streamId": "2027248701"
+              }
+            },
+            {
+              "channelName": "CCTV11-2",
+              "player": "cctv",
+              "args": {
+                "id": "cctv11"
+              }
+            }
+          ]
         },
         {
           "channelName": "CCTV12",
-          "pid": "600001807",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/484083cffaa40df7e659565e8cb4d1cc740158a185512114167aa21fa0c59240.png?imageMogr2/format/webp",
-          "streamId": "2027248801",
-          "number": 13,
-          "desc": "社会与法"
+          "desc": "社会与法",
+          "children": [
+            {
+              "channelName": "CCTV12-1",
+              "player": "ysp",
+              "args": {
+                "pid": "600001807",
+                "streamId": "2027248801"
+              }
+            },
+            {
+              "channelName": "CCTV12-2",
+              "player": "cctv",
+              "args": {
+                "id": "cctv12"
+              }
+            }
+          ]
         },
         {
           "channelName": "CCTV13",
-          "pid": "600001811",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/266da7b43c03e2312186b4a999e0f060e8f15b10d2cc2c9aa32171819254cf1a.png?imageMogr2/format/webp",
-          "streamId": "2024079001",
-          "number": 14,
-          "desc": "新闻"
+          "desc": "新闻",
+          "children": [
+            {
+              "channelName": "CCTV13-1",
+              "player": "ysp",
+              "args": {
+                "pid": "600001811",
+                "streamId": "2024079001"
+              }
+            },
+            {
+              "channelName": "CCTV13-2",
+              "player": "cctv",
+              "args": {
+                "id": "cctv13"
+              }
+            }
+          ]
         },
         {
           "channelName": "CCTV14",
-          "pid": "600001809",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/af6b603896938dc346fbb16abfc63c12cba54b0ec9d18770a15d347d115f12d5.png?imageMogr2/format/webp",
-          "streamId": "2027248901",
-          "number": 15,
-          "desc": "少儿"
+          "desc": "少儿",
+          "children": [
+            {
+              "channelName": "CCTV14-1",
+              "player": "ysp",
+              "args": {
+                "pid": "600001809",
+                "streamId": "2027248901"
+              }
+            },
+            {
+              "channelName": "CCTV14-2",
+              "player": "cctv",
+              "args": {
+                "id": "cctv14"
+              }
+            }
+          ]
         },
         {
           "channelName": "CCTV15",
@@ -503,38 +582,76 @@
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/2ceee92188ef684efe0d8b90839c4f3ad450d179dc64d59beff417059453af47.png?imageMogr2/format/webp",
           "streamId": "2027249001",
           "number": 16,
-          "desc": "音乐"
+          "desc": "音乐",
+          "children": [
+            {
+              "channelName": "CCTV15-1",
+              "player": "ysp",
+              "args": {
+                "pid": "600001815",
+                "streamId": "2027249001"
+              }
+            },
+            {
+              "channelName": "CCTV15-2",
+              "player": "cctv",
+              "args": {
+                "id": "cctv15"
+              }
+            }
+          ]
         },
         {
           "channelName": "CCTV16-HD",
-          "pid": "600098637",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/53793fa7bacd3a93ff6dc5d2758418985e1f952a316c335d663b572d8bdcd74d.png?imageMogr2/format/webp",
-          "streamId": "2027249101",
-          "number": 17,
-          "desc": "奥林匹克"
-        },
-        {
-          "channelName": "CCTV16(4K）",
-          "pid": "600099502",
-          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/53793fa7bacd3a93ff6dc5d2758418985e1f952a316c335d663b572d8bdcd74d.png?imageMogr2/format/webp",
-          "streamId": "2027249301",
-          "number": 18
+          "desc": "奥林匹克",
+          "children": [
+            {
+              "channelName": "CCTV16-1",
+              "player": "ysp",
+              "args": {
+                "pid": "600098637",
+                "streamId": "2027249101"
+              }
+            },
+            {
+              "channelName": "CCTV16(4K）",
+              "player": "ysp",
+              "args": {
+                "pid": "600099502",
+                "streamId": "2027249301"
+              }
+            },
+            {
+              "channelName": "CCTV16-2",
+              "player": "cctv",
+              "args": {
+                "id": "cctv16"
+              }
+            }
+          ]
         },
         {
           "channelName": "CCTV17",
-          "pid": "600001810",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/ddef563072f8bad2bea5b9e52674cb7b4ed50efb20c26e61994dfbdf05c1e3c0.png?imageMogr2/format/webp",
-          "streamId": "2027249401",
-          "number": 19,
-          "desc": "农业农村"
-        },
-        {
-          "channelName": "CCTV5+",
-          "pid": "600001817",
-          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/649ad76a90bfef55b05db9fe52e006487280f619089099d5dc971e387fc6eff0.png?imageMogr2/format/webp",
-          "streamId": "2024078001",
-          "number": 6,
-          "desc": "体育赛事"
+          "desc": "农业农村",
+          "children": [
+            {
+              "channelName": "CCTV17-1",
+              "player": "ysp",
+              "args": {
+                "pid": "600001810",
+                "streamId": "2027249401"
+              }
+            },
+            {
+              "channelName": "CCTV17-2",
+              "player": "cctv",
+              "args": {
+                "id": "cctv17"
+              }
+            }
+          ]
         },
         {
           "channelName": "CCTV4K",
@@ -623,227 +740,259 @@
       "channelList": [
         {
           "channelName": "北京卫视",
-          "pid": "600002309",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/f4f23633c578beea49a3841d88d3490100f029ee349059fa532869db889872c5.png?imageMogr2/format/webp",
-          "streamId": "2024052703",
-          "number": 31
+          "args": {
+            "pid": "600002309",
+            "streamId": "2024052703"
+          }
         },
         {
           "channelName": "江苏卫视",
-          "pid": "600002521",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/380ad685c0c1d5b2c902246b8d2df6d3f9b45e2837abcfe493075bbded597a31.png?imageMogr2/format/webp",
-          "streamId": "2024171103",
-          "number": 32
+          "args": {
+            "pid": "600002521",
+            "streamId": "2024171103"
+          }
         },
         {
           "channelName": "东方卫视",
-          "pid": "600002483",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/9bd372ca292a82ce3aa08772b07efc4af1f85c21d1f268ea33440c49e9a0a488.png?imageMogr2/format/webp",
-          "streamId": "2024054503",
-          "number": 33
+          "args": {
+            "pid": "600002483",
+            "streamId": "2024054503"
+          }
         },
         {
           "channelName": "浙江卫视",
-          "pid": "600002520",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/a66c836bd98ba3e41a2e9a570d4b9c50dedc6839e9de333e2e78212ad505f37e.png?imageMogr2/format/webp",
-          "streamId": "2024054703",
-          "number": 34
+          "args": {
+            "pid": "600002520",
+            "streamId": "2024054703"
+          }
         },
         {
           "channelName": "湖南卫视",
-          "pid": "600002475",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/4120e89d3079d08aa17d382f69a2308ec70839b278367763c34a34666c75cb88.png?imageMogr2/format/webp",
-          "streamId": "2024054803",
-          "number": 35
+          "args": {
+            "pid": "600002475",
+            "streamId": "2024054803"
+          }
         },
         {
           "channelName": "湖北卫视",
-          "pid": "600002508",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/7a6be5a2bb1dc53a945c016ff1f525dc4a84c51db371c15c89aa55404b0ba784.png?imageMogr2/format/webp",
-          "streamId": "2024171203",
-          "number": 36
+          "args": {
+            "pid": "600002508",
+            "streamId": "2024171203"
+          }
         },
         {
           "channelName": "广东卫视",
-          "pid": "600002485",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/28886880a4dc0f06fb7e0a528a1def0591d61a65870e29176ede0cc92033bbfd.png?imageMogr2/format/webp",
-          "streamId": "2024060903",
-          "number": 37
+          "args": {
+            "pid": "600002485",
+            "streamId": "2024060903"
+          }
         },
         {
           "channelName": "广西卫视",
-          "pid": "600002509",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/54b7e97cb816bb223fe05f3fc44da2c7820eb66e8550c19d23100f2c414ecc38.png?imageMogr2/format/webp",
-          "streamId": "2024060703",
-          "number": 38
+          "args": {
+            "pid": "600002509",
+            "streamId": "2024060703"
+          }
         },
         {
           "channelName": "黑龙江卫视",
-          "pid": "600002498",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/d8273ae9be698ce2db21f5b886ecac95a73429593f93713c60ed8c12c38bf0d3.png?imageMogr2/format/webp",
-          "streamId": "2024061003",
-          "number": 39
+          "args": {
+            "pid": "600002498",
+            "streamId": "2024061003"
+          }
         },
         {
           "channelName": "海南卫视",
-          "pid": "600002506",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/6e060391fde0469801fc3d84dbf204b4f8d650d251f17d7595a6964c0bb99e81.png?imageMogr2/format/webp",
-          "streamId": "2024055603",
-          "number": 40
+          "args": {
+            "pid": "600002506",
+            "streamId": "2024055603"
+          }
         },
         {
           "channelName": "重庆卫视",
-          "pid": "600002531",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/657651f411de2673d1770d9a78b44c1265704f7468cc41d4be7f51d630768494.png?imageMogr2/format/webp",
-          "streamId": "2024061103",
-          "number": 41
+          "args": {
+            "pid": "600002531",
+            "streamId": "2024061103"
+          }
         },
         {
           "channelName": "深圳卫视",
-          "pid": "600002481",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/d59fec04c902e3581c617136d02d4b9b8c4cbe64272781ddd3525e80c823edb7.png?imageMogr2/format/webp",
-          "streamId": "2024061303",
-          "number": 42
+          "args": {
+            "pid": "600002481",
+            "streamId": "2024061303"
+          }
         },
         {
           "channelName": "四川卫视",
-          "pid": "600002516",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/3276a414ae0eaa0f116f2045cd913367967d0c7c1e978e8621ac3879436c6ed7.png?imageMogr2/format/webp",
-          "streamId": "2024061403",
-          "number": 43
+          "args": {
+            "pid": "600002516",
+            "streamId": "2024061403"
+          }
         },
         {
           "channelName": "河南卫视",
-          "pid": "600002525",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/74925962148a6d31c85808b6cd4e444c2a54bab393d2c5fc85e960b50e22fa86.png?imageMogr2/format/webp",
-          "streamId": "2024059703",
-          "number": 44
+          "args": {
+            "pid": "600002525",
+            "streamId": "2024059703"
+          }
         },
         {
           "channelName": "福建东南卫视",
-          "pid": "600002484",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/3208fe6564a293c21b711333fb3edb05bb5b406cff840573c9a8d839680a1579.png?imageMogr2/format/webp",
-          "streamId": "2024061503",
-          "number": 45
+          "args": {
+            "pid": "600002484",
+            "streamId": "2024061503"
+          }
         },
         {
           "channelName": "贵州卫视",
-          "pid": "600002490",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/4eb45f4781d33d872af027dc01c941559aab55667dd99cc5c22bef7037807b13.png?imageMogr2/format/webp",
-          "streamId": "2024061603",
-          "number": 46
+          "args": {
+            "pid": "600002490",
+            "streamId": "2024061603"
+          }
         },
         {
           "channelName": "江西卫视",
-          "pid": "600002503",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/3c760d0d00463855890e8a1864ea4a6b6dd66b90c29b4ac714a4b17c16519871.png?imageMogr2/format/webp",
-          "streamId": "2024061703",
-          "number": 47
+          "args": {
+            "pid": "600002503",
+            "streamId": "2024061703"
+          }
         },
         {
           "channelName": "辽宁卫视",
-          "pid": "600002505",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/ac4ed6058a87c101ae7147ebc38905d0cae047fb73fd277ee5049b84f52bda36.png?imageMogr2/format/webp",
-          "streamId": "2024171303",
-          "number": 48
+          "args": {
+            "pid": "600002505",
+            "streamId": "2024171303"
+          }
         },
         {
           "channelName": "安徽卫视",
-          "pid": "600002532",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/f35fa04b51b1ee4984b03578b65403570868ebca03c6c01e11b097f999a58d9b.png?imageMogr2/format/webp",
-          "streamId": "2024171403",
-          "number": 49
+          "args": {
+            "pid": "600002532",
+            "streamId": "2024171403"
+          }
         },
         {
           "channelName": "河北卫视",
-          "pid": "600002493",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/d545becdc81c60197b08c7f47380705e4665ed3fe55efc8b855e486f6e655378.png?imageMogr2/format/webp",
-          "streamId": "2024171503",
-          "number": 50
+          "args": {
+            "pid": "600002493",
+            "streamId": "2024171503"
+          }
         },
         {
           "channelName": "山东卫视",
-          "pid": "600002513",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/22d403f07a7cf5410b3ad3ddb65a11aa229a32475fac213f5344c9f0ec330ca1.png?imageMogr2/format/webp",
-          "streamId": "2024171603",
-          "number": 51
+          "args": {
+            "pid": "600002513",
+            "streamId": "2024171603"
+          }
         },
         {
           "channelName": "天津卫视",
-          "pid": "600152137",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202411/2642bf96eaf49fdc6b08db2cf6a3d8a7c30824bbcc199985e70e8b8846c5d14d.png?imageMogr2/format/webp",
-          "streamId": "2019927003",
-          "number": 52
+          "args": {
+            "pid": "600152137",
+            "streamId": "2019927003"
+          }
         },
         {
           "channelName": "吉林卫视",
-          "pid": "600190405",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202411/cfe6b0f01c7e381471b774f5a9f615e1bb70b946ad658da9ed6fcae28d752881.png?imageMogr2/format/webp",
-          "streamId": "2025561503",
-          "number": 53
+          "args": {
+            "pid": "600190405",
+            "streamId": "2025561503"
+          }
         },
         {
           "channelName": "陕西卫视",
-          "pid": "600190400",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202411/b63ce6fd91a92076273ea2d4679bfbe367ece51a114b54b79a66bc8de5831fa0.png?imageMogr2/format/webp",
-          "streamId": "2025561103",
-          "number": 54
+          "args": {
+            "pid": "600190400",
+            "streamId": "2025561103"
+          }
         },
         {
           "channelName": "宁夏卫视",
-          "pid": "600190737",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202411/8392c1ee75dca2a13f6dc0efa37519be4284764fecd65415a1a9f55b11534c5b.png?imageMogr2/format/webp",
-          "streamId": "2025608503",
-          "number": 55
+          "args": {
+            "pid": "600190737",
+            "streamId": "2025608503"
+          }
         },
         {
           "channelName": "内蒙古卫视",
-          "pid": "600190401",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202411/fe60396ae9ead3125d763146d8bc1e9b51ed8e19e8dc61600e28cc0b2f2d28c7.png?imageMogr2/format/webp",
-          "streamId": "2025561203",
-          "number": 56
+          "args": {
+            "pid": "600190401",
+            "streamId": "2025561203"
+          }
         },
         {
           "channelName": "云南卫视",
-          "pid": "600190402",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202411/907600c544719ffdaa6b6fa177d91b530dc9ce38e3dfd43a14ea7c805a7df97d.png?imageMogr2/format/webp",
-          "streamId": "2025561303",
-          "number": 57
+          "args": {
+            "pid": "600190402",
+            "streamId": "2025561303"
+          }
         },
         {
           "channelName": "山西卫视",
-          "pid": "600190407",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202411/d9fe4441f6adcfe9fd7ee2e45bf46d2a355b0fa48ff10dbba12978d2f8cf9780.png?imageMogr2/format/webp",
-          "streamId": "2025560803",
-          "number": 58
+          "args": {
+            "pid": "600190407",
+            "streamId": "2025560803"
+          }
         },
         {
           "channelName": "青海卫视",
-          "pid": "600190406",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202411/182e779878c85642049514a6e033f6be41aa8bf5f489fadc6f63dfc50863c36d.png?imageMogr2/format/webp",
-          "streamId": "2025559103",
-          "number": 59
+          "args": {
+            "pid": "600190406",
+            "streamId": "2025559103"
+          }
         },
         {
           "channelName": "西藏卫视",
-          "pid": "600190403",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202411/37f9668cded5cc19848cfe7dcaf717de4acc47667dde656ba2646aba372eebbe.png?imageMogr2/format/webp",
-          "streamId": "2025558003",
-          "number": 60
+          "args": {
+            "pid": "600190403",
+            "streamId": "2025558003"
+          }
         },
         {
           "channelName": "中国教育电视台1频道",
-          "pid": "600171827",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202412/2b9301a4795c7f23b7ec7ed651d8c7df002ce8c608168970485999b03d29f783.png?imageMogr2/format/webp",
-          "streamId": "2022823801",
-          "number": 61
+          "args": {
+            "pid": "600171827",
+            "streamId": "2022823801"
+          }
         },
         {
           "channelName": "新疆卫视",
-          "pid": "600152138",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202412/005fd504f809ab28ec8cdd5d34d3886f0611ddefa20ebcc0f3f7dc176ad528c7.png?imageMogr2/format/webp",
-          "streamId": "2019927403",
-          "number": 62
+          "args": {
+            "pid": "600152138",
+            "streamId": "2019927403"
+          }
         }
       ]
     },

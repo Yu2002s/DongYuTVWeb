@@ -86,7 +86,6 @@
                 android:layout_height="wrap_content" />
 
             <Button
-                android:visibility="gone"
                 hit="@{true}"
                 android:layout_marginStart="10dp"
                 android:textSize="17sp"

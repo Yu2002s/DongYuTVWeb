@@ -1,17 +1,14 @@
 package xyz.jdynb.tv
 
-import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.media.AudioManager
 import android.net.ConnectivityManager
-import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
@@ -19,8 +16,6 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
@@ -29,17 +24,14 @@ import kotlinx.coroutines.launch
 import xyz.jdynb.tv.databinding.ActivityMainBinding
 import xyz.jdynb.tv.dialog.ChannelListDialog
 import xyz.jdynb.tv.fragment.LivePlayerFragment
-import xyz.jdynb.tv.utils.WebViewUpgrade
 import kotlin.system.exitProcess
-import androidx.core.net.toUri
 import androidx.core.view.WindowInsetsControllerCompat
+import com.drake.brv.reflect.copyType
 import com.drake.engine.utils.NetworkUtils
-import kotlinx.coroutines.delay
-import xyz.jdynb.music.utils.SpUtils.getRequired
+import xyz.jdynb.tv.utils.SpUtils.getRequired
 import xyz.jdynb.tv.constants.SPKeyConstants
 import xyz.jdynb.tv.dialog.ChannelSourceDialog
 import xyz.jdynb.tv.dialog.SettingDialog
-import xyz.jdynb.tv.model.response.main
 import xyz.jdynb.tv.ui.activity.SearchActivity
 
 class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main) {
@@ -48,6 +40,7 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
 
     private const val TAG = "MainActivity"
 
+    private const val SLIDE_DISTANCE = 200
   }
 
   /**
@@ -146,6 +139,9 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
     channelListDialog.onRefreshListener = {
       refreshFragment()
     }
+    channelListDialog.onSwitchSourceListener = {
+      changeSource()
+    }
   }
 
   override fun initData() {
@@ -210,20 +206,18 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
       Toast.makeText(this, "请等待初始化之后操作", Toast.LENGTH_SHORT).show()
       return
     }
-    val liveModel = mainViewModel.liveModel
-    val channelTypeModels = liveModel.channel
-      .filter { channel ->
-        channel.channelList
-          .any { it.channelName == currentChannelModel.channelName }
-      }
 
-    if (channelTypeModels.isEmpty()) {
-      Toast.makeText(this, "暂无该频道源", Toast.LENGTH_SHORT).show()
-    }
-
-    ChannelSourceDialog(this, channelTypeModels, currentChannelModel).apply {
-      onChannelChange = {
-
+    ChannelSourceDialog(
+      this,
+      currentChannelModel
+    ).apply {
+      onChannelChange = { model ->
+        mainViewModel.currentChannelModel.value?.apply {
+          // channelName = model.channelName
+          player = model.player
+          args = model.args
+        }
+        refreshFragment()
       }
       show()
     }
@@ -292,8 +286,33 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
     }
   }
 
+  private var downY = 0f
+  private var moveY = 0f
+
   override fun dispatchTouchEvent(event: MotionEvent): Boolean {
     mainViewModel.showActions()
+    if (SPKeyConstants.OK_CHANNEL.getRequired<Boolean>(false)) {
+      return super.onTouchEvent(event)
+    }
+    when (event.action) {
+      MotionEvent.ACTION_DOWN -> {
+        downY = event.y
+        moveY = 0f
+      }
+
+      MotionEvent.ACTION_MOVE -> {
+        moveY = event.y - downY
+        Log.i(TAG, "moveY: $moveY")
+      }
+
+      MotionEvent.ACTION_UP -> {
+        if (moveY > SLIDE_DISTANCE) {
+          binding.btnRight.callOnClick()
+        } else if (moveY < -SLIDE_DISTANCE) {
+          binding.btnLeft.callOnClick()
+        }
+      }
+    }
     return super.dispatchTouchEvent(event)
   }
 

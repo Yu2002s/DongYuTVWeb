@@ -19,8 +19,8 @@ class YspLivePlayerFragment : BaseLivePlayerFragment() {
   }
 
   override fun onLoadUrl(url: String?, channelModel: LiveChannelModel) {
-    Log.i(TAG, "url: $url?pid=${mainViewModel.currentChannelModel.value!!.pid}")
-    webView.loadUrl("${url}?pid=${mainViewModel.currentChannelModel.value!!.pid}")
+    // Log.i(TAG, "url: $url?pid=${mainViewModel.currentChannelModel.value!!.pid}")
+    // webView.loadUrl("${url}?pid=${mainViewModel.currentChannelModel.value!!.pid}")
   }
 
   /**
@@ -30,6 +30,6 @@ class YspLivePlayerFragment : BaseLivePlayerFragment() {
    */
   override fun play(channel: LiveChannelModel) {
     Log.i(TAG, "play: $channel")
-    execJs(JsType.PLAY, "pid" to channel.pid, "streamId" to channel.streamId)
+    // execJs(JsType.PLAY, "pid" to channel.pid, "streamId" to channel.streamId)
   }
 }

@@ -2,12 +2,10 @@ package xyz.jdynb.tv.dialog
 
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SwitchCompat
 import com.bumptech.glide.Glide
 import com.drake.engine.base.EngineDialog
@@ -15,14 +13,11 @@ import com.drake.engine.utils.NetworkUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.json.Json
-import xyz.jdynb.music.utils.SpUtils.getRequired
-import xyz.jdynb.music.utils.SpUtils.put
+import xyz.jdynb.tv.utils.SpUtils.getRequired
+import xyz.jdynb.tv.utils.SpUtils.put
 import xyz.jdynb.tv.R
 import xyz.jdynb.tv.constants.SPKeyConstants
 import xyz.jdynb.tv.databinding.DialogSettingBinding
-import xyz.jdynb.tv.ui.activity.WebViewUpdateActivity
 import xyz.jdynb.tv.utils.UpdateUtils
 
 class SettingDialog(context: Context) :
@@ -53,6 +48,8 @@ class SettingDialog(context: Context) :
     binding.swUpdate.initSwitch(SPKeyConstants.CHECK_UPDATE, true)
     binding.swOkChannel.initSwitch(SPKeyConstants.OK_CHANNEL, false)
 
+    binding.swSlideSwitchChannel.initSwitch(SPKeyConstants.SLIDE_SWITCH_CHANNEL, false)
+
     binding.tvIp.text = NetworkUtils.getIPAddress(true)
 
     binding.btnCheckUpdate.setOnClickListener {
@@ -70,8 +67,8 @@ class SettingDialog(context: Context) :
       showImageDialog("images/qrcode_mp.jpg")
     }
 
-    binding.btnUpdateWebview.setOnClickListener {
-      context.startActivity(Intent(context, WebViewUpdateActivity::class.java))
+    binding.btnWebviewDebug.setOnClickListener {
+      X5DebugDialog(context).show()
     }
   }
 

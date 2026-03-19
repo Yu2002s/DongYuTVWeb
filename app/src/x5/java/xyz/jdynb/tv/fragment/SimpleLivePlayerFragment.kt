@@ -5,7 +5,7 @@ import android.webkit.MimeTypeMap
 import androidx.core.net.toUri
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest
 import com.tencent.smtt.export.external.interfaces.WebResourceResponse
-import xyz.jdynb.music.utils.SpUtils.remove
+import xyz.jdynb.tv.utils.SpUtils.remove
 import xyz.jdynb.tv.bridge.JSBridge
 import xyz.jdynb.tv.model.LiveChannelModel
 import xyz.jdynb.tv.utils.NetworkUtils.inputStream

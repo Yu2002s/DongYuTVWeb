@@ -50,6 +50,16 @@
                 android:focusable="true"
                 android:background="@drawable/bg_select"
                 android:textSize="17sp"
+                android:id="@+id/btn_switch_channel"
+                android:text="换源"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:layout_marginStart="8dp"
+                android:focusable="true"
+                android:background="@drawable/bg_select"
+                android:textSize="17sp"
                 android:id="@+id/btn_setting"
                 android:text="设置"
                 android:layout_width="wrap_content"

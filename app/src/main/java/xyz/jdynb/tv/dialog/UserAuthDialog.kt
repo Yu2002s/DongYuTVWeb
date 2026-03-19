@@ -13,7 +13,7 @@ import androidx.core.view.setMargins
 import com.bumptech.glide.Glide
 import com.drake.engine.base.EngineDialog
 import okhttp3.FormBody
-import xyz.jdynb.music.utils.SpUtils.put
+import xyz.jdynb.tv.utils.SpUtils.put
 import xyz.jdynb.tv.R
 import xyz.jdynb.tv.config.Api
 import xyz.jdynb.tv.constants.IntentActionConstants

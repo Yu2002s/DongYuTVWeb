@@ -2,16 +2,10 @@ package xyz.jdynb.tv.utils
 
 import android.os.Build
 import android.view.InflateException
-import androidx.annotation.OptIn
 import androidx.core.content.pm.PackageInfoCompat
-import androidx.lifecycle.lifecycleScope
-import com.drake.engine.utils.AppUtils
-import com.drake.engine.utils.DeviceUtils
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
-import xyz.jdynb.music.utils.SpUtils.put
+import xyz.jdynb.tv.utils.SpUtils.put
 import xyz.jdynb.tv.ui.activity.CrashActivity
 import xyz.jdynb.tv.DongYuTVApplication
 import xyz.jdynb.tv.config.Api

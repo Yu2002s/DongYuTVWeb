@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.core.content.ContextCompat
-import xyz.jdynb.music.utils.SpUtils.getRequired
+import xyz.jdynb.tv.utils.SpUtils.getRequired
 import xyz.jdynb.tv.MainActivity
 import xyz.jdynb.tv.constants.SPKeyConstants
 import xyz.jdynb.tv.service.BootService

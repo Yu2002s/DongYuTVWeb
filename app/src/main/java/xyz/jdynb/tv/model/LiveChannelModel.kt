@@ -18,22 +18,10 @@ data class LiveChannelModel(
   @SerialName("channelName")
   var channelName: String = "",
   /**
-   * pid，央视频使用此 id 区分不同频道，现已弃用
-   */
-  @Deprecated("由于YSP需要，不移除，使用 args 字段替换此字段")
-  @SerialName("pid")
-  var pid: String? = "",
-  /**
    * 台标，目前没有用上
    */
   @SerialName("tvLogo")
   var tvLogo: String = "",
-  /**
-   * streamId，央视频需要此 id，现已弃用
-   */
-  @Deprecated("由于YSP需要，不移除，使用 args 字段替换此字段")
-  @SerialName("streamId")
-  var streamId: String? = "",
   /**
    * 频道分类
    */
@@ -68,6 +56,11 @@ data class LiveChannelModel(
    * 描述
    */
   val desc: String? = null,
+
+  /**
+   * 子频道
+   */
+  val children: List<LiveChannelModel> = listOf()
 ) : BaseObservable() {
 
   val showDesc: String get() = desc ?: ""
