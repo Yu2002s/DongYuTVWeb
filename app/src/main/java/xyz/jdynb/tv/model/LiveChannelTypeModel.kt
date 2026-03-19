@@ -15,6 +15,10 @@ data class LiveChannelTypeModel(
    */
   val channelType: String = "央视",
   /**
+   * 源名称
+   */
+  val source: String = "",
+  /**
    * 播放器名称
    */
   val player: String = "ysp",

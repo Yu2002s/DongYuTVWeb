@@ -81,6 +81,11 @@ class SPKeyConstants {
      * OK换台
      */
     const val OK_CHANNEL = "ok_channel"
+
+    /**
+     * 是否更新WebView
+     */
+    const val UPDATE_WEBVIEW = ""
   }
 
 }

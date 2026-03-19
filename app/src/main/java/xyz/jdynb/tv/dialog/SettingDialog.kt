@@ -2,6 +2,7 @@ package xyz.jdynb.tv.dialog
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -21,6 +22,7 @@ import xyz.jdynb.music.utils.SpUtils.put
 import xyz.jdynb.tv.R
 import xyz.jdynb.tv.constants.SPKeyConstants
 import xyz.jdynb.tv.databinding.DialogSettingBinding
+import xyz.jdynb.tv.ui.activity.WebViewUpdateActivity
 import xyz.jdynb.tv.utils.UpdateUtils
 
 class SettingDialog(context: Context) :
@@ -66,6 +68,10 @@ class SettingDialog(context: Context) :
     binding.btnFeedback.setOnClickListener {
       Toast.makeText(context, "请扫码关注公众号", Toast.LENGTH_SHORT).show()
       showImageDialog("images/qrcode_mp.jpg")
+    }
+
+    binding.btnUpdateWebview.setOnClickListener {
+      context.startActivity(Intent(context, WebViewUpdateActivity::class.java))
     }
   }
 

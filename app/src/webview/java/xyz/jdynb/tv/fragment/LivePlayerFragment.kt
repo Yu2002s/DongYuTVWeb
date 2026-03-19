@@ -23,10 +23,17 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
+import androidx.annotation.OptIn
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.media3.common.MediaItem
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.datasource.DefaultHttpDataSource
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.hls.HlsMediaSource
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -113,6 +120,12 @@ abstract class LivePlayerFragment : Fragment(), Playable {
     @JavascriptInterface
     fun onKeyDown(key: String, keyCode: Int) {
     }
+
+    @JavascriptInterface
+    fun play(url: String) {
+      Log.i(TAG, "play: $url")
+      playVideo(url)
+    }
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -142,6 +155,11 @@ abstract class LivePlayerFragment : Fragment(), Playable {
   @SuppressLint("ClickableViewAccessibility")
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+
+    if (!::playerConfig.isInitialized) {
+      return
+    }
+
     binding.m = livePlayerModel
 
     binding.webview.setOnTouchListener { v, event ->
@@ -221,6 +239,36 @@ abstract class LivePlayerFragment : Fragment(), Playable {
         webView.execJs(playerConfig, it.first, *(it.second ?: arrayOf()))
       }
     }
+  }
+
+  /**
+   * 播放视频
+   */
+  @SuppressLint("UnsafeOptInUsageError")
+  fun playVideo(url: String) {
+    /*Log.i(TAG, "playVideo: $url")
+    requireActivity().runOnUiThread {
+      if (!binding.playerView.isVisible) {
+        binding.playerView.isVisible = true
+      }
+
+      if (!::exoPlayer.isInitialized) {
+        // 1. 创建 HTTP 数据源工厂，配置连接参数
+        val httpDataSourceFactory = DefaultHttpDataSource.Factory().apply {
+          setConnectTimeoutMs(15000) // 连接超时 15 秒
+          setReadTimeoutMs(15000)    // 读取超时 15 秒
+          setKeepPostFor302Redirects(true)  // 保持 POST 请求重定向
+          setAllowCrossProtocolRedirects(true) // 允许跨协议重定向
+        }
+        val hlsMediaSource = HlsMediaSource.Factory(httpDataSourceFactory)
+        exoPlayer = ExoPlayer.Builder(requireContext(), hlsMediaSource)
+          .build()
+
+        exoPlayer.playWhenReady = true
+      }
+      exoPlayer.setMediaItem(MediaItem.fromUri(url))
+      exoPlayer.prepare()
+    }*/
   }
 
   /**

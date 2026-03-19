@@ -154,14 +154,15 @@ class MainViewModel : ViewModel() {
   private suspend fun init() = withContext(Dispatchers.IO) {
     // 读取网络上的配置文件
     val liveContent = NetworkUtils.getResponseBodyCache(LIVE_CONFIG_URL, "live-3.jsonc")
-    Log.i(TAG, "liveContent: $liveContent")
+    // Log.i(TAG, "liveContent: $liveContent")
     // 反序列化赋值给 liveModel 对象
     _liveModel = json.decodeFromString<LiveModel>(liveContent)
     val showCCTV = SPKeyConstants.CCTV_CHANNEL.getRequired<Boolean>(false)
-    liveModel.channel.find { it.player == "cctv" }?.hidden = !showCCTV
     liveModel.channel.forEach {
       if (it.player == "ysp") {
         it.hidden = showCCTV
+      } else if (it.player == "cctv" /*|| it.player == "custom"*/) {
+        it.hidden = !showCCTV
       }
     }
     // 频道类型列表
@@ -187,6 +188,9 @@ class MainViewModel : ViewModel() {
         if (it.player.isEmpty()) {
           it.player = liveChannelTypeModel.player
         }
+        if (it.source.isEmpty()) {
+          it.source = liveChannelTypeModel.source
+        }
         // 频道类型
         it.channelType = liveChannelTypeModel.channelType
       }
@@ -194,17 +198,6 @@ class MainViewModel : ViewModel() {
       // 统一设置频道号码
       model.number = index + 1 // 设置频道序号
     }//distinctBy { it.number }.sortedBy { it.number } // 去重，并且升序排序
-  }
-
-  /**
-   * 获取初始化默认的频道
-   */
-  private fun getInitialChannelModel(): LiveChannelModel {
-    return SPKeyConstants.CURRENT_CHANNEL.get<String?>()?.let {
-      runCatching {
-        json.decodeFromString<LiveChannelModel>(it)
-      }.getOrDefault(getDefaultChannelModel())
-    } ?: getDefaultChannelModel()
   }
 
   /**
@@ -248,11 +241,9 @@ class MainViewModel : ViewModel() {
   val currentChannelType = _currentChannelType.asStateFlow()
 
   @OptIn(ExperimentalCoroutinesApi::class)
-  val currentFragment = currentChannelModel
-    .filter { it != null }
-    .flatMapConcat {
-      flowOf(getFragmentClassForChannel(it!!))
-    }.stateIn(viewModelScope, SharingStarted.Lazily, null)
+  val currentChannelPlayer = currentChannelModel.flatMapConcat {
+    flowOf(it?.player)
+  }
 
   init {
     viewModelScope.launch {
@@ -298,6 +289,10 @@ class MainViewModel : ViewModel() {
    */
   fun changeCurrentIndex(model: LiveChannelModel) {
     changeCurrentIndex(channelModelList.value.indexOf(model))
+  }
+
+  fun changeCurrentSource(model: LiveChannelModel) {
+
   }
 
   /**

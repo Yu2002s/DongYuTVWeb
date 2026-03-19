@@ -86,28 +86,17 @@
                 android:layout_height="wrap_content" />
 
             <Button
+                android:visibility="gone"
                 hit="@{true}"
-                android:textSize="17sp"
-                android:id="@+id/btn_left"
-                android:textColor="@color/black"
                 android:layout_marginStart="10dp"
+                android:textSize="17sp"
+                android:id="@+id/btn_change_source"
+                android:textColor="@color/black"
                 android:alpha="0.7"
                 android:backgroundTint="#FFFFFF"
-                android:text="上"
+                android:text="换源"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-
-            <Button
-                android:textSize="17sp"
-                hit="@{true}"
-                android:id="@+id/btn_right"
-                android:textColor="@color/black"
-                android:layout_marginStart="10dp"
-                android:alpha="0.7"
-                android:backgroundTint="#FFFFFF"
-                android:text="下"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
 
             <Button
                 hit="@{true}"
@@ -134,6 +123,34 @@
                 android:layout_height="wrap_content"/>
 
         </LinearLayout>
+
+        <Button
+            gone="@{m.showActions}"
+            hit="@{true}"
+            android:layout_marginStart="50dp"
+            android:layout_gravity="start|center_vertical"
+            android:textSize="17sp"
+            android:id="@+id/btn_left"
+            android:textColor="@color/black"
+            android:alpha="0.7"
+            android:backgroundTint="#FFFFFF"
+            android:text="上"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            gone="@{m.showActions}"
+            android:layout_marginEnd="50dp"
+            android:layout_gravity="center_vertical|end"
+            android:textSize="17sp"
+            hit="@{true}"
+            android:id="@+id/btn_right"
+            android:textColor="@color/black"
+            android:alpha="0.7"
+            android:backgroundTint="#FFFFFF"
+            android:text="下"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
     </FrameLayout>
 

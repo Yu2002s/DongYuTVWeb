@@ -92,6 +92,8 @@
             android:excludeFromRecents="false"
             android:screenOrientation="landscape" />
 
+        <activity android:name=".ui.activity.WebViewUpdateActivity" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.drake.file_provider"

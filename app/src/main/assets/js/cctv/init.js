@@ -1,4 +1,4 @@
-const classNames = ['newtopbz'];
+const classNames = ['newtopbz', 'newtopbzTV'];
  classNames.forEach(className => {
      Array.from(document.getElementsByClassName(className)).forEach(div => {
          div.style.display = 'none'

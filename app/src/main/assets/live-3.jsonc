@@ -187,6 +187,18 @@
       }
     },
     {
+      "id": "shanxi2",
+      "name": "simple",
+      "script": {
+        "init": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/shanxi2/init.js"
+        ],
+        "play": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/shanxi2/play.js"
+        ]
+      }
+    },
+    {
       "id": "chongqing",
       "name": "base",
       "url": "https://www.cbg.cn/web/list/4918/1.html?5DEFC70C1A4AOD5173881C62BD4ACAD0",
@@ -198,10 +210,14 @@
     },
     {
       "id": "hubei",
-      "name": "simple",
+      "name": "base",
+      "url": "https://news.hbtv.com.cn/app/tv/{{id}}",
       "script": {
         "init": [
           "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/hubei/init.js"
+        ],
+        "play": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/hubei/play.js"
         ]
       }
     },
@@ -222,6 +238,7 @@
   "channel": [
     {
       "channelType": "央视",
+      "source": "CCTV(稳定，清晰度低)",
       "player": "cctv",
       "hidden": true,
       "channelList": [
@@ -363,6 +380,7 @@
     {
       // 播放频道类型
       "channelType": "央视",
+      "source": "YangShiPing(清晰，设备要求高)",
       // 需要播放的播放器（播放器id)
       "player": "ysp",
       "hidden": false,
@@ -407,14 +425,6 @@
           "streamId": "2024078401",
           "number": 5,
           "desc": "体育"
-        },
-        {
-          "channelName": "CCTV5+",
-          "pid": "600001817",
-          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/649ad76a90bfef55b05db9fe52e006487280f619089099d5dc971e387fc6eff0.png?imageMogr2/format/webp",
-          "streamId": "2024078001",
-          "number": 6,
-          "desc": "体育赛事"
         },
         {
           "channelName": "CCTV6",
@@ -520,6 +530,14 @@
           "desc": "农业农村"
         },
         {
+          "channelName": "CCTV5+",
+          "pid": "600001817",
+          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/649ad76a90bfef55b05db9fe52e006487280f619089099d5dc971e387fc6eff0.png?imageMogr2/format/webp",
+          "streamId": "2024078001",
+          "number": 6,
+          "desc": "体育赛事"
+        },
+        {
           "channelName": "CCTV4K",
           "pid": "600002264",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/3e9d06fd7244d950df5838750f1c6ac3456e172b51caca2c16d2282125b111e8.png?imageMogr2/format/webp",
@@ -602,6 +620,7 @@
       "channelType": "卫视",
       "player": "ysp",
       "hidden": false,
+      "source": "YangShiPing(清晰，设备要求高)",
       "channelList": [
         {
           "channelName": "北京卫视",
@@ -826,6 +845,111 @@
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202412/005fd504f809ab28ec8cdd5d34d3886f0611ddefa20ebcc0f3f7dc176ad528c7.png?imageMogr2/format/webp",
           "streamId": "2019927403",
           "number": 62
+        }
+      ]
+    },
+    {
+      "channelType": "卫视",
+      "player": "custom",
+      "source": "地方电视台",
+      "hidden": true,
+      "channelList": [
+        {
+          "channelName": "河北卫视",
+          "tvLogo": "https://web.cmc.hebtv.com/cms/rmt0336/upload/Image/9/9tpklm/2025/07/18/30aaea69a1de46a881cef5d759d30b3e.png",
+          "player": "hebei"
+        },
+        {
+          "channelName": "河南卫视",
+          "player": "henan"
+        },
+        {
+          "tvLogo": "https://images.jstv.com/images/2024/01/12/202401121516401705043800994_639_b_40x34.png",
+          "channelName": "江苏卫视",
+          "player": "jiangsu",
+          "args": {
+            "liveUrl": "https://litchi-play-encrypted-site.jstv.com/applive/jswspro.m3u8"
+          }
+        },
+        {
+          "channelName": "江西卫视",
+          "player": "jiangxi",
+          "args": {
+            "id": "jxtv1"
+          }
+        },
+        {
+          "channelName": "山东卫视",
+          "player": "shandong",
+          "args": { "channelId": "24581" }
+        },
+        {
+          "channelName": "浙江卫视",
+          "player": "zhejiang",
+          "tvLogo": "http://oss.cztv.com/ucc/20200123/4aaea824fa3e4f8391a6243509de7011.png",
+          "args": { "code": "01" }
+        },
+        {
+          "tvLogo": "https://image.ahtv.cn/2021012210f12b01689743e3d415947bf449fbd3.jpg",
+          "channelName": "安徽卫视",
+          "player": "anhui"
+        },
+        {
+          "channelName": "广西卫视",
+          "player": "guangxi",
+          "args": {
+            "id": "e7a7ab7df9fe11e88bcfe41f13b60c62"
+          }
+        },
+        {
+          "channelName": "广东卫视",
+          "player": "guangdong",
+          "args": {
+            "id": "43"
+          }
+        },
+        {
+          "channelName": "山西卫视",
+          "player": "shanxi"
+        },
+        {
+          "channelName": "黑龙江卫视",
+          "player": "common",
+          "args": {
+            "liveUrl": "https://idclive.hljtv.com:4430/live/hljws_own.m3u8"
+          }
+        },
+        {
+          "channelName": "陕西卫视",
+          "player": "common",
+          "args": {
+            "liveUrl": "http://stream.snrtv.com/sxbc-star-gwHKQ9.m3u8"
+          }
+        },
+        {
+          "channelName": "湖北卫视",
+          "player": "hubei",
+          "args": {
+            "id": "431"
+          }
+        },
+        {
+          "channelName": "重庆卫视",
+          "player": "chongqing"
+        },
+        {
+          "channelName": "湖南卫视",
+          "player": "hunan",
+          "args": {
+            "id": "287"
+          }
+        },
+        {
+          "channelName": "香港卫视",
+          "player": "common",
+          "args": {
+            "liveUrl": "https://www.hkstv.tv/webcast/livestream/mutfysrq/playlist.m3u8?hls_ctx=7144stj2"
+          }
         }
       ]
     },
@@ -1479,8 +1603,8 @@
     },
     {
       "channelType": "陕西",
-      "hidden": true,
-      "player": "common",
+      "hidden": false,
+      "player": "shanxi2",
       "channelList": [
         {
           "channelName": "陕西卫视",
@@ -1520,7 +1644,6 @@
     {
       "channelType": "湖北",
       "player": "hubei",
-      "hidden": true,
       "channelList": [
         {
           "channelName": "湖北卫视",

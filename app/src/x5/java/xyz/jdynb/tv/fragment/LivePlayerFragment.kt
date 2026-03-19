@@ -3,6 +3,8 @@ package xyz.jdynb.tv.fragment
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +26,7 @@ import com.tencent.smtt.sdk.WebViewClient
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import xyz.jdynb.tv.MainActivity
 import xyz.jdynb.tv.MainViewModel
 import xyz.jdynb.tv.R
 import xyz.jdynb.tv.databinding.FragmentLivePlayerBinding
@@ -105,7 +108,14 @@ abstract class LivePlayerFragment : Fragment(), Playable {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     playerName = LivePlayer.getLivePlayerForClass(this.javaClass).player
-    val player = mainViewModel.currentChannelModel.value?.player ?: return
+    val player = mainViewModel.currentChannelModel.value?.player
+    if (player == null) {
+      // 异常情况，目前未知，这里先尝试刷新操作
+      Handler(Looper.getMainLooper()).postDelayed({
+        (requireActivity() as MainActivity).refreshFragment()
+      }, 1500L)
+      return
+    }
     playerConfig = mainViewModel.liveModel.player.find { it.id == player } ?: LiveModel.Player()
     Log.i(TAG, "playerConfig: $playerConfig")
   }
@@ -122,6 +132,10 @@ abstract class LivePlayerFragment : Fragment(), Playable {
   @SuppressLint("ClickableViewAccessibility")
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    if (!::playerConfig.isInitialized) {
+      return
+    }
+
     binding.m = livePlayerModel
 
     binding.webview.setOnTouchListener { v, event ->
@@ -378,34 +392,6 @@ abstract class LivePlayerFragment : Fragment(), Playable {
       mimeType,
       "UTF-8",
       emptyByteArrayStream
-    )
-  }
-
-  protected fun createResponse(
-    url: String,
-    mimeType: String = "text/plain",
-    headers: Map<String, String> = mapOf(
-      "User-Agent" to USER_AGENT,
-    )
-  ): WebResourceResponse {
-    val allHeaders = mutableMapOf(
-      "Access-Control-Allow-Origin" to "*",
-    )
-    allHeaders.putAll(headers)
-    val index = url.indexOf('/', 12)
-    if (index != -1) {
-      allHeaders.put("Referer", url.substring(0, index))
-    } else {
-      allHeaders.put("Referer", url)
-    }
-    Log.i(TAG, "requestHeaders: $allHeaders")
-    return WebResourceResponse(
-      mimeType,
-      "UTF-8",
-      200, "ok", allHeaders,
-      url.inputStream(
-        headers = allHeaders
-      )
     )
   }
 

@@ -37,7 +37,9 @@ import com.drake.engine.utils.NetworkUtils
 import kotlinx.coroutines.delay
 import xyz.jdynb.music.utils.SpUtils.getRequired
 import xyz.jdynb.tv.constants.SPKeyConstants
+import xyz.jdynb.tv.dialog.ChannelSourceDialog
 import xyz.jdynb.tv.dialog.SettingDialog
+import xyz.jdynb.tv.model.response.main
 import xyz.jdynb.tv.ui.activity.SearchActivity
 
 class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main) {
@@ -101,10 +103,8 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
       WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
     insetsController.hide(WindowInsetsCompat.Type.systemBars())
 
-    // 判断cpu型号决定需不需要升级
-    isUpgrade = !Build.SUPPORTED_ABIS.any {
-      it.contains("arm64")
-    }
+    // 需不需要升级
+    isUpgrade = !SPKeyConstants.UPDATE_WEBVIEW.getRequired(true)
 
     Log.i(TAG, "abi: ${Build.SUPPORTED_ABIS.joinToString(",")}")
 
@@ -144,14 +144,14 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
 
     channelListDialog = ChannelListDialog(this, mainViewModel)
     channelListDialog.onRefreshListener = {
-      handleChannelTypeChange()
+      refreshFragment()
     }
   }
 
   override fun initData() {
     lifecycleScope.launch {
-      mainViewModel.currentChannelType.collect {
-        handleChannelTypeChange(it)
+      mainViewModel.currentChannelPlayer.collect {
+        handleChannelPlayerChange(it)
       }
     }
 
@@ -167,39 +167,65 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
   }
 
   fun refreshFragment() {
-    handleChannelTypeChange()
+    handleChannelPlayerChange()
   }
 
   /**
-   * 处理频道类型变化
+   * 处理频道播放器变化
    *
-   * @param type 频道类型
+   * @param player 频道播放器
    */
-  private fun handleChannelTypeChange(type: String = mainViewModel.currentChannelType.value) {
-    // 如果当前频道类型为空，则不处理
-    if (type.isEmpty()) return
-
+  private fun handleChannelPlayerChange(player: String? = mainViewModel.currentChannelModel.value?.player) {
+    if (player == null) {
+      return
+    }
     if (mainViewModel.currentChannelModel.value == null) {
       Handler(Looper.getMainLooper()).postDelayed({
         refreshFragment()
       }, 1500L)
       return
     }
-
-    Log.i(TAG, "currentChannelType: $type")
-    // 根据当前频道类型获取对应的 Fragment 类
     val fragmentClazz = mainViewModel
       .getFragmentClassForChannel(mainViewModel.currentChannelModel.value!!)
       ?: return
     Log.i(TAG, "showFragment: $fragmentClazz")
 
-    if (isUpgrade || BuildConfig.DEBUG) {
-      showFragment(fragmentClazz)
+    showFragment(fragmentClazz)
+    /*if (isUpgrade || BuildConfig.DEBUG) {
+
     } else {
       isUpgrade = true
       WebViewUpgrade.initWebView(this@MainActivity) {
         showFragment(fragmentClazz)
       }
+    }*/
+  }
+
+  /**
+   * 换源
+   */
+  fun changeSource() {
+    val currentChannelModel = mainViewModel.currentChannelModel.value
+    if (currentChannelModel == null) {
+      Toast.makeText(this, "请等待初始化之后操作", Toast.LENGTH_SHORT).show()
+      return
+    }
+    val liveModel = mainViewModel.liveModel
+    val channelTypeModels = liveModel.channel
+      .filter { channel ->
+        channel.channelList
+          .any { it.channelName == currentChannelModel.channelName }
+      }
+
+    if (channelTypeModels.isEmpty()) {
+      Toast.makeText(this, "暂无该频道源", Toast.LENGTH_SHORT).show()
+    }
+
+    ChannelSourceDialog(this, channelTypeModels, currentChannelModel).apply {
+      onChannelChange = {
+
+      }
+      show()
     }
   }
 
@@ -251,12 +277,17 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
 
       // 刷新
       R.id.btn_refresh -> {
-        handleChannelTypeChange()
+        refreshFragment()
       }
 
       // 搜索
       R.id.btn_search -> {
         startActivity(Intent(this, SearchActivity::class.java))
+      }
+
+      // 换源
+      R.id.btn_change_source -> {
+        changeSource()
       }
     }
   }
@@ -448,7 +479,7 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
       val currentNetworkConnected = NetworkUtils.isConnected()
       if (currentNetworkConnected && !isNetworkConnected) {
         //连接时调用 handleChannelTypeChange 方法
-        handleChannelTypeChange()
+        refreshFragment()
         Toast.makeText(context, "已连接到网络", Toast.LENGTH_SHORT).show()
       } else if (!currentNetworkConnected) {
         Toast.makeText(context, "已断开网络，当网络连接后自动刷新页面", Toast.LENGTH_LONG).show()

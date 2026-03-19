@@ -55,6 +55,11 @@ data class LiveChannelModel(
   var player: String = "",
 
   /**
+   * 源
+   */
+  var source: String = "",
+
+  /**
    * 是否隐藏
    */
   var hidden: Boolean = false,
