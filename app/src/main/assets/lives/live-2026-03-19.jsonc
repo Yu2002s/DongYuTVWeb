@@ -571,7 +571,7 @@
               "channelName": "CCTV14-2",
               "player": "cctv",
               "args": {
-                "id": "cctv14"
+                "id": "cctvchild"
               }
             }
           ]

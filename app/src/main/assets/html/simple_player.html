@@ -7,6 +7,8 @@
     <style>
         body {
             background: #000000;
+            width: 100vw;
+            height: 100vh;
         }
 
         #video {
@@ -50,6 +52,9 @@
     function hideLoading() {
         const loading = document.getElementById('loading');
         loading.style.display = 'none';
+        if (typeof JSBridge !== 'undefined' && JSBridge.hideLoading) {
+            JSBridge.hideLoading()
+        }
     }
 
     function resumeOrPause() {
@@ -57,6 +62,9 @@
             video.play();
         } else {
             video.pause();
+        }
+        if (typeof JSBridge !== 'undefined') {
+            JSBridge.showToast(video.paused ? '播放' : '暂停')
         }
     }
 
@@ -109,6 +117,9 @@
                             hls.destroy();
                             break;
                     }
+                }
+                if (typeof JSBridge !== 'undefined') {
+                    // JSBridge.showToast('HLS异常，请耐心等待')
                 }
             });
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {

@@ -1,8 +1,8 @@
 package xyz.jdynb.tv.enums
 
-import xyz.jdynb.tv.fragment.BaseLivePlayerFragment
-import xyz.jdynb.tv.fragment.SimpleLivePlayerFragment
-import xyz.jdynb.tv.fragment.YspLivePlayerFragment
+import xyz.jdynb.tv.ui.fragment.BaseLivePlayerFragment
+import xyz.jdynb.tv.ui.fragment.SimpleLivePlayerFragment
+import xyz.jdynb.tv.ui.fragment.YspLivePlayerFragment
 
 /**
  * 播放器配置

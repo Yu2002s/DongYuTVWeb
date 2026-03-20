@@ -61,7 +61,7 @@ android {
     jvmTarget = "11"
   }
 
-  flavorDimensions("cpu", "example")
+  flavorDimensions("cpu")
 
   productFlavors {
     create("arm32") {
@@ -80,13 +80,7 @@ android {
     }
 
     create("webview") {
-      dimension = "example"
-      // 默认配置
-    }
-
-    // X5 内核已收费，不支持，如果你有付费的，请开启注释，并按照文档进行配置
-    create("x5") {
-      dimension = "example"
+      // 使用默认的 webview
     }
 
     // 限制太多，不支持

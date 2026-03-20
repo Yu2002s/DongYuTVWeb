@@ -1,4 +1,4 @@
-package xyz.jdynb.tv.fragment
+package xyz.jdynb.tv.ui.fragment
 
 import android.os.Bundle
 import android.util.Log

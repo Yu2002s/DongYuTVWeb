@@ -1,8 +1,7 @@
-package xyz.jdynb.tv.fragment
+package xyz.jdynb.tv.ui.fragment
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
-import android.net.http.SslError
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -10,30 +9,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.ConsoleMessage
-import android.webkit.CookieManager
 import android.webkit.JavascriptInterface
-import android.webkit.PermissionRequest
-import android.webkit.SslErrorHandler
-import android.webkit.WebChromeClient
-import android.webkit.WebResourceError
-import android.webkit.WebResourceRequest
-import android.webkit.WebResourceResponse
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import android.widget.Toast
-import androidx.annotation.OptIn
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.media3.common.MediaItem
-import androidx.media3.common.util.UnstableApi
-import androidx.media3.datasource.DefaultHttpDataSource
-import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.hls.HlsMediaSource
+import com.tencent.smtt.export.external.interfaces.ConsoleMessage
+import com.tencent.smtt.export.external.interfaces.PermissionRequest
+import com.tencent.smtt.export.external.interfaces.WebResourceError
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest
+import com.tencent.smtt.export.external.interfaces.WebResourceResponse
+import com.tencent.smtt.sdk.WebChromeClient
+import com.tencent.smtt.sdk.WebSettings
+import com.tencent.smtt.sdk.WebView
+import com.tencent.smtt.sdk.WebViewClient
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -47,15 +36,9 @@ import xyz.jdynb.tv.event.Playable
 import xyz.jdynb.tv.model.LiveChannelModel
 import xyz.jdynb.tv.model.LiveModel
 import xyz.jdynb.tv.model.LivePlayerModel
-import xyz.jdynb.tv.model.response.main
-import xyz.jdynb.tv.utils.CrashHandler
-import xyz.jdynb.tv.utils.JsManager.execJs
 import xyz.jdynb.tv.utils.NetworkUtils.inputStream
-import xyz.jdynb.tv.utils.toArray
+import xyz.jdynb.tv.utils.X5JsManager.execJs
 import java.io.ByteArrayInputStream
-import java.net.CookieHandler
-import java.net.HttpURLConnection
-import java.net.URL
 
 abstract class LivePlayerFragment : Fragment(), Playable {
 
@@ -120,12 +103,6 @@ abstract class LivePlayerFragment : Fragment(), Playable {
     @JavascriptInterface
     fun onKeyDown(key: String, keyCode: Int) {
     }
-
-    @JavascriptInterface
-    fun play(url: String) {
-      Log.i(TAG, "play: $url")
-      playVideo(url)
-    }
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -155,7 +132,6 @@ abstract class LivePlayerFragment : Fragment(), Playable {
   @SuppressLint("ClickableViewAccessibility")
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-
     if (!::playerConfig.isInitialized) {
       return
     }
@@ -222,6 +198,20 @@ abstract class LivePlayerFragment : Fragment(), Playable {
   abstract fun onPageFinished(url: String, channelModel: LiveChannelModel)
 
   /**
+   * 进度条变化时的回调
+   */
+  protected open fun onProgressChanged(newProgress: Int): Int {
+    return newProgress
+  }
+
+  /**
+   * 设置进度条进度
+   */
+  fun setProgress(progress: Int) {
+    livePlayerModel.progress = progress
+  }
+
+  /**
    * 执行 JS 脚本
    */
   fun execJs(jsType: JsType, vararg args: Pair<String, Any?>) {
@@ -242,42 +232,10 @@ abstract class LivePlayerFragment : Fragment(), Playable {
   }
 
   /**
-   * 播放视频
-   */
-  @SuppressLint("UnsafeOptInUsageError")
-  fun playVideo(url: String) {
-    /*Log.i(TAG, "playVideo: $url")
-    requireActivity().runOnUiThread {
-      if (!binding.playerView.isVisible) {
-        binding.playerView.isVisible = true
-      }
-
-      if (!::exoPlayer.isInitialized) {
-        // 1. 创建 HTTP 数据源工厂，配置连接参数
-        val httpDataSourceFactory = DefaultHttpDataSource.Factory().apply {
-          setConnectTimeoutMs(15000) // 连接超时 15 秒
-          setReadTimeoutMs(15000)    // 读取超时 15 秒
-          setKeepPostFor302Redirects(true)  // 保持 POST 请求重定向
-          setAllowCrossProtocolRedirects(true) // 允许跨协议重定向
-        }
-        val hlsMediaSource = HlsMediaSource.Factory(httpDataSourceFactory)
-        exoPlayer = ExoPlayer.Builder(requireContext(), hlsMediaSource)
-          .build()
-
-        exoPlayer.playWhenReady = true
-      }
-      exoPlayer.setMediaItem(MediaItem.fromUri(url))
-      exoPlayer.prepare()
-    }*/
-  }
-
-  /**
    * 创建并配置 WebView
    */
   @SuppressLint("SetJavaScriptEnabled")
   fun initWebView(webView: WebView) {
-    CookieManager.getInstance().setAcceptCookie(true)
-    CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true)
     webView.apply {
       // 基本配置
       setupWebSettings()
@@ -297,10 +255,11 @@ abstract class LivePlayerFragment : Fragment(), Playable {
 
       // tbs x5 播放视频优化
       // setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY)
-      // setPluginState(WebSettings.PluginState.ON_DEMAND)
+      setPluginState(WebSettings.PluginState.ON_DEMAND)
 
       isFocusable = false
 
+      // 获取当前的 UA，可以获取当前的浏览器内核版本
       Log.i(TAG, "userAgent: $userAgentString")
       userAgentString = USER_AGENT
 
@@ -337,8 +296,8 @@ abstract class LivePlayerFragment : Fragment(), Playable {
       // blockNetworkImage = true
       mediaPlaybackRequiresUserGesture = false
 
-      allowFileAccessFromFileURLs = true
-      allowUniversalAccessFromFileURLs = true
+      setAllowUniversalAccessFromFileURLs(true)
+      setAllowFileAccessFromFileURLs(true)
     }
   }
 
@@ -362,7 +321,7 @@ abstract class LivePlayerFragment : Fragment(), Playable {
 
       override fun onProgressChanged(view: WebView?, newProgress: Int) {
         super.onProgressChanged(view, newProgress)
-        livePlayerModel.progress = newProgress
+        livePlayerModel.progress = onProgressChanged(newProgress)
       }
     }
   }
@@ -385,6 +344,7 @@ abstract class LivePlayerFragment : Fragment(), Playable {
       // 通过后缀拦截
       return createEmptyResponse("*/*")
     }
+
     return null
   }
 
@@ -393,11 +353,6 @@ abstract class LivePlayerFragment : Fragment(), Playable {
    */
   private fun WebView.setupWebViewClient() {
     webViewClient = object : WebViewClient() {
-
-      @SuppressLint("WebViewClientOnReceivedSslError")
-      override fun onReceivedSslError(p0: WebView?, p1: SslErrorHandler?, p2: SslError?) {
-        p1?.proceed()
-      }
 
       override fun shouldInterceptRequest(
         view: WebView?,
@@ -437,12 +392,8 @@ abstract class LivePlayerFragment : Fragment(), Playable {
         onPageFinished(url, currentChannelModel)
       }
 
-      override fun onReceivedError(
-        view: WebView?,
-        request: WebResourceRequest?,
-        error: WebResourceError?
-      ) {
-        super.onReceivedError(view, request, error)
+      override fun onReceivedError(view: WebView?, p1: WebResourceRequest?, p2: WebResourceError?) {
+        super.onReceivedError(view, p1, p2)
       }
     }
   }
@@ -455,34 +406,6 @@ abstract class LivePlayerFragment : Fragment(), Playable {
       mimeType,
       "UTF-8",
       emptyByteArrayStream
-    )
-  }
-
-  protected fun createResponse(
-    url: String,
-    mimeType: String = "text/plain",
-    headers: Map<String, String> = mapOf(
-      "User-Agent" to USER_AGENT,
-    )
-  ): WebResourceResponse {
-    val allHeaders = mutableMapOf(
-      "Access-Control-Allow-Origin" to "*",
-    )
-    allHeaders.putAll(headers)
-    val index = url.indexOf('/', 12)
-    if (index != -1) {
-      allHeaders.put("Referer", url.substring(0, index))
-    } else {
-      allHeaders.put("Referer", url)
-    }
-    Log.i(TAG, "requestHeaders: $allHeaders")
-    return WebResourceResponse(
-      mimeType,
-      "UTF-8",
-      200, "ok", allHeaders,
-      url.inputStream(
-        headers = allHeaders
-      )
     )
   }
 

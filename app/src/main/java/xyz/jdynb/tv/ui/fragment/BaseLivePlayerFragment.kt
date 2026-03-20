@@ -1,5 +1,6 @@
-package xyz.jdynb.tv.fragment
+package xyz.jdynb.tv.ui.fragment
 
+import android.util.Log
 import xyz.jdynb.tv.enums.JsType
 import xyz.jdynb.tv.model.LiveChannelModel
 import xyz.jdynb.tv.utils.toArray
@@ -25,11 +26,13 @@ open class BaseLivePlayerFragment: LivePlayerFragment() {
       finialUrl = finialUrl.replace("{{${it.key}}}", it.value)
     }
     webView.loadUrl(finialUrl)
+    Log.i(TAG, "loadUrl: $finialUrl")
   }
 
   override fun play(channel: LiveChannelModel) {
     // 默认的播放
     execJs(JsType.PLAY, *channel.toArray())
+    Log.i(TAG, "play: $channel, $playerConfig ${webView.url}")
   }
 
   override fun resumeOrPause() {

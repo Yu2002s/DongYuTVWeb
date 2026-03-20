@@ -1,39 +1,65 @@
 package xyz.jdynb.tv.ui.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Build
+import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.drake.engine.base.EngineActivity
 import com.tencent.smtt.sdk.QbSdk
-import xyz.jdynb.tv.utils.SpUtils.getRequired
-import xyz.jdynb.tv.utils.SpUtils.put
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import xyz.jdynb.tv.BuildConfig
 import xyz.jdynb.tv.MainActivity
 import xyz.jdynb.tv.R
 import xyz.jdynb.tv.constants.SPKeyConstants
 import xyz.jdynb.tv.databinding.ActivitySplashBinding
-import xyz.jdynb.tv.utils.getWebViewVersionNumber
-import xyz.jdynb.tv.utils.startInstallX5LocationCore
+import xyz.jdynb.tv.utils.SpUtils.getRequired
+import xyz.jdynb.tv.utils.SpUtils.put
+import xyz.jdynb.tv.utils.X5Utils
 
 class SplashActivity : EngineActivity<ActivitySplashBinding>(R.layout.activity_splash) {
 
+  @SuppressLint("ObsoleteSdkInt")
   override fun init() {
     super.init()
 
     val isInstallX5 = SPKeyConstants.IS_INSTALL_X5.getRequired(false)
 
-    if (isInstallX5 || getWebViewVersionNumber() >= 85 || QbSdk.canLoadX5(this)) {
+    val flavor = BuildConfig.FLAVOR
+
+    Log.i("SplashActivity", "isInstallX5:$isInstallX5, flavor:$flavor")
+
+    // Android 13 以上不让安装X5内核
+    if (Build.VERSION.SDK_INT > 13 || flavor == "webview" || isInstallX5 ||  QbSdk.canLoadX5(this)) {
       enterHome()
       return
     }
 
-    Toast.makeText(this, "正在安装X5内核，请稍候...", Toast.LENGTH_LONG).show()
-    startInstallX5LocationCore(this, onSucceed = {
-      SPKeyConstants.IS_INSTALL_X5.put(true)
-      restartApp()
-      Toast.makeText(this, "安装成功，未重启App请手动重启", Toast.LENGTH_LONG).show()
-    }, onFailed = {
-      Toast.makeText(this, "安装失败，直接进入App", Toast.LENGTH_LONG).show()
-      enterHome()
-    })
+    lifecycleScope.launch {
+      X5Utils.startInstallX5LocationCore(this@SplashActivity, onProgress = {
+        withContext(Dispatchers.Main) {
+          if (binding.progressBar.isIndeterminate) {
+            binding.progressBar.isIndeterminate = false
+          }
+          binding.progressBar.progress = it
+        }
+      }, onSucceed = {
+        SPKeyConstants.IS_INSTALL_X5.put(true)
+        runOnUiThread {
+          restartApp()
+          binding.tvTips.text = "初始化完成，未重启App请手动重启App"
+          Toast.makeText(this@SplashActivity, "安装成功，未重启App请手动重启", Toast.LENGTH_LONG)
+            .show()
+        }
+      }, onFailed = {
+        Toast.makeText(this@SplashActivity, "安装失败，直接进入App", Toast.LENGTH_LONG).show()
+        enterHome()
+      })
+    }
   }
 
   //重启代码
@@ -60,5 +86,12 @@ class SplashActivity : EngineActivity<ActivitySplashBinding>(R.layout.activity_s
   }
 
   override fun initView() {
+    Glide.with(this)
+      .load("file:///android_asset/images/qrcode_mp.jpg")
+      .into(binding.ivQrcode)
+
+    Glide.with(this)
+      .load("file:///android_asset/images/qrcode_gitee.png")
+      .into(binding.ivQrcode2)
   }
 }

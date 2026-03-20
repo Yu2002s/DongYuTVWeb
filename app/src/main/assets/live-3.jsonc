@@ -337,7 +337,7 @@
           "channelName": "CCTV14",
           "desc": "少儿",
           "args": {
-            "id": "cctv14"
+            "id": "cctvchild"
           }
         },
         {

@@ -19,7 +19,7 @@
 
                 <TextView
                     android:layout_marginBottom="6dp"
-                    android:text="方向键选择，确认键按下(修改)"
+                    android:text="方向键选择，确认键按下(修改)默认Ok键换台"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 

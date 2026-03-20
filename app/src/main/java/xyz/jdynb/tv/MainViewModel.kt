@@ -27,7 +27,7 @@ import xyz.jdynb.tv.utils.SpUtils.getRequired
 import xyz.jdynb.tv.utils.SpUtils.put
 import xyz.jdynb.tv.constants.SPKeyConstants
 import xyz.jdynb.tv.enums.LivePlayer
-import xyz.jdynb.tv.fragment.LivePlayerFragment
+import xyz.jdynb.tv.ui.fragment.LivePlayerFragment
 import xyz.jdynb.tv.model.LiveChannelModel
 import xyz.jdynb.tv.model.LiveChannelTypeModel
 import xyz.jdynb.tv.model.LiveModel
@@ -144,6 +144,7 @@ class MainViewModel : ViewModel() {
     // 改变时都会执行这里
     .onEach {
       // 设置当前的频道分类
+      Log.i(TAG, "beforeChannelPlayer: ${_currentChannelPlayer.value} afterChannelPlayer: ${it.player}")
       _currentChannelType.value = it.channelType
       _currentChannelPlayer.value = it.player
       // 保存当前的频道信息
@@ -301,8 +302,15 @@ class MainViewModel : ViewModel() {
     changeCurrentIndex(channelModelList.value.indexOf(model))
   }
 
+  /**
+   * 通过 model 修改当前频道的播放源
+   */
   fun changeCurrentSource(model: LiveChannelModel) {
-
+    currentChannelModel.value?.let {
+      it.player = model.player
+      it.args = model.args
+      _currentChannelPlayer.value = model.player
+    }
   }
 
   /**

@@ -23,7 +23,7 @@ import com.drake.engine.base.EngineActivity
 import kotlinx.coroutines.launch
 import xyz.jdynb.tv.databinding.ActivityMainBinding
 import xyz.jdynb.tv.dialog.ChannelListDialog
-import xyz.jdynb.tv.fragment.LivePlayerFragment
+import xyz.jdynb.tv.ui.fragment.LivePlayerFragment
 import kotlin.system.exitProcess
 import androidx.core.view.WindowInsetsControllerCompat
 import com.drake.brv.reflect.copyType
@@ -147,6 +147,7 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
   override fun initData() {
     lifecycleScope.launch {
       mainViewModel.currentChannelPlayer.collect {
+        Log.i(TAG, "currentChannelPlayer: $it")
         if (it.isEmpty()) {
           return@collect
         }
@@ -220,11 +221,7 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
       currentChannelModel
     ).apply {
       onChannelChange = { model ->
-        mainViewModel.currentChannelModel.value?.apply {
-          // channelName = model.channelName
-          player = model.player
-          args = model.args
-        }
+        mainViewModel.changeCurrentSource(model)
         refreshFragment()
       }
       show()
@@ -366,7 +363,7 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
       // ENTER、OK（确认）
       KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_SPACE -> {
         Log.d(TAG, "onKeyDown: Ok")
-        if (SPKeyConstants.OK_CHANNEL.getRequired<Boolean>(false)) {
+        if (SPKeyConstants.OK_CHANNEL.getRequired<Boolean>(true)) {
           binding.btnMenu.callOnClick()
         } else {
           livePlayerFragment?.resumeOrPause()
@@ -431,7 +428,7 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
 
       // 菜单
       KeyEvent.KEYCODE_MENU, KeyEvent.KEYCODE_P -> {
-        if (SPKeyConstants.OK_CHANNEL.getRequired<Boolean>(false)) {
+        if (SPKeyConstants.OK_CHANNEL.getRequired<Boolean>(true)) {
           SettingDialog(this).show()
         } else {
           binding.btnMenu.callOnClick()

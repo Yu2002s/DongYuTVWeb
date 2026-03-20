@@ -46,7 +46,7 @@ class SettingDialog(context: Context) :
       Toast.makeText(context, "需要重启软件才能生效", Toast.LENGTH_LONG).show()
     }
     binding.swUpdate.initSwitch(SPKeyConstants.CHECK_UPDATE, true)
-    binding.swOkChannel.initSwitch(SPKeyConstants.OK_CHANNEL, false)
+    binding.swOkChannel.initSwitch(SPKeyConstants.OK_CHANNEL, true)
 
     binding.swSlideSwitchChannel.initSwitch(SPKeyConstants.SLIDE_SWITCH_CHANNEL, false)
 
