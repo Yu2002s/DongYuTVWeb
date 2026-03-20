@@ -60,10 +60,8 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
   private var lastBackTime = 0L
 
   /**
-   * 是否已经更新内核了
+   * 网络是否连接
    */
-  private var isUpgrade = false
-
   private var isNetworkConnected = false
 
   /**
@@ -95,11 +93,6 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
     insetsController.systemBarsBehavior =
       WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
     insetsController.hide(WindowInsetsCompat.Type.systemBars())
-
-    // 需不需要升级
-    isUpgrade = !SPKeyConstants.UPDATE_WEBVIEW.getRequired(true)
-
-    Log.i(TAG, "abi: ${Build.SUPPORTED_ABIS.joinToString(",")}")
 
     audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
 
@@ -191,14 +184,6 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
     Log.i(TAG, "showFragment: $fragmentClazz")
 
     showFragment(fragmentClazz)
-    /*if (isUpgrade || BuildConfig.DEBUG) {
-
-    } else {
-      isUpgrade = true
-      WebViewUpgrade.initWebView(this@MainActivity) {
-        showFragment(fragmentClazz)
-      }
-    }*/
   }
 
   /**
@@ -502,7 +487,6 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
       Log.i(TAG, "network change")
       val currentNetworkConnected = NetworkUtils.isConnected()
       if (currentNetworkConnected && !isNetworkConnected) {
-        //连接时调用 handleChannelTypeChange 方法
         refreshFragment()
         Toast.makeText(context, "已连接到网络", Toast.LENGTH_SHORT).show()
       } else if (!currentNetworkConnected) {

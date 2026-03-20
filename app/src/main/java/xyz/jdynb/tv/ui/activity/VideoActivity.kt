@@ -52,7 +52,9 @@ import xyz.jdynb.tv.utils.putSerializable
 import java.io.File
 import java.io.IOException
 
-
+/**
+ * 视频播放页面
+ */
 class VideoActivity : EngineActivity<ActivityVideoBinding>(R.layout.activity_video),
   Player.Listener {
 

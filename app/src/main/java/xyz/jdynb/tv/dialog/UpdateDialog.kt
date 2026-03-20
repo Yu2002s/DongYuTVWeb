@@ -141,6 +141,10 @@ class UpdateDialog(context: Context, private val updateModel: UpdateModel) :
     Glide.with(context)
       .load("file:///android_asset/images/qrcode_mp.jpg")
       .into(binding.ivQrcode)
+
+    Glide.with(context)
+      .load("https://images.jdynb.xyz/qrcode_update.png")
+      .into(binding.ivQrcode2)
   }
 
 }

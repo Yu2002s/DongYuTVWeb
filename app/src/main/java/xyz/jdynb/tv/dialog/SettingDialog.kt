@@ -58,13 +58,17 @@ class SettingDialog(context: Context) :
       }
     }
 
+    binding.btnCheckUpdateCustom.setOnClickListener {
+      showImageDialog("https://images.jdynb.xyz/qrcode_update.png")
+    }
+
     binding.btnDonate.setOnClickListener {
-      showImageDialog("images/qrcode.png")
+      showImageDialog("file:///android_asset/images/qrcode.png")
     }
 
     binding.btnFeedback.setOnClickListener {
       Toast.makeText(context, "请扫码关注公众号", Toast.LENGTH_SHORT).show()
-      showImageDialog("images/qrcode_mp.jpg")
+      showImageDialog("file:///android_asset/images/qrcode_mp.jpg")
     }
 
     binding.btnWebviewDebug.setOnClickListener {
@@ -76,10 +80,10 @@ class SettingDialog(context: Context) :
     val imageView = ImageView(context).apply {
       layoutParams = ViewGroup.LayoutParams(500, 500)
     }
-    val inputStream = context.assets.open(path)
-    val readBytes = inputStream.readBytes()
+    // val inputStream = context.assets.open(path)
+    // val readBytes = inputStream.readBytes()
     Glide.with(context)
-      .load(readBytes)
+      .load(path)
       .into(imageView)
     Dialog(context).apply {
       setContentView(imageView)

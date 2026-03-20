@@ -23,6 +23,7 @@ object UpdateUtils {
    */
   private const val CHECK_UPDATE_URL =
     "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/update.json"
+
   /**
    * 标签
    */
@@ -36,7 +37,13 @@ object UpdateUtils {
   suspend fun checkUpdate(context: Context, showToast: Boolean = true) {
     try {
       val updateModel = withContext(Dispatchers.IO) {
-        NetworkUtils.requestSuspend<UpdateModel>(Api.CHECK_UPDATE, mapOf("versionCode" to AppUtils.getAppVersionCode().toString()))
+        NetworkUtils.requestSuspend<UpdateModel>(
+          Api.CHECK_UPDATE,
+          mapOf(
+            "versionCode" to AppUtils.getAppVersionCode().toString(),
+            "flavor" to BuildConfig.FLAVOR
+          )
+        )
       }
       Log.i(TAG, "updateModel: $updateModel")
       // 发现新版本

@@ -74,9 +74,19 @@ reboot # 重启设备
 ```
 > 注意：定制系统可能无效
 
-## X5内核
+## 无法播放问题
 
 软件已内置X5内核，如果你设备安装失败会有问题请反馈！具体看【下载】
+
+部分设备仍然无法正常使用，这时候需要手动下载并安装 [AndroidSystemWebView](https://www.apkmirror.com/apk/google-inc/android-system-webview/) (需要梯子)
+
+这里提供以下下载地址:
+
+- [WebView更新](https://app.jdynb.xyz/webview/)
+- [ApkMirror](https://www.apkmirror.com/apk/google-inc/android-system-webview/) (需要梯子)
+- [123网盘下载](https://www.123865.com/s/km2hjv-WOuOA) (32位)
+- [Gitee下载](https://gitee.com/jdy2002/android-webview/releases)
+- 加入公众号获取
 
 ## 自定义频道
 

@@ -15,7 +15,7 @@ data class UpdateModel(
 ): BaseObservable() {
 
   @get:Bindable
-  var closeTime: Int = 15
+  var closeTime: Int = 30
     set(value) {
       field = value
       notifyPropertyChanged(BR.closeTime)

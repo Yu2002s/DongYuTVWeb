@@ -119,7 +119,8 @@
                     android:padding="10dp"
                     android:background="@drawable/bg_select"
                     android:id="@+id/btn_webview_debug"
-                    android:text="WebView调试"
+                    android:text="WebView调试(播放问题)"
+                    android:textAllCaps="false"
                     android:textSize="19sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
@@ -143,6 +144,17 @@
                     android:text="检查更新"
                     android:layout_marginTop="10dp"
                     android:id="@+id/btn_check_update"
+                    android:textSize="19sp"
+                    android:background="@drawable/bg_select"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <Button
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="手动更新(电视点我)"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/btn_check_update_custom"
                     android:textSize="19sp"
                     android:background="@drawable/bg_select"
                     android:layout_width="match_parent"

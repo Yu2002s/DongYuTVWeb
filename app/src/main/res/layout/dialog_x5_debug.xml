@@ -16,20 +16,31 @@
 
         <Button
             android:layout_marginTop="10dp"
-            android:id="@+id/btn_x5"
+            android:id="@+id/btn_x5_install"
             android:background="@drawable/bg_select"
             android:focusable="true"
-            android:text="打开X5内核调试页面"
+            android:text="尝试本地安装X5内核"
             android:padding="10dp"
             android:layout_width="250dp"
             android:layout_height="wrap_content"/>
 
         <Button
             android:layout_marginTop="10dp"
-            android:id="@+id/btn_x5_install"
+            android:id="@+id/btn_webview_download"
             android:background="@drawable/bg_select"
             android:focusable="true"
-            android:text="尝试本地安装X5内核"
+            android:textAllCaps="false"
+            android:text="尝试手动下载AndroidSystemWebView"
+            android:padding="10dp"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:layout_marginTop="10dp"
+            android:id="@+id/btn_x5"
+            android:background="@drawable/bg_select"
+            android:focusable="true"
+            android:text="打开X5内核调试页面"
             android:padding="10dp"
             android:layout_width="250dp"
             android:layout_height="wrap_content"/>

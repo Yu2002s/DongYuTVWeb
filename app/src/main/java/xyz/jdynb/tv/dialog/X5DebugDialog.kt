@@ -1,11 +1,15 @@
 package xyz.jdynb.tv.dialog
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Looper
+import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.drake.engine.base.EngineDialog
 import com.tencent.smtt.sdk.QbSdk
 import kotlinx.coroutines.CoroutineScope
@@ -61,6 +65,23 @@ class X5DebugDialog(context: Context) :
           Toast.makeText(context, "安装失败，直接进入App", Toast.LENGTH_LONG).show()
         })
       }
+    }
+
+    binding.btnWebviewDownload.setOnClickListener {
+      showImageDialog("file:///android_asset/images/qrcode_webview.png")
+    }
+  }
+
+  private fun showImageDialog(path: String) {
+    val imageView = ImageView(context).apply {
+      layoutParams = ViewGroup.LayoutParams(500, 500)
+    }
+    Glide.with(context)
+      .load(path)
+      .into(imageView)
+    Dialog(context).apply {
+      setContentView(imageView)
+      show()
     }
   }
 
