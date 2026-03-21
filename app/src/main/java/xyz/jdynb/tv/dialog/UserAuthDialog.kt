@@ -8,11 +8,13 @@ import android.text.Editable
 import android.widget.Button
 import android.widget.GridLayout
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.forEach
 import androidx.core.view.setMargins
 import com.bumptech.glide.Glide
 import com.drake.engine.base.EngineDialog
 import okhttp3.FormBody
+import xyz.jdynb.tv.MainActivity
 import xyz.jdynb.tv.utils.SpUtils.put
 import xyz.jdynb.tv.R
 import xyz.jdynb.tv.config.Api
@@ -75,6 +77,12 @@ class UserAuthDialog(context: Context) :
           binding.editCode.append((v as Button).text)
         }
       }
+    }
+
+    binding.btnBack.setOnClickListener {
+      context as AppCompatActivity
+      (context as AppCompatActivity).finish()
+      context.startActivity(Intent(context, MainActivity::class.java))
     }
   }
 

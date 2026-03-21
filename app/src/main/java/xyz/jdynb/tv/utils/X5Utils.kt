@@ -7,12 +7,17 @@ import com.norman.webviewup.lib.WebViewUpgrade
 import com.tencent.smtt.sdk.QbSdk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.Response
+import okhttp3.internal.headersContentLength
+import xyz.jdynb.tv.BuildConfig
 import xyz.jdynb.tv.DongYuTVApplication
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.net.URL
 import java.util.Timer
 import java.util.TimerTask
+import kotlin.jvm.Throws
 
 object X5Utils {
 
@@ -24,9 +29,11 @@ object X5Utils {
 
   private const val TBS_FOLDER = "tbs"
 
-  private const val ARM_64_CORE_NAME = "tbs_core_046281_20240119145442_nolog_fs_obfs_arm64-v8a_release.tbs"
+  private const val ARM_64_CORE_NAME =
+    "tbs_core_046281_20240119145442_nolog_fs_obfs_arm64-v8a_release.tbs"
 
-  private const val ARM_32_CORE_NAME = "tbs_core_046270_20230713164840_nolog_fs_obfs_armeabi_release.tbs"
+  private const val ARM_32_CORE_NAME =
+    "tbs_core_046270_20230713164840_nolog_fs_obfs_armeabi_release.tbs"
 
   /**
    * 校验架构
@@ -45,16 +52,57 @@ object X5Utils {
     return "lib/armeabi-v7a" == relativePath
   }
 
+  suspend fun downloadCoreFile(fileName: String, url: String, onProgress: suspend (Int) -> Unit): String {
+    return withContext(Dispatchers.IO) {
+      val response = NetworkUtils.requestSuspendResponseResult(url).getOrThrow()
+      val responseBody = response.body ?: throw IOException("Response body is null")
+      val inputStream = responseBody.byteStream()
+      val contentLength = response.headersContentLength()
+      val cacheFile = DongYuTVApplication.context.externalCacheDir!!
+      if (!cacheFile.exists()) {
+        cacheFile.mkdirs()
+      }
+      val tbsFilePath = File(cacheFile, fileName)
+      val fileOutputStream = FileOutputStream(tbsFilePath)
+      fileOutputStream.use { outputStream ->
+        val buffer = ByteArray(1024)
+        var len = -1
+        var totalBytesRead = 0
+        while (inputStream.read(buffer).also { len = it } != -1) {
+          totalBytesRead += len
+          outputStream.write(buffer, 0, len)
+          onProgress((totalBytesRead * 100 / contentLength).toInt())
+        }
+      }
+      inputStream.close()
+      tbsFilePath.path
+    }
+  }
+
+  suspend fun installFromNetwork(
+    context: Context,
+    url: String,
+    onProgress: suspend (Int) -> Unit,
+    onSucceed: () -> Unit,
+    onFailed: (String) -> Unit
+  ) {
+    try {
+      val installPath = downloadCoreFile("x5.tbs", url, onProgress)
+      installTbsCore(context = context, installPath = installPath, onSucceed = onSucceed, onFailed = onFailed)
+    } catch (e: Exception) {
+      onFailed(e.message ?: "下载失败")
+    }
+  }
+
   /**
    * 安装本地内核
    */
-  suspend fun startInstallX5LocationCore(
+  suspend fun installFromAssets(
     context: Context,
     onProgress: suspend (Int) -> Unit,
     onSucceed: () -> Unit,
     onFailed: (String) -> Unit
   ) {
-    val index = intArrayOf(0)
     val coreName = if (is32BitAbi(context)) ARM_32_CORE_NAME else ARM_64_CORE_NAME //内核文件名称
     val appDataPath = context.filesDir.parent //存储路径
     try {
@@ -69,44 +117,55 @@ object X5Utils {
       }
       if (isExitCore) {
         val installPath = appDataPath + File.separator + TBS_FOLDER + File.separator + coreName
-        Log.d(TAG, "安装内核地址：$installPath")
-        //开始安装
-        QbSdk.installLocalTbsCore(context, CORE_VERSION, installPath)
-        val timer = Timer()
-        timer.schedule(object : TimerTask() {
-          override fun run() {
-            QbSdk.initX5Environment(context, object : QbSdk.PreInitCallback {
-              override fun onCoreInitFinished() {
-                Log.d(TAG, "onCoreInitFinished")
-              }
-
-              override fun onViewInitFinished(p0: Boolean) {
-                Log.d(TAG, "onViewInitFinished_p0=$p0")
-              }
-            })
-            val version = QbSdk.getTbsVersion(context)
-            if (version > 0) {
-              Log.d(TAG, "x5内核安装完成，版本号$version")
-              timer.cancel()
-              onSucceed()
-            } else {
-              Log.d(TAG, "循环检验内核版本 " + version + ",计数：" + index[0])
-              index[0]++
-              //老式的系统版本，例如7.0 8.0这些配置较低的写入比较慢，估需要等待
-              if (index[0] > INSTALL_RETRY_NUM) {
-                Log.d(TAG, "超过" + INSTALL_RETRY_NUM + "s")
-                timer.cancel()
-                onFailed("超过" + INSTALL_RETRY_NUM + "s,取消安装")
-              }
-            }
-          }
-        }, 0, 1000)
+        installTbsCore(context = context, installPath= installPath, onSucceed = onSucceed, onFailed = onFailed)
       }
     } catch (e: java.lang.Exception) {
       e.printStackTrace()
       Log.d(TAG, "本地离线内核安装异常,异常信息>" + e.message)
       onFailed("本地离线内核安装异常,异常信息：" + e.message)
     }
+  }
+
+  @Throws(Exception::class)
+  private fun installTbsCore(
+    context: Context,
+    installPath: String,
+    onSucceed: () -> Unit,
+    onFailed: (String) -> Unit
+  ) {
+    Log.d(TAG, "安装内核地址：$installPath")
+    val index = intArrayOf(0)
+    //开始安装
+    QbSdk.installLocalTbsCore(context, CORE_VERSION, installPath)
+    val timer = Timer()
+    timer.schedule(object : TimerTask() {
+      override fun run() {
+        QbSdk.initX5Environment(context, object : QbSdk.PreInitCallback {
+          override fun onCoreInitFinished() {
+            Log.d(TAG, "onCoreInitFinished")
+          }
+
+          override fun onViewInitFinished(p0: Boolean) {
+            Log.d(TAG, "onViewInitFinished_p0=$p0")
+          }
+        })
+        val version = QbSdk.getTbsVersion(context)
+        if (version > 0) {
+          Log.d(TAG, "x5内核安装完成，版本号$version")
+          timer.cancel()
+          onSucceed()
+        } else {
+          Log.d(TAG, "循环检验内核版本 " + version + ",计数：" + index[0])
+          index[0]++
+          //老式的系统版本，例如7.0 8.0这些配置较低的写入比较慢，估需要等待
+          if (index[0] > INSTALL_RETRY_NUM) {
+            Log.d(TAG, "超过" + INSTALL_RETRY_NUM + "s")
+            timer.cancel()
+            onFailed("超过" + INSTALL_RETRY_NUM + "s,取消安装")
+          }
+        }
+      }
+    }, 0, 1000)
   }
 
   /**

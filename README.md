@@ -12,9 +12,19 @@
 
 [公众号](./app/src/main/assets/images/qrcode_mp.jpg)
 
+- App发布网站
+
+[App发布中心](http://app.jdynb.xyz)
+
+- 相关问题解答
+
+[相关问题解答](https://app.jdynb.xyz/faq)
+
 ## 下载
 
 应该如何下载呢？
+
+[App发布中心](http://app.jdynb.xyz)
 
 1. 请在 [release](https://gitee.com/jdy2002/DongYuTvWeb/releases) 下载。
 2. 如果你用的是手机，一般内核版本高，可以在 `release` 下载体积最小的，电视则下载体积大的。

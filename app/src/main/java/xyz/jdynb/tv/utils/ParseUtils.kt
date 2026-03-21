@@ -18,15 +18,6 @@ import java.net.URLEncoder
 
 object ParseUtils {
 
-  @OptIn(ExperimentalSerializationApi::class)
-  private val json = Json {
-    isLenient = true
-    ignoreUnknownKeys = true
-    encodeDefaults = true
-    allowComments = true
-    explicitNulls = false
-  }
-
   /**
    * 获取解析规则
    */

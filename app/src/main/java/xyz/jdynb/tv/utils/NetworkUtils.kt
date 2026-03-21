@@ -11,6 +11,7 @@ import kotlinx.serialization.serializer
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
+import okhttp3.Response
 import xyz.jdynb.tv.utils.SpUtils.remove
 import xyz.jdynb.tv.BuildConfig
 import xyz.jdynb.tv.DongYuTVApplication
@@ -52,7 +53,10 @@ object NetworkUtils {
       val num = Random.nextInt(100, 180)
       val num2 = Random.nextInt(7, 11)
       val request = chan.request().newBuilder()
-        .addHeader("User-Agent", "Mozilla/5.0 (Windows NT ${num2}.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${num}.0.0.0 Safari/537.36")
+        .addHeader(
+          "User-Agent",
+          "Mozilla/5.0 (Windows NT ${num2}.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${num}.0.0.0 Safari/537.36"
+        )
         .addHeader("Accept", "*/*")
         .addHeader("Accept-Language", "zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7")
         .build()
@@ -254,17 +258,31 @@ object NetworkUtils {
     }
 
   suspend inline fun <reified T> requestSuspend(request: Request, raw: Boolean = false) =
-    withContext(Dispatchers.IO) {
-      runCatching {
-        withContext(Dispatchers.IO) {
-          getBodyEntity<T>(request, raw = raw)
-        }
+    runCatching {
+      withContext(Dispatchers.IO) {
+        getBodyEntity<T>(request, raw = raw)
       }
     }
+
+  suspend inline fun requestSuspendResponseResult(
+    url: String
+  ) : Result<Response> {
+    return runCatching {
+      withContext(Dispatchers.IO) {
+        val request = Request.Builder()
+          .url(url)
+          .build()
+        okHttpClient.newCall(request).execute()
+      }
+    }
+  }
 
   @Throws(Exception::class)
   inline fun <reified T> getBodyEntity(request: Request, raw: Boolean = false): T {
     val response = okHttpClient.newCall(request).execute()
+    if (T::class == Response::class) {
+      return response as T
+    }
     val responseBody = response.body?.string()
     return getBodyStringEntity(responseBody, raw = raw)
   }

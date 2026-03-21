@@ -9,6 +9,8 @@ import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.net.wifi.WifiManager
+import android.os.PowerManager
 import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
@@ -16,6 +18,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
@@ -53,6 +56,16 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
   private val mainViewModel by viewModels<MainViewModel>()
 
   private lateinit var audioManager: AudioManager
+
+  /**
+   * 唤醒锁，用于防止设备进入休眠状态导致断网
+   */
+  private var wakeLock: PowerManager.WakeLock? = null
+
+  /**
+   * WiFi 锁，用于保持 WiFi 连接不断
+   */
+  private var wifiLock: WifiManager.WifiLock? = null
 
   /**
    * 最后一次按下返回键的时间
@@ -93,6 +106,11 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
     insetsController.systemBarsBehavior =
       WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
     insetsController.hide(WindowInsetsCompat.Type.systemBars())
+    
+    // 强制显示鼠标指针，解决电视上插入鼠标后不显示的问题
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      window.decorView.requestPointerCapture()
+    }
 
     audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
 
@@ -100,6 +118,11 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
 
     // 注册网络状态广播接收器
     registerNetworkReceiver()
+
+    // 获取唤醒锁，防止设备休眠导致断网
+    acquireWakeLock()
+    // 获取 WiFi 锁，保持 WiFi 连接
+    acquireWifiLock()
   }
 
   /**
@@ -293,6 +316,7 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
       MotionEvent.ACTION_MOVE -> {
         moveY = event.y - downY
         Log.i(TAG, "moveY: $moveY")
+        binding.fragment.translationY = moveY
       }
 
       MotionEvent.ACTION_UP -> {
@@ -301,6 +325,13 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
         } else if (moveY < -SLIDE_DISTANCE) {
           binding.btnLeft.callOnClick()
         }
+        binding.fragment.animate()
+          .translationY(0f)
+          .start()
+      }
+
+      MotionEvent.ACTION_CANCEL -> {
+        binding.fragment.translationY = 0f
       }
     }
     return super.dispatchTouchEvent(event)
@@ -480,6 +511,10 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
     super.onDestroy()
     // 注销网络状态广播接收器
     unregisterNetworkReceiver()
+    // 释放唤醒锁
+    releaseWakeLock()
+    // 释放 WiFi 锁
+    releaseWifiLock()
   }
 
   private inner class NetworkBoardReceiver : BroadcastReceiver() {
@@ -495,5 +530,77 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
       isNetworkConnected = currentNetworkConnected
     }
 
+  }
+
+  /**
+   * 获取唤醒锁，防止设备进入休眠状态
+   */
+  private fun acquireWakeLock() {
+    try {
+      val powerManager = getSystemService(POWER_SERVICE) as PowerManager
+      wakeLock = powerManager.newWakeLock(
+        PowerManager.PARTIAL_WAKE_LOCK,
+        "DongYuTV::WakeLock"
+      ).apply {
+        setReferenceCounted(false)
+        acquire(10*60*60*1000L) // 10 小时
+      }
+      Log.i(TAG, "WakeLock acquired")
+    } catch (e: Exception) {
+      Log.e(TAG, "Failed to acquire WakeLock", e)
+    }
+  }
+
+  /**
+   * 释放唤醒锁
+   */
+  private fun releaseWakeLock() {
+    try {
+      wakeLock?.let {
+        if (it.isHeld) {
+          it.release()
+          Log.i(TAG, "WakeLock released")
+        }
+      }
+      wakeLock = null
+    } catch (e: Exception) {
+      Log.e(TAG, "Failed to release WakeLock", e)
+    }
+  }
+
+  /**
+   * 获取 WiFi 锁，保持 WiFi 连接不断
+   */
+  private fun acquireWifiLock() {
+    try {
+      val wifiManager = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
+      wifiLock = wifiManager.createWifiLock(
+        WifiManager.WIFI_MODE_FULL_HIGH_PERF,
+        "DongYuTV::WifiLock"
+      ).apply {
+        setReferenceCounted(false)
+        acquire()
+      }
+      Log.i(TAG, "WifiLock acquired")
+    } catch (e: Exception) {
+      Log.e(TAG, "Failed to acquire WifiLock", e)
+    }
+  }
+
+  /**
+   * 释放 WiFi 锁
+   */
+  private fun releaseWifiLock() {
+    try {
+      wifiLock?.let {
+        if (it.isHeld) {
+          it.release()
+          Log.i(TAG, "WifiLock released")
+        }
+      }
+      wifiLock = null
+    } catch (e: Exception) {
+      Log.e(TAG, "Failed to release WifiLock", e)
+    }
   }
 }

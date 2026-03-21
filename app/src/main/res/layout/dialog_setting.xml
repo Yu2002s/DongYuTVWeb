@@ -33,6 +33,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
+                <Button
+                    android:textColor="@color/white"
+                    android:layout_marginTop="10dp"
+                    android:focusable="true"
+                    android:padding="10dp"
+                    android:background="@drawable/bg_select"
+                    android:id="@+id/btn_webview_debug"
+                    android:text="WebView更新(播放问题)"
+                    android:textAllCaps="false"
+                    android:textSize="19sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
                 <androidx.appcompat.widget.SwitchCompat
                     android:textColor="@color/white"
                     android:layout_marginTop="10dp"
@@ -108,19 +121,6 @@
                     tools:checked="true"
                     android:id="@+id/sw_slide_switch_channel"
                     android:text="上下滑切台"
-                    android:textSize="19sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <Button
-                    android:textColor="@color/white"
-                    android:layout_marginTop="10dp"
-                    android:focusable="true"
-                    android:padding="10dp"
-                    android:background="@drawable/bg_select"
-                    android:id="@+id/btn_webview_debug"
-                    android:text="WebView调试(播放问题)"
-                    android:textAllCaps="false"
                     android:textSize="19sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>

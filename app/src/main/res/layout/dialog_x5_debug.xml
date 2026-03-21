@@ -1,49 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:gravity="center"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:textColor="@android:color/holo_red_light"
-            android:textSize="17sp"
-            android:id="@+id/tv_info"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
 
-        <Button
-            android:layout_marginTop="10dp"
-            android:id="@+id/btn_x5_install"
-            android:background="@drawable/bg_select"
-            android:focusable="true"
-            android:text="尝试本地安装X5内核"
-            android:padding="10dp"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"/>
+            <TextView
+                android:textColor="@android:color/holo_red_light"
+                android:textSize="17sp"
+                android:id="@+id/tv_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
-        <Button
-            android:layout_marginTop="10dp"
-            android:id="@+id/btn_webview_download"
-            android:background="@drawable/bg_select"
-            android:focusable="true"
-            android:textAllCaps="false"
-            android:text="尝试手动下载AndroidSystemWebView"
-            android:padding="10dp"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"/>
+            <Button
+                android:layout_marginTop="10dp"
+                android:id="@+id/btn_x5_install"
+                android:background="@drawable/bg_select"
+                android:focusable="true"
+                android:text="尝试本地安装X5内核"
+                android:padding="10dp"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"/>
 
-        <Button
-            android:layout_marginTop="10dp"
-            android:id="@+id/btn_x5"
-            android:background="@drawable/bg_select"
-            android:focusable="true"
-            android:text="打开X5内核调试页面"
-            android:padding="10dp"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"/>
+            <Button
+                android:layout_marginTop="10dp"
+                android:id="@+id/btn_webview_download"
+                android:background="@drawable/bg_select"
+                android:focusable="true"
+                android:textAllCaps="false"
+                android:text="前往网页手动下载"
+                android:padding="10dp"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:layout_marginTop="10dp"
+                android:id="@+id/btn_x5"
+                android:background="@drawable/bg_select"
+                android:focusable="true"
+                android:text="打开X5内核调试页面"
+                android:padding="10dp"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:textSize="14sp"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="center_horizontal"
+                android:text="安装完成后记得断电重启设备"
+                android:textColor="@android:color/holo_red_light"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginStart="10dp"
+            android:orientation="vertical"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="可在线下载的版本: "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="8dp"
+                android:id="@+id/rv_core"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

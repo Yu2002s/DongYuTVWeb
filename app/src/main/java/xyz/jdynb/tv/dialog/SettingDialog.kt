@@ -59,11 +59,13 @@ class SettingDialog(context: Context) :
     }
 
     binding.btnCheckUpdateCustom.setOnClickListener {
-      showImageDialog("https://images.jdynb.xyz/qrcode_update.png")
+      showImageDialog("file:///android_asset/images/qrcode_update.png")
+      Toast.makeText(context, "请扫码打开", Toast.LENGTH_SHORT).show()
     }
 
     binding.btnDonate.setOnClickListener {
       showImageDialog("file:///android_asset/images/qrcode.png")
+      Toast.makeText(context, "请扫码打开", Toast.LENGTH_SHORT).show()
     }
 
     binding.btnFeedback.setOnClickListener {

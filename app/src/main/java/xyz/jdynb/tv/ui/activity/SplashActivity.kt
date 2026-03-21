@@ -40,7 +40,7 @@ class SplashActivity : EngineActivity<ActivitySplashBinding>(R.layout.activity_s
     }
 
     lifecycleScope.launch {
-      X5Utils.startInstallX5LocationCore(this@SplashActivity, onProgress = {
+      X5Utils.installFromAssets(this@SplashActivity, onProgress = {
         withContext(Dispatchers.Main) {
           if (binding.progressBar.isIndeterminate) {
             binding.progressBar.isIndeterminate = false
@@ -56,8 +56,10 @@ class SplashActivity : EngineActivity<ActivitySplashBinding>(R.layout.activity_s
             .show()
         }
       }, onFailed = {
-        Toast.makeText(this@SplashActivity, "安装失败，直接进入App", Toast.LENGTH_LONG).show()
-        enterHome()
+        runOnUiThread {
+          Toast.makeText(this@SplashActivity, "安装失败，直接进入App", Toast.LENGTH_LONG).show()
+          enterHome()
+        }
       })
     }
   }

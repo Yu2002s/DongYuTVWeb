@@ -112,7 +112,8 @@ abstract class LivePlayerFragment : Fragment(), Playable {
     if (player == null) {
       // 异常情况，目前未知，这里先尝试刷新操作
       Handler(Looper.getMainLooper()).postDelayed({
-        (requireActivity() as MainActivity).refreshFragment()
+        activity ?: return@postDelayed
+        (activity as MainActivity).refreshFragment()
       }, 1500L)
       return
     }
