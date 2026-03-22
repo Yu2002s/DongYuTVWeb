@@ -264,13 +264,6 @@
           // 子频道
           "children": [
             {
-              "channelName": "CCTV1-0",
-              "player": "cctv2",
-              "args": {
-                "id": "11200132825562653886"
-              }
-            },
-            {
               "channelName": "CCTV1-1",
               "player": "ysp",
               "args": {
@@ -284,6 +277,13 @@
               "args": {
                 "id": "cctv1"
               }
+            },
+            {
+              "channelName": "CCTV1-0",
+              "player": "cctv2",
+              "args": {
+                "id": "11200132825562653886"
+              }
             }
           ]
         },
@@ -292,13 +292,6 @@
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/20115388de0207131af17eac86c33049b95d69eaff064e55653a1b941810a006.png?imageMogr2/format/webp",
           "desc": "财经",
           "children": [
-            {
-              "channelName": "CCTV2-0",
-              "player": "cctv2",
-              "args": {
-                "id": "12030532124776958103"
-              }
-            },
             {
               "channelName": "CCTV2-1",
               "player": "ysp",
@@ -312,6 +305,13 @@
               "player": "cctv",
               "args": {
                 "id": "cctv2"
+              }
+            },
+            {
+              "channelName": "CCTV2-0",
+              "player": "cctv2",
+              "args": {
+                "id": "12030532124776958103"
               }
             }
           ]
@@ -344,13 +344,6 @@
           "desc": "中文国际",
           "children": [
             {
-              "channelName": "CCTV4-0",
-              "player": "cctv2",
-              "args": {
-                "id": "10620168294224708952"
-              }
-            },
-            {
               "channelName": "CCTV4-1",
               "player": "ysp",
               "args": {
@@ -377,6 +370,13 @@
               "player": "cctv",
               "args": {
                 "id": "cctvamerica"
+              }
+            },
+            {
+              "channelName": "CCTV4-0",
+              "player": "cctv2",
+              "args": {
+                "id": "10620168294224708952"
               }
             }
           ]
@@ -439,13 +439,6 @@
           "desc": "国防军事",
           "children": [
             {
-              "channelName": "CCTV7-0",
-              "player": "cctv2",
-              "args": {
-                "id": "8516529981177953694"
-              }
-            },
-            {
               "channelName": "CCTV7-1",
               "player": "ysp",
               "args": {
@@ -458,6 +451,13 @@
               "player": "cctv",
               "args": {
                 "id": "cctv7"
+              }
+            },
+            {
+              "channelName": "CCTV7-0",
+              "player": "cctv2",
+              "args": {
+                "id": "8516529981177953694"
               }
             }
           ]
@@ -490,13 +490,6 @@
           "desc": "记录",
           "children": [
             {
-              "channelName": "CCTV9-0",
-              "player": "cctv2",
-              "args": {
-                "id": "7252237247689203957"
-              }
-            },
-            {
               "channelName": "CCTV9-1",
               "player": "ysp",
               "args": {
@@ -510,6 +503,13 @@
               "args": {
                 "id": "cctv9"
               }
+            },
+            {
+              "channelName": "CCTV9-0",
+              "player": "cctv2",
+              "args": {
+                "id": "7252237247689203957"
+              }
             }
           ]
         },
@@ -518,13 +518,6 @@
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/aa6157ec65188cd41826e5a2f088c3d6d153205f5f6428258d12c59999e221aa.png?imageMogr2/format/webp",
           "desc": "科教",
           "children": [
-            {
-              "channelName": "CCTV10-0",
-              "player": "cctv2",
-              "args": {
-                "id": "14589146016461298119"
-              }
-            },
             {
               "channelName": "CCTV10-1",
               "player": "ysp",
@@ -538,6 +531,13 @@
               "player": "cctv",
               "args": {
                 "id": "cctv10"
+              }
+            },
+            {
+              "channelName": "CCTV10-0",
+              "player": "cctv2",
+              "args": {
+                "id": "14589146016461298119"
               }
             }
           ]
@@ -592,13 +592,6 @@
           "desc": "新闻",
           "children": [
             {
-              "channelName": "CCTV13-0",
-              "player": "cctv2",
-              "args": {
-                "id": "16265686808730585228"
-              }
-            },
-            {
               "channelName": "CCTV13-1",
               "player": "ysp",
               "args": {
@@ -611,6 +604,13 @@
               "player": "cctv",
               "args": {
                 "id": "cctv13"
+              }
+            },
+            {
+              "channelName": "CCTV13-0",
+              "player": "cctv2",
+              "args": {
+                "id": "16265686808730585228"
               }
             }
           ]
@@ -719,18 +719,18 @@
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/3e9d06fd7244d950df5838750f1c6ac3456e172b51caca2c16d2282125b111e8.png?imageMogr2/format/webp",
           "children": [
             {
-              "channelName": "CCTV4K-0",
-              "player": "cctv2",
-              "args": {
-                "id": "2127841942201075403"
-              }
-            },
-            {
               "channelName": "CCTV4k-1",
               "player": "ysp",
               "args": {
                 "pid": "600002264",
                 "streamId": "2027249501"
+              }
+            },
+            {
+              "channelName": "CCTV4K-0",
+              "player": "cctv2",
+              "args": {
+                "id": "2127841942201075403"
               }
             }
           ]
