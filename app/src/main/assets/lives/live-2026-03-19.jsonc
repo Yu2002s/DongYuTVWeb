@@ -58,6 +58,18 @@
       }
     },
     {
+      "id": "cctv2",
+      "name": "simple",
+      "script": {
+        "init": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/cctv2/init.js"
+        ],
+        "play": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/cctv2/init.js"
+        ]
+      }
+    },
+    {
       "id": "common",
       "name": "simple",
       // "url": "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/html/simple_player.html",
@@ -252,6 +264,13 @@
           // 子频道
           "children": [
             {
+              "channelName": "CCTV1-0",
+              "player": "cctv2",
+              "args": {
+                "id": "11200132825562653886"
+              }
+            },
+            {
               "channelName": "CCTV1-1",
               "player": "ysp",
               "args": {
@@ -273,6 +292,13 @@
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/20115388de0207131af17eac86c33049b95d69eaff064e55653a1b941810a006.png?imageMogr2/format/webp",
           "desc": "财经",
           "children": [
+            {
+              "channelName": "CCTV2-0",
+              "player": "cctv2",
+              "args": {
+                "id": "12030532124776958103"
+              }
+            },
             {
               "channelName": "CCTV2-1",
               "player": "ysp",
@@ -317,6 +343,13 @@
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/f357e58fdbcc076a3d65e1f958c942b2e14f14342c60736ceed98b092d35356a.png?imageMogr2/format/webp",
           "desc": "中文国际",
           "children": [
+            {
+              "channelName": "CCTV4-0",
+              "player": "cctv2",
+              "args": {
+                "id": "10620168294224708952"
+              }
+            },
             {
               "channelName": "CCTV4-1",
               "player": "ysp",
@@ -406,6 +439,13 @@
           "desc": "国防军事",
           "children": [
             {
+              "channelName": "CCTV7-0",
+              "player": "cctv2",
+              "args": {
+                "id": "8516529981177953694"
+              }
+            },
+            {
               "channelName": "CCTV7-1",
               "player": "ysp",
               "args": {
@@ -450,6 +490,13 @@
           "desc": "记录",
           "children": [
             {
+              "channelName": "CCTV9-0",
+              "player": "cctv2",
+              "args": {
+                "id": "7252237247689203957"
+              }
+            },
+            {
               "channelName": "CCTV9-1",
               "player": "ysp",
               "args": {
@@ -471,6 +518,13 @@
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/aa6157ec65188cd41826e5a2f088c3d6d153205f5f6428258d12c59999e221aa.png?imageMogr2/format/webp",
           "desc": "科教",
           "children": [
+            {
+              "channelName": "CCTV10-0",
+              "player": "cctv2",
+              "args": {
+                "id": "14589146016461298119"
+              }
+            },
             {
               "channelName": "CCTV10-1",
               "player": "ysp",
@@ -537,6 +591,13 @@
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/266da7b43c03e2312186b4a999e0f060e8f15b10d2cc2c9aa32171819254cf1a.png?imageMogr2/format/webp",
           "desc": "新闻",
           "children": [
+            {
+              "channelName": "CCTV13-0",
+              "player": "cctv2",
+              "args": {
+                "id": "16265686808730585228"
+              }
+            },
             {
               "channelName": "CCTV13-1",
               "player": "ysp",
@@ -656,10 +717,23 @@
         {
           "channelName": "CCTV4K",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/3e9d06fd7244d950df5838750f1c6ac3456e172b51caca2c16d2282125b111e8.png?imageMogr2/format/webp",
-          "args": {
-            "pid": "600002264",
-            "streamId": "2027249501"
-          }
+          "children": [
+            {
+              "channelName": "CCTV4K-0",
+              "player": "cctv2",
+              "args": {
+                "id": "2127841942201075403"
+              }
+            },
+            {
+              "channelName": "CCTV4k-1",
+              "player": "ysp",
+              "args": {
+                "pid": "600002264",
+                "streamId": "2027249501"
+              }
+            }
+          ]
         },
         {
           "channelName": "CCTV8K",
