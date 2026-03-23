@@ -35,6 +35,10 @@ class ChannelSourceDialog(
   override fun initView() {
     setMaxWidth()
 
+    currentChannelModel.children.forEach {
+      it.isSelected = false
+    }
+
     binding.tvTitle.text = currentChannelModel.channelType + " " + currentChannelModel.channelName
 
     binding.rvType.dividerSpace(30).setup {

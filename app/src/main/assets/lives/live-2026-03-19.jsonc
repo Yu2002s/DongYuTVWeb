@@ -58,18 +58,6 @@
       }
     },
     {
-      "id": "cctv2",
-      "name": "simple",
-      "script": {
-        "init": [
-          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/cctv2/init.js"
-        ],
-        "play": [
-          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/cctv2/init.js"
-        ]
-      }
-    },
-    {
       "id": "common",
       "name": "simple",
       // "url": "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/html/simple_player.html",
@@ -86,9 +74,15 @@
       "name": "base",
       "url": "https://tv.gxtv.cn/channel/channelivePlay_{{id}}.html",
       "script": {
-        "init": ["https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/guangxi/init.js"],
-        "play": ["https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/guangxi/play.js"],
-        "resume_pause": ["https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/guangxi/resume_pause.js"]
+        "init": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/guangxi/init.js"
+        ],
+        "play": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/guangxi/play.js"
+        ],
+        "resume_pause": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/guangxi/resume_pause.js"
+        ]
       }
     },
     {
@@ -96,8 +90,12 @@
       "name": "base",
       "url": "https://www.gdtv.cn/tvChannelDetail/{{id}}",
       "script": {
-        "init": ["https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/guangdong/init.js"],
-        "play": ["https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/guangdong/play.js"]
+        "init": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/guangdong/init.js"
+        ],
+        "play": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/guangdong/play.js"
+        ]
       }
     },
     {
@@ -264,7 +262,7 @@
           // 子频道
           "children": [
             {
-              "channelName": "CCTV1-1",
+              "channelName": "CCTV1(央视频)",
               "player": "ysp",
               "args": {
                 "pid": "600001859",
@@ -272,17 +270,17 @@
               }
             },
             {
-              "channelName": "CCTV1-2",
+              "channelName": "CCTV1(CCTV)",
               "player": "cctv",
               "args": {
                 "id": "cctv1"
               }
             },
             {
-              "channelName": "CCTV1-0",
-              "player": "cctv2",
+              "channelName": "CCTV1(稳定,不清晰)",
+              "player": "common",
               "args": {
-                "id": "11200132825562653886"
+                "liveUrl": "https://media.hndyjyfw.gov.cn/live/jz-cctv-1/live.m3u8"
               }
             }
           ]
@@ -306,13 +304,6 @@
               "args": {
                 "id": "cctv2"
               }
-            },
-            {
-              "channelName": "CCTV2-0",
-              "player": "cctv2",
-              "args": {
-                "id": "12030532124776958103"
-              }
             }
           ]
         },
@@ -334,6 +325,13 @@
               "player": "cctv",
               "args": {
                 "id": "cctv3"
+              }
+            },
+            {
+              "channelName": "CCTV3(稳定,不清晰)",
+              "player": "common",
+              "args": {
+                "liveUrl": "https://media.hndyjyfw.gov.cn/live/jz-cctv-3/live.m3u8"
               }
             }
           ]
@@ -371,13 +369,6 @@
               "args": {
                 "id": "cctvamerica"
               }
-            },
-            {
-              "channelName": "CCTV4-0",
-              "player": "cctv2",
-              "args": {
-                "id": "10620168294224708952"
-              }
             }
           ]
         },
@@ -408,6 +399,13 @@
               "args": {
                 "id": "cctv5"
               }
+            },
+            {
+              "channelName": "CCTV5(稳定,不清晰)",
+              "player": "common",
+              "args": {
+                "liveUrl": "https://media.hndyjyfw.gov.cn/live/jz-cctv-5/live.m3u8"
+              }
             }
           ]
         },
@@ -429,6 +427,13 @@
               "player": "cctv",
               "args": {
                 "id": "cctv6"
+              }
+            },
+            {
+              "channelName": "CCTV6(稳定,不清晰)",
+              "player": "common",
+              "args": {
+                "liveUrl": "https://media.hndyjyfw.gov.cn/live/jz-cctv-6/live.m3u8"
               }
             }
           ]
@@ -454,10 +459,10 @@
               }
             },
             {
-              "channelName": "CCTV7-0",
-              "player": "cctv2",
+              "channelName": "CCTV7(稳定,不清晰)",
+              "player": "common",
               "args": {
-                "id": "8516529981177953694"
+                "liveUrl": "https://media.hndyjyfw.gov.cn/live/jz-cctv-7/live.m3u8"
               }
             }
           ]
@@ -505,10 +510,10 @@
               }
             },
             {
-              "channelName": "CCTV9-0",
-              "player": "cctv2",
+              "channelName": "CCTV9(稳定,不清晰)",
+              "player": "common",
               "args": {
-                "id": "7252237247689203957"
+                "liveUrl": "https://media.hndyjyfw.gov.cn/live/jz-cctv-9/live.m3u8"
               }
             }
           ]
@@ -534,10 +539,10 @@
               }
             },
             {
-              "channelName": "CCTV10-0",
-              "player": "cctv2",
+              "channelName": "CCTV10(稳定,不清晰)",
+              "player": "common",
               "args": {
-                "id": "14589146016461298119"
+                "liveUrl": "https://media.hndyjyfw.gov.cn/live/jz-cctv-10/live.m3u8"
               }
             }
           ]
@@ -561,6 +566,13 @@
               "args": {
                 "id": "cctv11"
               }
+            },
+            {
+              "channelName": "CCTV11(稳定,不清晰)",
+              "player": "common",
+              "args": {
+                "liveUrl": "https://media.hndyjyfw.gov.cn/live/jz-cctv-11/live.m3u8"
+              }
             }
           ]
         },
@@ -582,6 +594,13 @@
               "player": "cctv",
               "args": {
                 "id": "cctv12"
+              }
+            },
+            {
+              "channelName": "CCTV12(稳定,不清晰)",
+              "player": "common",
+              "args": {
+                "liveUrl": "https://media.hndyjyfw.gov.cn/live/jz-cctv-12/live.m3u8"
               }
             }
           ]
@@ -607,10 +626,10 @@
               }
             },
             {
-              "channelName": "CCTV13-0",
-              "player": "cctv2",
+              "channelName": "CCTV13(稳定,不清晰)",
+              "player": "common",
               "args": {
-                "id": "16265686808730585228"
+                "liveUrl": "https://media.hndyjyfw.gov.cn/live/jz-cctv-13/live.m3u8"
               }
             }
           ]
@@ -826,10 +845,23 @@
         {
           "channelName": "北京卫视",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/f4f23633c578beea49a3841d88d3490100f029ee349059fa532869db889872c5.png?imageMogr2/format/webp",
-          "args": {
-            "pid": "600002309",
-            "streamId": "2024052703"
-          }
+          "children": [
+            {
+              "channelName": "北京卫视-高清",
+              "player": "ysp",
+              "args": {
+                "pid": "600002309",
+                "streamId": "2024052703"
+              }
+            },
+            {
+              "channelName": "北京卫视(稳定,不清晰)",
+              "player": "common",
+              "args": {
+                "liveUrl": "https://media.hndyjyfw.gov.cn/live/jz-beijingweishi/live.m3u8"
+              }
+            }
+          ]
         },
         {
           "channelName": "江苏卫视",
@@ -890,10 +922,23 @@
         {
           "channelName": "黑龙江卫视",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/d8273ae9be698ce2db21f5b886ecac95a73429593f93713c60ed8c12c38bf0d3.png?imageMogr2/format/webp",
-          "args": {
-            "pid": "600002498",
-            "streamId": "2024061003"
-          }
+          "children": [
+            {
+              "channelName": "黑龙江卫视-高清",
+              "player": "ysp",
+              "args": {
+                "pid": "600002498",
+                "streamId": "2024061003"
+              }
+            },
+            {
+              "channelName": "黑龙江卫视-稳定",
+              "player": "common",
+              "args": {
+                "liveUrl": "https://idclive.hljtv.com:4430/live/hljws_own.m3u8"
+              }
+            }
+          ]
         },
         {
           "channelName": "海南卫视",
@@ -930,10 +975,23 @@
         {
           "channelName": "河南卫视",
           "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/74925962148a6d31c85808b6cd4e444c2a54bab393d2c5fc85e960b50e22fa86.png?imageMogr2/format/webp",
-          "args": {
-            "pid": "600002525",
-            "streamId": "2024059703"
-          }
+          "children": [
+            {
+              "channelName": "河南卫视-高清",
+              "player": "ysp",
+              "args": {
+                "pid": "600002525",
+                "streamId": "2024059703"
+              }
+            },
+            {
+              "channelName": "河南卫视(稳定,不清晰)",
+              "player": "common",
+              "args": {
+                "liveUrl": "https://media.hndyjyfw.gov.cn/live/jz-henanweishi/live.m3u8"
+              }
+            }
+          ]
         },
         {
           "channelName": "福建东南卫视",
@@ -1114,13 +1172,29 @@
         {
           "channelName": "山东卫视",
           "player": "shandong",
-          "args": { "channelId": "24581" }
+          "args": {
+            "channelId": "24581"
+          }
         },
         {
           "channelName": "浙江卫视",
-          "player": "zhejiang",
           "tvLogo": "http://oss.cztv.com/ucc/20200123/4aaea824fa3e4f8391a6243509de7011.png",
-          "args": { "code": "01" }
+          "children": [
+            {
+              "channelName": "浙江卫视(高清)",
+              "player": "zhejiang",
+              "args": {
+                "code": "01"
+              }
+            },
+            {
+              "channelName": "浙江卫视(稳定,不清晰)",
+              "player": "common",
+              "args": {
+                "liveUrl": "https://media.hndyjyfw.gov.cn/live/jz-zhejiangweishi/live.m3u8"
+              }
+            }
+          ]
         },
         {
           "tvLogo": "https://image.ahtv.cn/2021012210f12b01689743e3d415947bf449fbd3.jpg",
@@ -1144,13 +1218,6 @@
         {
           "channelName": "山西卫视",
           "player": "shanxi"
-        },
-        {
-          "channelName": "黑龙江卫视",
-          "player": "common",
-          "args": {
-            "liveUrl": "https://idclive.hljtv.com:4430/live/hljws_own.m3u8"
-          }
         },
         {
           "channelName": "陕西卫视",
@@ -1451,49 +1518,65 @@
           "number": 105,
           "tvLogo": "",
           "channelName": "山东卫视",
-          "args": { "channelId": "24581" }
+          "args": {
+            "channelId": "24581"
+          }
         },
         {
           "number": 106,
           "tvLogo": "",
           "channelName": "齐鲁频道",
-          "args": { "channelId": "24584" }
+          "args": {
+            "channelId": "24584"
+          }
         },
         {
           "number": 107,
           "tvLogo": "",
           "channelName": "综艺频道",
-          "args": { "channelId": "24593" }
+          "args": {
+            "channelId": "24593"
+          }
         },
         {
           "number": 108,
           "tvLogo": "",
           "channelName": "新闻频道",
-          "args": { "channelId": "24602" }
+          "args": {
+            "channelId": "24602"
+          }
         },
         {
           "number": 109,
           "tvLogo": "",
           "channelName": "农科频道",
-          "args": { "channelId": "24599" }
+          "args": {
+            "channelId": "24599"
+          }
         },
         {
           "number": 110,
           "tvLogo": "",
           "channelName": "少儿频道",
-          "args": { "channelId": "24605" }
+          "args": {
+            "channelId": "24605"
+          }
         },
         {
           "number": 111,
           "tvLogo": "",
           "channelName": "体育频道",
-          "args": { "channelId": "24587" }
+          "args": {
+            "channelId": "24587"
+          }
         },
         {
           "number": 112,
           "tvLogo": "",
           "channelName": "文旅频道",
-          "args": { "channelId": "24590" }
+          "args": {
+            "channelId": "24590"
+          }
         }
       ]
     },
@@ -1505,61 +1588,81 @@
           "number": 113,
           "channelName": "浙江卫视",
           "tvLogo": "http://oss.cztv.com/ucc/20200123/4aaea824fa3e4f8391a6243509de7011.png",
-          "args": { "code": "01" }
+          "args": {
+            "code": "01"
+          }
         },
         {
           "number": 114,
           "channelName": "钱江都市",
           "tvLogo": "http://oss.cztv.com/image/uc/user_20200120/22682936202001201527561695077536.png",
-          "args": { "code": "02" }
+          "args": {
+            "code": "02"
+          }
         },
         {
           "number": 115,
           "channelName": "经济生活",
           "tvLogo": "http://oss.cztv.com/ucc/20200123/fb0b3cff52e248e38b05be65c87869ad.png",
-          "args": { "code": "03" }
+          "args": {
+            "code": "03"
+          }
         },
         {
           "number": 116,
           "channelName": "教科影视",
           "tvLogo": "http://oss.cztv.com/ucc/20200123/821f9a2695c24835aac3665ef4b2e9a1.png",
-          "args": { "code": "04" }
+          "args": {
+            "code": "04"
+          }
         },
         {
           "number": 117,
           "channelName": "民生休闲",
           "tvLogo": "http://oss.cztv.com/ucc/20200123/dde8c15d034d45468c0fe1cd247805a3.png",
-          "args": { "code": "06" }
+          "args": {
+            "code": "06"
+          }
         },
         {
           "number": 118,
           "channelName": "新闻",
           "tvLogo": "http://oss.cztv.com/uploads/2023-06-20/1687261802752146585_newsliveicon.png",
-          "args": { "code": "07" }
+          "args": {
+            "code": "07"
+          }
         },
         {
           "number": 119,
           "channelName": "少儿频道",
           "tvLogo": "http://oss.cztv.com/ucc/20200123/312d8aea2f2a4f678b084d2bd8dbcb05.png",
-          "args": { "code": "08" }
+          "args": {
+            "code": "08"
+          }
         },
         {
           "number": 120,
           "channelName": "浙江国际",
           "tvLogo": "http://oss.cztv.com/ucc/20200123/ad3c07c7910e475a8631e4cff5a9431c.png",
-          "args": { "code": "10" }
+          "args": {
+            "code": "10"
+          }
         },
         {
           "number": 121,
           "channelName": "好易购",
           "tvLogo": "http://oss.cztv.com/uploads/2023-06-20/1687261764728924223_haoyigouicon.png",
-          "args": { "code": "11" }
+          "args": {
+            "code": "11"
+          }
         },
         {
           "number": 122,
           "channelName": "之江纪录",
           "tvLogo": "https://oss.cztv.com/ucc/20221019/c797cd82a3d44ca8a54f19a7e636b8f6.jpg",
-          "args": { "code": "12" }
+          "args": {
+            "code": "12"
+          }
         }
       ]
     },

@@ -120,7 +120,7 @@
                     android:background="@drawable/bg_select"
                     tools:checked="true"
                     android:id="@+id/sw_slide_switch_channel"
-                    android:text="上下滑切台"
+                    android:text="滑动切台换源"
                     android:textSize="19sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>

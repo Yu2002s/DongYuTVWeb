@@ -77,48 +77,44 @@
             android:layout_height="wrap_content">
 
             <Button
+                android:background="@drawable/bg_select"
                 hit="@{true}"
                 android:textSize="17sp"
                 android:id="@+id/btn_menu"
-                android:textColor="@color/black"
-                android:alpha="0.7"
-                android:backgroundTint="#FFFFFF"
                 android:text="菜单"
+                android:textColor="@android:color/holo_red_light"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <Button
+                android:background="@drawable/bg_select"
                 hit="@{true}"
                 android:layout_marginStart="10dp"
+                android:textColor="@android:color/holo_red_light"
                 android:textSize="17sp"
                 android:id="@+id/btn_change_source"
-                android:textColor="@color/black"
-                android:alpha="0.7"
-                android:backgroundTint="#FFFFFF"
                 android:text="换源"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <Button
+                android:background="@drawable/bg_select"
                 hit="@{true}"
                 android:layout_marginStart="10dp"
+                android:textColor="@android:color/holo_red_light"
                 android:textSize="17sp"
                 android:id="@+id/btn_refresh"
-                android:textColor="@color/black"
-                android:alpha="0.7"
-                android:backgroundTint="#FFFFFF"
                 android:text="刷新"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <Button
+                android:background="@drawable/bg_select"
                 hit="@{true}"
                 android:layout_marginStart="10dp"
+                android:textColor="@android:color/holo_red_light"
                 android:textSize="17sp"
                 android:id="@+id/btn_search"
-                android:textColor="@color/black"
-                android:alpha="0.7"
-                android:backgroundTint="#FFFFFF"
                 android:text="搜索"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -133,27 +129,26 @@
             android:layout_gravity="start|center_vertical"
             android:textSize="17sp"
             android:id="@+id/btn_left"
-            android:textColor="@color/black"
-            android:alpha="0.7"
-            android:backgroundTint="#FFFFFF"
+            android:background="@drawable/bg_circle"
+            android:textColor="@android:color/holo_red_light"
             android:text="上"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="80dp"
+            android:layout_height="80dp" />
 
         <Button
+            android:elevation="3dp"
+            android:background="@drawable/bg_circle"
             android:translationZ="10dp"
             gone="@{m.showActions}"
             android:layout_marginEnd="50dp"
             android:layout_gravity="center_vertical|end"
             android:textSize="17sp"
             hit="@{true}"
+            android:textColor="@android:color/holo_red_light"
             android:id="@+id/btn_right"
-            android:textColor="@color/black"
-            android:alpha="0.7"
-            android:backgroundTint="#FFFFFF"
             android:text="下"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="80dp"
+            android:layout_height="80dp"/>
 
     </FrameLayout>
 

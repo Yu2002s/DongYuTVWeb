@@ -34,7 +34,7 @@ object UpdateUtils {
    *
    * @param context 上下文
    */
-  suspend fun checkUpdate(context: Context, showToast: Boolean = true) {
+  suspend fun checkUpdate(context: Context, showToast: Boolean = true, showDialog: Boolean = true) {
     try {
       val updateModel = withContext(Dispatchers.IO) {
         NetworkUtils.requestSuspend<UpdateModel>(
@@ -46,6 +46,10 @@ object UpdateUtils {
         )
       }
       Log.i(TAG, "updateModel: $updateModel")
+      if (!showDialog) {
+        Toast.makeText(context, "发现新版本，打开设置更新", Toast.LENGTH_LONG).show()
+        return
+      }
       // 发现新版本
       UpdateDialog(context, updateModel).run {
         setCancelable(false)

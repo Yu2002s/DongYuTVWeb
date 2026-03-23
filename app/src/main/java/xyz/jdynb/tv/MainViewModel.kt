@@ -309,7 +309,9 @@ class MainViewModel : ViewModel() {
     currentChannelModel.value?.let {
       it.player = model.player
       it.args = model.args
-      _currentChannelPlayer.value = model.player
+      _currentChannelPlayer.value = "" // 清空当前播放器
+      _currentChannelPlayer.value = model.player // 设置当前播放器
+      Log.i(TAG, "currentChannelModel: $it")
     }
   }
 
@@ -328,7 +330,7 @@ class MainViewModel : ViewModel() {
   }
 
   /**
-   * 上一个频道
+   * 下一个频道
    */
   fun up() {
     if (currentIndex.value >= channelModelList.value.size - 1) {
@@ -339,7 +341,7 @@ class MainViewModel : ViewModel() {
   }
 
   /**
-   * 下一个频道
+   * 上一个频道
    */
   fun down() {
     if (currentIndex.value <= 0) {
@@ -347,6 +349,38 @@ class MainViewModel : ViewModel() {
     } else {
       _currentIndex.value--
     }
+  }
+
+  /**
+   * 切换到上一个源
+   */
+  fun left(): String? {
+    currentChannelModel.value?.let {
+      if (it.children.size > 1) {
+        var index = "channel_config_${it.channelType}".get<Int>(it.channelName, 0) ?: 0
+        index = if (index > 0) index - 1 else it.children.size - 1
+        changeCurrentSource(it.children[index])
+        index.put("channel_config_${it.channelType}", it.channelName)
+        return it.children[index].channelName
+      }
+    }
+    return null
+  }
+
+  /**
+   * 切换到下一个源
+   */
+  fun right(): String? {
+    currentChannelModel.value?.let {
+      if (it.children.size > 1) {
+        var index = "channel_config_${it.channelType}".get<Int>(it.channelName, 0) ?: 0
+        index = if (index < it.children.size - 1) index + 1 else 0
+        changeCurrentSource(it.children[index])
+        index.put("channel_config_${it.channelType}", it.channelName)
+        return it.children[index].channelName
+      }
+    }
+    return null
   }
 
   /**

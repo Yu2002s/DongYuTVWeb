@@ -68,19 +68,26 @@
         }
     }
 
-    let hls = null;
+    var hls = null;
+
+    var hlsOptions = undefined;
+
+    function setHlsOptions(options) {
+        hlsOptions = options
+    }
 
     function playLive(url, headers) {
         video.volume = 1
         console.log('liveUrl:', url)
+        window.currentLiveUrl = url
         
         // 检查是否支持 HLS.js 且为 m3u8 文件
         if (Hls.isSupported() && url.includes('.m3u8')) {
             if (hls) {
                 hls.destroy();
             }
-            
-            hls = new Hls({
+
+            var options = {
                 debug: false,
                 xhrSetup: function(xhr, url) {
                     // xhr.setRequestHeader('X-Referer', headers['Referer'])
@@ -91,7 +98,13 @@
                         }
                     }
                 }
-            });
+            }
+
+            if (hlsOptions) {
+                Object.assign(options, hlsOptions);
+            }
+            
+            hls = new Hls(options);
             
             hls.loadSource(url);
             hls.attachMedia(video);
