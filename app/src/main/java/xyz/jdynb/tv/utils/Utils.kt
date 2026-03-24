@@ -1,5 +1,8 @@
 package xyz.jdynb.tv.utils
 
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.os.bundleOf
@@ -98,3 +101,16 @@ inline fun <reified T : @Serializable Any> Fragment.setSerializableArguments(
 inline fun <reified T : @Serializable Any> Fragment.getSerializableArguments(key: String): T? {
   return arguments?.getSerializableForKey(key)
 }
+
+/**
+ * Context 转 activity
+ */
+fun Context.activity(): Activity? {
+  if (this is Activity) {
+    return this
+  } else if (this is ContextWrapper) {
+    return this.baseContext.activity()
+  }
+  return null
+}
+

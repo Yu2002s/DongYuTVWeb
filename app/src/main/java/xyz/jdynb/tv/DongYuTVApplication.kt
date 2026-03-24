@@ -10,6 +10,7 @@ import androidx.media3.datasource.cache.LeastRecentlyUsedCacheEvictor
 import androidx.media3.datasource.cache.SimpleCache
 import com.drake.brv.utils.BRV
 import com.drake.engine.base.Engine
+import timber.log.Timber
 import java.io.File
 
 /**
@@ -33,6 +34,10 @@ class DongYuTVApplication : Application() {
 
     Engine.initialize(this)
     BRV.modelId = BR.m
+
+    if (BuildConfig.DEBUG) {
+      Timber.plant(Timber.DebugTree())
+    }
 
     // 1. 创建缓存目录
     val cacheDir = File(cacheDir, "media_cache").apply { mkdirs() }

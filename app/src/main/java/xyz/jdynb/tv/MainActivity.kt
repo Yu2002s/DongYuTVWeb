@@ -2,6 +2,9 @@ package xyz.jdynb.tv
 
 import android.animation.FloatEvaluator
 import android.animation.ObjectAnimator
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.OvershootInterpolator
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -38,6 +41,7 @@ import xyz.jdynb.tv.utils.SpUtils.getRequired
 import xyz.jdynb.tv.constants.SPKeyConstants
 import xyz.jdynb.tv.dialog.ChannelSourceDialog
 import xyz.jdynb.tv.dialog.SettingDialog
+import xyz.jdynb.tv.model.response.main
 import xyz.jdynb.tv.ui.activity.SearchActivity
 import xyz.jdynb.tv.utils.UpdateUtils
 
@@ -48,6 +52,8 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
     private const val TAG = "MainActivity"
 
     private const val SLIDE_DISTANCE = 200
+
+    private const val SLIDE_THRESHOLD = 100
   }
 
   /**
@@ -301,6 +307,8 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
   private var downX = 0f
   private var moveY = 0f
   private var moveX = 0f
+  private var isSliding = false
+  private var slideDirection: String? = null // "vertical" 或 "horizontal"
 
   override fun dispatchTouchEvent(event: MotionEvent): Boolean {
     mainViewModel.showActions()
@@ -313,147 +321,188 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
         downX = event.x
         moveY = 0f
         moveX = 0f
+        isSliding = false
+        slideDirection = null
       }
 
       MotionEvent.ACTION_MOVE -> {
-        moveX = event.x - downX
-        moveY = event.y - downY
-        Log.i(TAG, "moveY: $moveY, moveX: $moveX")
-        // 同时支持 X 和 Y 方向的平移
-        binding.fragment.translationY = moveY
-        binding.fragment.translationX = moveX
+        val currentMoveX = event.x - downX
+        val currentMoveY = event.y - downY
+        
+        // 如果还未锁定方向，判断是否达到滑动阈值
+        if (!isSliding) {
+          val absMoveX = kotlin.math.abs(currentMoveX)
+          val absMoveY = kotlin.math.abs(currentMoveY)
+          
+          // 当任一方向达到阈值时，锁定滑动方向
+          if (absMoveX > SLIDE_THRESHOLD || absMoveY > SLIDE_THRESHOLD) {
+            isSliding = true
+            // 哪个方向的绝对值大就锁定哪个方向
+            slideDirection = if (absMoveY > absMoveX) "vertical" else "horizontal"
+            Log.i(TAG, "锁定滑动方向：$slideDirection, moveX: $currentMoveX, moveY: $currentMoveY")
+          }
+        }
+        
+        // 根据锁定的方向更新位移
+        if (isSliding) {
+          when (slideDirection) {
+            "vertical" -> {
+              // 垂直滑动：只更新 Y 轴
+              moveY = currentMoveY
+              moveX = 0f
+              binding.fragment.translationY = moveY
+              binding.fragment.translationX = 0f
+            }
+            "horizontal" -> {
+              // 水平滑动：只更新 X 轴
+              moveX = currentMoveX
+              moveY = 0f
+              binding.fragment.translationX = moveX
+              binding.fragment.translationY = 0f
+            }
+          }
+          Log.i(TAG, "滑动中 - 方向：$slideDirection, moveY: $moveY, moveX: $moveX")
+        }
       }
 
       MotionEvent.ACTION_UP -> {
-        // 判断是垂直滑动还是水平滑动（哪个绝对值大就是哪个方向）
-        if (kotlin.math.abs(moveY) > kotlin.math.abs(moveX)) {
-          // 垂直滑动
-          if (moveY > SLIDE_DISTANCE) {
-            // 下滑 - 触发右侧按钮（下一个频道）
-            performSlideAnimation("down", binding.btnRight::callOnClick)
-          } else if (moveY < -SLIDE_DISTANCE) {
-            // 上滑 - 触发左侧按钮（上一个频道）
-            performSlideAnimation("up", binding.btnLeft::callOnClick)
-          } else {
-            // 滑动距离不足，恢复原位
-            restoreFragmentPosition()
+        if (isSliding) {
+          // 根据锁定的方向执行对应操作
+          when (slideDirection) {
+            "vertical" -> {
+              // 垂直滑动
+              if (moveY > SLIDE_DISTANCE) {
+                mainViewModel.enableDebounce = false
+                binding.btnRight.callOnClick()
+                // 下滑 - 触发右侧按钮（下一个频道）
+                performSlideAnimation("down") {
+
+                }
+              } else if (moveY < -SLIDE_DISTANCE) {
+                mainViewModel.enableDebounce = false
+                binding.btnLeft.callOnClick()
+                // 上滑 - 触发左侧按钮（上一个频道）
+                performSlideAnimation("up") {}
+              } else {
+                // 滑动距离不足，恢复原位
+                restoreFragmentPosition()
+              }
+            }
+            "horizontal" -> {
+              // 水平滑动
+              if (moveX > SLIDE_DISTANCE) {
+                // 右滑 - 左方向操作
+                performSlideAnimation("right") {
+                  val channelName = mainViewModel.left()
+                  if (channelName != null) {
+                    Toast.makeText(this@MainActivity, "已切换到：$channelName", Toast.LENGTH_SHORT).show()
+                  } else {
+                    Toast.makeText(this@MainActivity, "只有一个源", Toast.LENGTH_SHORT).show()
+                  }
+                }
+              } else if (moveX < -SLIDE_DISTANCE) {
+                // 左滑 - 右方向操作
+                performSlideAnimation("left") {
+                  val channelName = mainViewModel.right()
+                  if (channelName != null) {
+                    Toast.makeText(this@MainActivity, "已切换到：$channelName", Toast.LENGTH_SHORT).show()
+                  } else {
+                    Toast.makeText(this@MainActivity, "只有一个源", Toast.LENGTH_SHORT).show()
+                  }
+                }
+              } else {
+                // 滑动距离不足，恢复原位
+                restoreFragmentPosition()
+              }
+            }
           }
         } else {
-          // 水平滑动
-          if (moveX > SLIDE_DISTANCE) {
-            // 右滑 - 左方向操作
-            performSlideAnimation("right") {
-              val channelName = mainViewModel.left()
-              Toast.makeText(this, "已切换到: $channelName", Toast.LENGTH_SHORT).show()
-            }
-          } else if (moveX < -SLIDE_DISTANCE) {
-            // 左滑 - 右方向操作
-            performSlideAnimation("left") {
-              val channelName = mainViewModel.right()
-              Toast.makeText(this, "已切换到: $channelName", Toast.LENGTH_SHORT).show()
-            }
-          } else {
-            // 滑动距离不足，恢复原位
-            restoreFragmentPosition()
-          }
+          // 未达到滑动阈值，视为点击事件，不处理
+          restoreFragmentPosition()
         }
       }
 
       MotionEvent.ACTION_CANCEL -> {
         restoreFragmentPosition()
+        isSliding = false
+        slideDirection = null
       }
     }
     return super.dispatchTouchEvent(event)
   }
 
-  data class Four<out A, out B, out C, out D>(
-    val first: A,
-    val second: B,
-    val third: C,
-    val fourth: D
-  )
-
   /**
    * 执行滑动动画
    *
    * @param direction "up" | "down" | "left" | "right" 滑动方向
-   * @param onComplete 动画完成后执行的回调
+   * @param onComplete 动画中途（彻底滑出后）执行的回调，用于切换内容
    */
   private fun performSlideAnimation(direction: String, onComplete: () -> Unit) {
     val fragmentWidth = binding.fragment.width.toFloat()
     val fragmentHeight = binding.fragment.height.toFloat()
-    
-    // 根据方向计算目标位置和动画属性
-    val (animX, animY, endX, endY) = when (direction) {
+
+    var endX = 0f
+    var endY = 0f
+    var enterX = 0f
+    var enterY = 0f
+
+    when (direction) {
       "up" -> {
-        // 上滑：只执行 Y 轴动画，向上滑出
-        Four(first = false, second = true, third = 0f, fourth = -fragmentHeight)
+        endY = -fragmentHeight
+        enterY = fragmentHeight
       }
       "down" -> {
-        // 下滑：只执行 Y 轴动画，向下滑出
-        Four(first = false, second = true, third = 0f, fourth = fragmentHeight)
+        endY = fragmentHeight
+        enterY = -fragmentHeight
       }
       "left" -> {
-        // 右滑（左操作）：只执行 X 轴动画，向右滑出
-        Four(first = true, second = false, third = fragmentWidth, fourth = 0f)
+        endX = -fragmentWidth
+        enterX = fragmentWidth
       }
       "right" -> {
-        // 左滑（右操作）：只执行 X 轴动画，向左滑出
-        Four(first = true, second = false, third = -fragmentWidth, fourth = 0f)
+        endX = fragmentWidth
+        enterX = -fragmentWidth
       }
       else -> return
     }
 
-    // 先完成当前的滑动偏移
-    binding.fragment.translationX = moveX
-    binding.fragment.translationY = moveY
+    // 第一阶段：平稳滑出
+    binding.fragment.animate()
+      .translationX(endX)
+      .translationY(endY)
+      .alpha(0.3f)
+      .setDuration(250)
+      .setInterpolator(AccelerateInterpolator())
+      .withEndAction {
+        // 在彻底滑出后执行内容切换
+        onComplete()
 
-    // 执行动画：从当前位置滑出屏幕，然后恢复并触发操作
-    if (animY) {
-      // Y 轴方向动画
-      ObjectAnimator
-        .ofObject(binding.fragment, "translationY", FloatEvaluator(), moveY, endY)
-        .apply {
-          duration = 300
-          addListener(onEnd = {
-            // 动画结束后，恢复位置并执行对应操作
-            binding.fragment.translationY = 0f
-            binding.fragment.translationX = 0f
-            onComplete()
-          })
-        }
-        .start()
-    }
-    
-    if (animX) {
-      // X 轴方向动画
-      ObjectAnimator
-        .ofObject(binding.fragment, "translationX", FloatEvaluator(), moveX, endX)
-        .apply {
-          duration = 300
-          addListener(onEnd = {
-            // 动画结束后，恢复位置并执行对应操作
-            binding.fragment.translationY = 0f
-            binding.fragment.translationX = 0f
-            onComplete()
-          })
-        }
-        .start()
-    }
+        // 移到另一侧准备滑入
+        binding.fragment.translationX = enterX
+        binding.fragment.translationY = enterY
+
+        // 第二阶段：平稳滑入
+        binding.fragment.animate()
+          .translationX(0f)
+          .translationY(0f)
+          .alpha(1f)
+          .setDuration(300)
+          .setInterpolator(DecelerateInterpolator())
+          .start()
+      }
+      .start()
   }
 
   /**
-   * 恢复 Fragment 到原始位置
+   * 恢复 Fragment 到原始位置（用于滑动距离不足时）
    */
   private fun restoreFragmentPosition() {
-    ObjectAnimator
-      .ofObject(binding.fragment, "translationY", FloatEvaluator(), moveY, 0f)
-      .setDuration(300)
-      .start()
-    
-    ObjectAnimator
-      .ofObject(binding.fragment, "translationX", FloatEvaluator(), moveX, 0f)
-      .setDuration(300)
+    binding.fragment.animate()
+      .translationX(0f)
+      .translationY(0f)
+      .alpha(1f)
+      .setDuration(400)
+      .setInterpolator(OvershootInterpolator(1.2f)) // 弹性回弹更自然
       .start()
   }
 

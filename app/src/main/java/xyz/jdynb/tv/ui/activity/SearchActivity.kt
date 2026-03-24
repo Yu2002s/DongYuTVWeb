@@ -33,8 +33,13 @@ import xyz.jdynb.tv.dialog.SettingDialog
 import xyz.jdynb.tv.dialog.UserAuthDialog
 import xyz.jdynb.tv.utils.NetworkUtils
 import xyz.jdynb.tv.utils.UpdateUtils
+import java.util.concurrent.atomic.AtomicBoolean
 
 class SearchActivity : EngineActivity<ActivitySearchBinding>(R.layout.activity_search) {
+
+  companion object {
+    private const val TAG = "SearchActivity"
+  }
 
   private var searchJob: Job? = null
 
@@ -42,9 +47,12 @@ class SearchActivity : EngineActivity<ActivitySearchBinding>(R.layout.activity_s
 
   private var userAuthDialog: UserAuthDialog? = null
 
+  private val isUserAuthorized = AtomicBoolean(true)
+
   override fun initData() {
     lifecycleScope.launch {
       NetworkUtils.requestSuspendResult<Unit>("/user/checkLogin")
+      Log.i(TAG, "isUserAuthorized: ${isUserAuthorized.get()}")
     }
 
     if (SPKeyConstants.CHECK_UPDATE.getRequired<Boolean>(true)) {
@@ -131,7 +139,7 @@ class SearchActivity : EngineActivity<ActivitySearchBinding>(R.layout.activity_s
       this,
       userAuthBroadcastReceiver,
       intent,
-      ContextCompat.RECEIVER_EXPORTED
+      ContextCompat.RECEIVER_NOT_EXPORTED
     )
   }
 
@@ -159,13 +167,19 @@ class SearchActivity : EngineActivity<ActivitySearchBinding>(R.layout.activity_s
   private inner class UserAuthBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
       if (intent?.action == IntentActionConstants.UN_AUTHORIZED) {
-        Toast.makeText(this@SearchActivity, "登录过期，请返回首页验证", Toast.LENGTH_LONG).show()
+        Log.i(TAG, "isUserAuthorized: ${isUserAuthorized.get()}")
+        if (!isUserAuthorized.getAndSet(false)) {
+          return
+        }
         if (userAuthDialog == null) {
+          Toast.makeText(this@SearchActivity, "登录过期，请返回首页验证", Toast.LENGTH_LONG).show()
           userAuthDialog = UserAuthDialog(this@SearchActivity).apply { show() }
         }
       } else if (intent?.action == IntentActionConstants.AUTHORIZED) {
+        Log.i(TAG, "isUserAuthorized: ${isUserAuthorized.get()}")
         userAuthDialog?.dismiss()
         userAuthDialog = null
+        isUserAuthorized.set(true)
       }
     }
   }

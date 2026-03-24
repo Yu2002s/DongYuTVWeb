@@ -76,11 +76,9 @@ class BootService: Service() {
       Log.e(TAG, "Failed to add overlay", e)
     }
 
-    repeat(3) {
-      Handler(Looper.getMainLooper()).postDelayed({
-        bringAppToFront(this)
-      }, 1000)
-    }
+    Handler(Looper.getMainLooper()).postDelayed({
+      bringAppToFront(this)
+    }, 1000)
   }
 
   /**

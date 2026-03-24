@@ -12,6 +12,7 @@ import com.tencent.smtt.sdk.QbSdk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import xyz.jdynb.tv.BuildConfig
 import xyz.jdynb.tv.MainActivity
 import xyz.jdynb.tv.R
@@ -31,15 +32,31 @@ class SplashActivity : EngineActivity<ActivitySplashBinding>(R.layout.activity_s
 
     val flavor = BuildConfig.FLAVOR
 
-    Log.i("SplashActivity", "isInstallX5:$isInstallX5, flavor:$flavor")
+    val canLoadX5 = QbSdk.canLoadX5(this)
+
+    Timber.i("isInstallX5:$isInstallX5, flavor:$flavor loadX5: $canLoadX5")
 
     // Android 13 以上不让安装X5内核
-    if (Build.VERSION.SDK_INT > 13 || flavor == "webview" || isInstallX5 ||  QbSdk.canLoadX5(this)) {
-      enterHome()
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU || flavor == "webview" || isInstallX5 || canLoadX5) {
+      if (isInstallX5 || canLoadX5) {
+        // 原来每次都要初始化？
+        QbSdk.initX5Environment(this, object : QbSdk.PreInitCallback {
+          override fun onCoreInitFinished() {
+          }
+
+          override fun onViewInitFinished(status: Boolean) {
+            Timber.i(" onViewInitFinished is $status, ${QbSdk.isTbsCoreInited()}")
+            enterHome()
+          }
+        })
+      } else {
+        enterHome()
+      }
       return
     }
 
     lifecycleScope.launch {
+      Timber.i("install X5")
       X5Utils.installFromAssets(this@SplashActivity, onProgress = {
         withContext(Dispatchers.Main) {
           if (binding.progressBar.isIndeterminate) {
@@ -54,8 +71,10 @@ class SplashActivity : EngineActivity<ActivitySplashBinding>(R.layout.activity_s
           binding.tvTips.text = "初始化完成，未重启App请手动重启App"
           Toast.makeText(this@SplashActivity, "安装成功，未重启App请手动重启", Toast.LENGTH_LONG)
             .show()
+          Timber.i("安装成功")
         }
       }, onFailed = {
+        Timber.e("安装失败: $it")
         runOnUiThread {
           Toast.makeText(this@SplashActivity, "安装失败，直接进入App", Toast.LENGTH_LONG).show()
           enterHome()
@@ -72,6 +91,7 @@ class SplashActivity : EngineActivity<ActivitySplashBinding>(R.layout.activity_s
   }
 
   private fun enterHome() {
+
     finish()
 
     val homeClass = if (SPKeyConstants.HOME_DEFAULT_SEARCH.getRequired(false))

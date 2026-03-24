@@ -23,6 +23,7 @@ import xyz.jdynb.tv.constants.SPKeyConstants
 import xyz.jdynb.tv.databinding.DialogUserAuthBinding
 import xyz.jdynb.tv.model.UserAuthModel
 import xyz.jdynb.tv.utils.NetworkUtils
+import xyz.jdynb.tv.utils.activity
 import kotlin.concurrent.thread
 
 class UserAuthDialog(context: Context) :
@@ -80,9 +81,9 @@ class UserAuthDialog(context: Context) :
     }
 
     binding.btnBack.setOnClickListener {
-      context as AppCompatActivity
-      (context as AppCompatActivity).finish()
-      context.startActivity(Intent(context, MainActivity::class.java))
+      val activity = context.activity() ?: return@setOnClickListener
+      activity.finish()
+      activity.startActivity(Intent(context, MainActivity::class.java))
     }
   }
 

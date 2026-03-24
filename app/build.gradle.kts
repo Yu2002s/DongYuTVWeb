@@ -149,6 +149,11 @@ dependencies {
   // "x5Implementation"(files("libs/tbs_sdk-44382-202411081743-release.aar"))
   implementation(project(":easydanmaku"))
   implementation(libs.okhttp.profiler)
+  // ===================== 调试 ==================
+  debugImplementation("com.willowtreeapps.hyperion:hyperion-core:0.9.38")
+  debugImplementation("com.willowtreeapps.hyperion:hyperion-timber:0.9.38")
+  // debugImplementation("com.willowtreeapps.hyperion:hyperion-sqlite:0.9.38")
+  implementation(libs.timber)
   // "geckoImplementation"("org.mozilla.geckoview:geckoview:93.0.20210927210923")
   // "x5Implementation"(project(":x5core_arm64_v8a"))
   // "x5Implementation"("com.github.HeartHappy.webX5Core:webx5core_armeabi_v7a:1.0.2")

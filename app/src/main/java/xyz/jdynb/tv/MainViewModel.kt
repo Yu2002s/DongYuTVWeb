@@ -93,6 +93,8 @@ class MainViewModel : ViewModel() {
    */
   val numberStringBuilder = StringBuilder()
 
+  var enableDebounce = true
+
   @OptIn(ExperimentalSerializationApi::class)
   private val json = Json {
     ignoreUnknownKeys = true // 忽略未知的键
@@ -106,9 +108,10 @@ class MainViewModel : ViewModel() {
   @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
   val currentChannelModel = _currentIndex
     // 300ms 防抖
-    .debounce(300)
+    .debounce(if (enableDebounce) 300 else 0)
     // 每次改变时都执行这里
     .onEach {
+      enableDebounce = true
       // 非输入状态时
       if (!isTypingNumber()) {
         // 记录切台之前的频道索引位置

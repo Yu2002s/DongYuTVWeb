@@ -26,6 +26,7 @@ import com.tencent.smtt.sdk.WebViewClient
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import xyz.jdynb.tv.MainActivity
 import xyz.jdynb.tv.MainViewModel
 import xyz.jdynb.tv.R
@@ -315,7 +316,7 @@ abstract class LivePlayerFragment : Fragment(), Playable {
 
       override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
         consoleMessage?.let {
-          Log.d("Console", "${it.message()} - ${it.lineNumber()}")
+          Timber.tag("Console").d("${it.message()} - ${it.lineNumber()}")
         }
         return true
       }

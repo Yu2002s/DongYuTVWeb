@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.Response
 import okhttp3.internal.headersContentLength
+import timber.log.Timber
 import xyz.jdynb.tv.BuildConfig
 import xyz.jdynb.tv.DongYuTVApplication
 import java.io.File
@@ -106,8 +107,8 @@ object X5Utils {
     val coreName = if (is32BitAbi(context)) ARM_32_CORE_NAME else ARM_64_CORE_NAME //内核文件名称
     val appDataPath = context.filesDir.parent //存储路径
     try {
-      Log.d(
-        TAG, ",内核版本号 CORE_VERSION = " + CORE_VERSION
+      Timber.tag(TAG).d(
+        ",内核版本号 CORE_VERSION = " + CORE_VERSION
             + ",内核文件名称 CORE_NAME = " + coreName
             + ",存储路径 path = " + appDataPath
       )
@@ -117,11 +118,11 @@ object X5Utils {
       }
       if (isExitCore) {
         val installPath = appDataPath + File.separator + TBS_FOLDER + File.separator + coreName
+        Timber.i("installPath: $installPath")
         installTbsCore(context = context, installPath= installPath, onSucceed = onSucceed, onFailed = onFailed)
       }
     } catch (e: java.lang.Exception) {
       e.printStackTrace()
-      Log.d(TAG, "本地离线内核安装异常,异常信息>" + e.message)
       onFailed("本地离线内核安装异常,异常信息：" + e.message)
     }
   }
@@ -142,24 +143,24 @@ object X5Utils {
       override fun run() {
         QbSdk.initX5Environment(context, object : QbSdk.PreInitCallback {
           override fun onCoreInitFinished() {
-            Log.d(TAG, "onCoreInitFinished")
+            Timber.tag(TAG).d("onCoreInitFinished")
           }
 
           override fun onViewInitFinished(p0: Boolean) {
-            Log.d(TAG, "onViewInitFinished_p0=$p0")
+            Timber.tag(TAG).d("onViewInitFinished_p0=$p0")
           }
         })
         val version = QbSdk.getTbsVersion(context)
         if (version > 0) {
-          Log.d(TAG, "x5内核安装完成，版本号$version")
+          Timber.tag(TAG).d("x5内核安装完成，版本号$version")
           timer.cancel()
           onSucceed()
         } else {
-          Log.d(TAG, "循环检验内核版本 " + version + ",计数：" + index[0])
+          Timber.tag(TAG).d("循环检验内核版本 " + version + ",计数：" + index[0])
           index[0]++
           //老式的系统版本，例如7.0 8.0这些配置较低的写入比较慢，估需要等待
           if (index[0] > INSTALL_RETRY_NUM) {
-            Log.d(TAG, "超过" + INSTALL_RETRY_NUM + "s")
+            Timber.tag(TAG).d("超过" + INSTALL_RETRY_NUM + "s")
             timer.cancel()
             onFailed("超过" + INSTALL_RETRY_NUM + "s,取消安装")
           }
@@ -207,6 +208,7 @@ object X5Utils {
           if (!file.parentFile.exists()) {
             file.parentFile?.mkdirs()
           }
+          Timber.d("开始复制文件 ${file.name}")
           val fileSize = inputStream.available()
           val fos = FileOutputStream(file)
           var len = -1
@@ -222,11 +224,12 @@ object X5Utils {
           fos.close()
           Log.d(TAG, file.path + "文件复制完毕");
         } else {
-          Log.d(TAG, file.path + "文件已存在，无需复制");
+          Timber.d( file.path + "文件已存在，无需复制");
         }
       }
       return true
     } catch (e: IOException) {
+      Timber.e(e)
       e.printStackTrace()
     }
     return false
