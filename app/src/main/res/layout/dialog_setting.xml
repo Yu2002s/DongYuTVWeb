@@ -125,6 +125,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
+                <Button
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="退出软件"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/btn_exit"
+                    android:textSize="19sp"
+                    android:background="@drawable/bg_select"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
                 <androidx.appcompat.widget.SwitchCompat
                     android:textColor="@color/white"
                     android:layout_marginTop="10dp"
@@ -155,6 +166,17 @@
                     android:text="手动更新(电视点我)"
                     android:layout_marginTop="10dp"
                     android:id="@+id/btn_check_update_custom"
+                    android:textSize="19sp"
+                    android:background="@drawable/bg_select"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <Button
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="给远程设备安装"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/btn_remote_install"
                     android:textSize="19sp"
                     android:background="@drawable/bg_select"
                     android:layout_width="match_parent"

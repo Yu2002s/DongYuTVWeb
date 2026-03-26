@@ -34,8 +34,8 @@ android {
     minSdk = 21
     //noinspection ExpiredTargetSdkVersion
     targetSdk = 28
-    versionCode = 19
-    versionName = "1.0.12"
+    versionCode = 20
+    versionName = "1.0.13"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     signingConfig = signingConfigs.getByName("debug")
@@ -49,7 +49,7 @@ android {
 
   buildTypes {
     release {
-      isMinifyEnabled = true
+      isMinifyEnabled = false
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
     }
   }
@@ -154,6 +154,11 @@ dependencies {
   debugImplementation("com.willowtreeapps.hyperion:hyperion-timber:0.9.38")
   // debugImplementation("com.willowtreeapps.hyperion:hyperion-sqlite:0.9.38")
   implementation(libs.timber)
+
+  implementation("com.github.MuntashirAkon:libadb-android:3.1.1")
+  implementation("org.conscrypt:conscrypt-android:2.5.3")
+  implementation("com.github.MuntashirAkon:sun-security-android:1.1")
+
   // "geckoImplementation"("org.mozilla.geckoview:geckoview:93.0.20210927210923")
   // "x5Implementation"(project(":x5core_arm64_v8a"))
   // "x5Implementation"("com.github.HeartHappy.webX5Core:webx5core_armeabi_v7a:1.0.2")

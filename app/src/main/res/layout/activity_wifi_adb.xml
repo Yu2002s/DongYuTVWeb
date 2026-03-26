@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="com.drake.engine.databinding.DataBindingComponent" />
+
+        <variable
+            name="m"
+            type="xyz.jdynb.tv.model.AdbConnectModel" />
+
+    </data>
+
+    <LinearLayout
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:textColor="@android:color/holo_red_light"
+            android:text="注意：请在手机端打开此页面，远程设备需要开启adb，电视开启adb教程: http://app.jdynb.xyz/faq"
+            android:autoLink="web"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:text="@{`当前连接状态: ` + m.status}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:text="@={m.host}"
+                android:hint="请输入IP地址"
+                android:inputType="textWebEditText"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+            <EditText
+                android:text="@={m.port}"
+                android:hint="请输入端口号"
+                android:inputType="number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <EditText
+                android:visibility="gone"
+                android:text="@={m.code}"
+                android:hint="请输入配对码"
+                android:inputType="number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/btn_connect"
+                hit="@{true}"
+                android:textSize="19sp"
+                android:text="连接设备"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:layout_marginStart="10dp"
+                android:enabled="@{m.connected}"
+                android:textSize="19sp"
+                hit="@{true}"
+                android:id="@+id/btn_install"
+                android:text="给远程设备安装"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:text="@={m.command}"
+                android:hint="请输入自定义命令"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                hit="@{true}"
+                android:enabled="@{m.command.length() > 0}"
+                android:id="@+id/btn_run"
+                android:text="执行"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <Button
+            android:enabled="@{m.connected}"
+            android:textSize="19sp"
+            hit="@{true}"
+            android:layout_marginTop="10dp"
+            android:id="@+id/btn_exec"
+            android:text="操作远程设备"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <ScrollView
+            android:layout_weight="1"
+            android:id="@+id/scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+
+            <TextView
+                android:textColor="@android:color/holo_red_light"
+                android:text="@{m.log}"
+                android:padding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+</layout>

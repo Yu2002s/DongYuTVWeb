@@ -1,5 +1,6 @@
 package xyz.jdynb.tv.utils
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Context
 import android.util.Log
@@ -11,10 +12,14 @@ import com.norman.webviewup.lib.service.interfaces.IServiceManager
 import com.norman.webviewup.lib.service.interfaces.IWebViewUpdateService
 import com.norman.webviewup.lib.source.UpgradeAssetSource
 import com.norman.webviewup.lib.source.download.UpgradeDownloadSource
+import com.tencent.smtt.sdk.WebSettings
+import com.tencent.smtt.sdk.WebView
+import timber.log.Timber
 import xyz.jdynb.tv.DongYuTVApplication
+import xyz.jdynb.tv.ui.fragment.LivePlayerFragment.Companion.USER_AGENT
 import java.io.File
 
-object WebViewUpgrade {
+object WebViewUtils {
 
   /**
    * 最低支持的 WebView 版本
@@ -43,8 +48,11 @@ object WebViewUpgrade {
 
   private const val WEBVIEW_FILE_NAME_21 = "com.google.android.webview_85.0.4183.59.apk"
 
-  private const val TAG = "WebViewUpgrade"
+  private const val TAG = "WebViewUtils"
 
+  /**
+   * 获取当前系统 WebView 版本
+   */
   fun getCurrentLocalWebViewVersion(): String? {
     try {
       val serviceManager = RuntimeAccess.staticAccess(IServiceManager::class.java)
@@ -65,6 +73,9 @@ object WebViewUpgrade {
     return null
   }
 
+  /**
+   * 获取当前 WebView 版本号
+   */
   fun getWebViewVersionNumber(): Int {
     var systemWebViewPackageVersion = WebViewUpgrade.getSystemWebViewPackageVersion()
     Log.i(TAG, "version: $systemWebViewPackageVersion, system: ${getCurrentLocalWebViewVersion()}")
@@ -85,6 +96,63 @@ object WebViewUpgrade {
     return Int.MAX_VALUE
   }
 
+  /**
+   * WebSettings 配置
+   */
+  @SuppressLint("SetJavaScriptEnabled")
+  fun WebView.setupWebSettings() {
+    settings.apply {
+
+      // tbs x5 播放视频优化
+      // setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY)
+      setPluginState(WebSettings.PluginState.ON_DEMAND)
+
+      isFocusable = false
+
+      // 获取当前的 UA，可以获取当前的浏览器内核版本
+      Timber.i( "userAgent: $userAgentString")
+      userAgentString = USER_AGENT
+
+      // 基本设置
+      javaScriptEnabled = true
+      domStorageEnabled = true
+      databaseEnabled = true
+      allowFileAccess = true
+      allowContentAccess = true
+
+      // 缓存设置
+      cacheMode = WebSettings.LOAD_DEFAULT
+
+      // 布局渲染
+      layoutAlgorithm = WebSettings.LayoutAlgorithm.NORMAL
+      useWideViewPort = false
+      loadWithOverviewMode = false
+      builtInZoomControls = false
+      displayZoomControls = false
+      setSupportZoom(false)
+
+      // 文本渲染
+      textZoom = 100
+      defaultFontSize = 16
+      defaultFixedFontSize = 13
+      minimumFontSize = 8
+      minimumLogicalFontSize = 8
+      // setInitialScale(getMinimumScale())
+
+      // 其他设置
+      setSupportMultipleWindows(false)
+      javaScriptCanOpenWindowsAutomatically = false
+      loadsImagesAutomatically = true
+      // blockNetworkImage = true
+      mediaPlaybackRequiresUserGesture = false
+
+      setAllowUniversalAccessFromFileURLs(true)
+      setAllowFileAccessFromFileURLs(true)
+    }
+  }
+
+  @Suppress("DEPRECATION")
+  @Deprecated("废弃，使用 X5 内核")
   fun initWebView(context: Context, callback: () -> Unit) {
     try {
       val version = getWebViewVersionNumber()

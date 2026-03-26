@@ -17,6 +17,7 @@ import android.os.Looper
 import android.net.wifi.WifiManager
 import android.os.PowerManager
 import android.util.Log
+import android.view.Gravity
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
@@ -41,8 +42,11 @@ import xyz.jdynb.tv.utils.SpUtils.getRequired
 import xyz.jdynb.tv.constants.SPKeyConstants
 import xyz.jdynb.tv.dialog.ChannelSourceDialog
 import xyz.jdynb.tv.dialog.SettingDialog
+import xyz.jdynb.tv.dialog.TipsDialog
+import xyz.jdynb.tv.model.TipsModel
 import xyz.jdynb.tv.model.response.main
 import xyz.jdynb.tv.ui.activity.SearchActivity
+import xyz.jdynb.tv.utils.SpUtils.put
 import xyz.jdynb.tv.utils.UpdateUtils
 
 class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main) {
@@ -181,6 +185,19 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
         UpdateUtils.checkUpdate(this@MainActivity, showToast = false, showDialog = false)
       }
     }
+
+    /*if (SPKeyConstants.RENAME_APP_TIPS.getRequired<Boolean>(true)) {
+      TipsDialog(
+        this, TipsModel("App变更提示", "已更新为新App【我的电视】，旧App可删除"), 15 * 1000L,
+        Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
+      ).apply {
+        setOnDismissListener {
+          SPKeyConstants.RENAME_APP_TIPS.put(false)
+        }
+        setCancelable(false)
+        show()
+      }
+    }*/
   }
 
   fun refreshFragment() {
@@ -328,12 +345,12 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
       MotionEvent.ACTION_MOVE -> {
         val currentMoveX = event.x - downX
         val currentMoveY = event.y - downY
-        
+
         // 如果还未锁定方向，判断是否达到滑动阈值
         if (!isSliding) {
           val absMoveX = kotlin.math.abs(currentMoveX)
           val absMoveY = kotlin.math.abs(currentMoveY)
-          
+
           // 当任一方向达到阈值时，锁定滑动方向
           if (absMoveX > SLIDE_THRESHOLD || absMoveY > SLIDE_THRESHOLD) {
             isSliding = true
@@ -342,7 +359,7 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
             Log.i(TAG, "锁定滑动方向：$slideDirection, moveX: $currentMoveX, moveY: $currentMoveY")
           }
         }
-        
+
         // 根据锁定的方向更新位移
         if (isSliding) {
           when (slideDirection) {
@@ -353,6 +370,7 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
               binding.fragment.translationY = moveY
               binding.fragment.translationX = 0f
             }
+
             "horizontal" -> {
               // 水平滑动：只更新 X 轴
               moveX = currentMoveX
@@ -388,6 +406,7 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
                 restoreFragmentPosition()
               }
             }
+
             "horizontal" -> {
               // 水平滑动
               if (moveX > SLIDE_DISTANCE) {
@@ -395,7 +414,8 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
                 performSlideAnimation("right") {
                   val channelName = mainViewModel.left()
                   if (channelName != null) {
-                    Toast.makeText(this@MainActivity, "已切换到：$channelName", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity, "已切换到：$channelName", Toast.LENGTH_SHORT)
+                      .show()
                   } else {
                     Toast.makeText(this@MainActivity, "只有一个源", Toast.LENGTH_SHORT).show()
                   }
@@ -405,7 +425,8 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
                 performSlideAnimation("left") {
                   val channelName = mainViewModel.right()
                   if (channelName != null) {
-                    Toast.makeText(this@MainActivity, "已切换到：$channelName", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity, "已切换到：$channelName", Toast.LENGTH_SHORT)
+                      .show()
                   } else {
                     Toast.makeText(this@MainActivity, "只有一个源", Toast.LENGTH_SHORT).show()
                   }
@@ -451,18 +472,22 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
         endY = -fragmentHeight
         enterY = fragmentHeight
       }
+
       "down" -> {
         endY = fragmentHeight
         enterY = -fragmentHeight
       }
+
       "left" -> {
         endX = -fragmentWidth
         enterX = fragmentWidth
       }
+
       "right" -> {
         endX = fragmentWidth
         enterX = -fragmentWidth
       }
+
       else -> return
     }
 

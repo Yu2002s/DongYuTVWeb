@@ -1,5 +1,6 @@
 package xyz.jdynb.tv.ui.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
@@ -7,6 +8,7 @@ import android.util.Log
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.annotation.OptIn
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -36,6 +38,7 @@ import com.drake.engine.utils.EncryptUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import xyz.jdynb.tv.utils.SpUtils.getRequired
 import xyz.jdynb.tv.DongYuTVApplication
 import xyz.jdynb.tv.R
@@ -83,63 +86,49 @@ class VideoActivity : EngineActivity<ActivityVideoBinding>(R.layout.activity_vid
 
     private const val MAX_SAVE_PROGRESS_COUNT = 2
 
+    private const val PARAM_MOVIE = "movieModel"
+
     @JvmStatic
     fun play(movieModel: MovieModel) {
-      Log.d(TAG, "play: ${movieModel.url}")
+      Timber.tag(TAG).d("play: ${movieModel.url}")
       val intent = Intent(DongYuTVApplication.context, VideoActivity::class.java).apply {
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        putSerializable("movieModel", movieModel)
+        putSerializable(PARAM_MOVIE, movieModel)
       }
       DongYuTVApplication.context.startActivity(intent)
     }
   }
 
-  override fun initData() {
-    movieModel = intent.extras?.getSerializableForKey<MovieModel>("movieModel") as MovieModel
+  override fun init() {
+    super.init()
+    val insetsController = WindowCompat.getInsetsController(window, window.decorView)
+    insetsController.systemBarsBehavior =
+      WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    insetsController.hide(WindowInsetsCompat.Type.systemBars())
 
-    lifecycleScope.launch {
-      withContext(Dispatchers.IO) {
-        try {
-          val videoProgressFile = File(cacheDir, "video_progress")
-          if (!videoProgressFile.exists()) {
-            videoProgressFile.mkdirs()
-          }
-          val files = videoProgressFile.listFiles() ?: arrayOf()
-          Log.d(TAG, "fileCount: ${files.size}, maxCount: $MAX_SAVE_PROGRESS_COUNT")
-          if (files.size > MAX_SAVE_PROGRESS_COUNT) {
-            // 按修改时间排序（从旧到新），删除最旧的文件
-            files.sortedBy { it.lastModified() }
-              .take(files.size - MAX_SAVE_PROGRESS_COUNT)  // 取最旧的 N 个文件（需要删除的数量）
-              .forEach {
-                Log.d(TAG, "删除旧的进度文件：${it.name}")
-                it.delete()
-              }
-          }
-          currentVideoProgressFile = File(
-            videoProgressFile, EncryptUtil.encryptMD5ToString(
-              movieModel.url?.ifEmpty { movieModel.id } ?: movieModel.id))
-          if (!currentVideoProgressFile.exists()) {
-            currentVideoProgressFile.createNewFile()
-          } else {
-            val videoProgressContent = currentVideoProgressFile.readText()
-            if (videoProgressContent.isNotEmpty()) {
-              videoProgressModel =
-                NetworkUtils.json.decodeFromString<VideoProgressModel>(videoProgressContent)
-              Log.i(TAG, "videoProgressModel: $videoProgressModel")
-            }
-          }
-        } catch (e: Exception) {
-          Log.e(TAG, "initData: ", e)
+    onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+      @OptIn(UnstableApi::class)
+      override fun handleOnBackPressed() {
+        if (isShowControl) {
+          binding.playerView.hideController()
+        } else {
+          finish()
         }
       }
+    })
+  }
+
+  override fun initData() {
+    movieModel = intent.extras?.getSerializableForKey<MovieModel>(PARAM_MOVIE) as MovieModel
+
+    lifecycleScope.launch {
+      getCurrentVideoProgress()
 
       selectionRv.models = if (movieModel.items.isNullOrEmpty()) {
         listOf(MovieModel.Item(name = "1", url = movieModel.url!!))
       } else {
         movieModel.items
       }
-
-      Log.i(TAG, "movieModel: $movieModel")
 
       if (movieModel.items.isNullOrEmpty()) {
         movieModel.url?.let { originalUrl ->
@@ -164,60 +153,18 @@ class VideoActivity : EngineActivity<ActivityVideoBinding>(R.layout.activity_vid
     }
   }
 
+  @SuppressLint("SetTextI18n")
   @UnstableApi
   override fun initView() {
-
-    val insetsController = WindowCompat.getInsetsController(window, window.decorView)
-    insetsController.systemBarsBehavior =
-      WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-    insetsController.hide(WindowInsetsCompat.Type.systemBars())
-
-    binding.danmakuView.setDanmakuOpacity(0.8f)
-    binding.danmakuView.setShowFPS(false)
-    binding.danmakuView.setActionOnFrame {
-      binding.danmakuView.time = player.currentPosition
-    }
-
-    binding.playerView.setShowSubtitleButton(false)
-    // binding.playerView.setShowRewindButton(true)
-    binding.playerView.setShowPlayButtonIfPlaybackIsSuppressed(true)
-    binding.playerView.setControllerVisibilityListener(PlayerView.ControllerVisibilityListener { visibility ->
-      isShowControl = visibility == PlayerControlView.VISIBLE
-    })
-
-    createVideoPlayer()
-    player.addListener(this)
-
     title = findViewById(R.id.exo_title)
 
-    binding.danmakuView.setTextScale(SPKeyConstants.DANMAKU_SIZE.getRequired(1.0f))
-    binding.danmakuView.setDanmakuOpacity(SPKeyConstants.DANMAKU_ALPHA.getRequired(1.0f))
-    binding.danmakuView.setDisplayArea(SPKeyConstants.DANMAKU_AREA.getRequired(0.5f))
-    binding.danmakuView.isVisible = (SPKeyConstants.ENABLE_DANMAKU.getRequired(true))
+    createVideoPlayer()
+    initPlayerView()
+    initDanmakuView()
+    initSelectionRecyclerView()
+  }
 
-    val imageButton: ImageButton =
-      binding.playerView.findViewById(androidx.media3.ui.R.id.exo_settings)
-    imageButton.setOnClickListener {
-      VideoSettingDialog(this).also {
-        it.onDanmakuVisibilityListener = { visible ->
-          binding.danmakuView.isVisible = visible
-        }
-
-        it.onDanmakuSizeListener = { size ->
-          binding.danmakuView.setTextScale(size)
-        }
-
-        it.onDanmakuAlphaListener = { alpha ->
-          binding.danmakuView.setDanmakuOpacity(alpha)
-        }
-
-        it.onDanmakuAreaListener = { area ->
-          binding.danmakuView.setDisplayArea(area)
-        }
-
-      }.show()
-    }
-
+  private fun initSelectionRecyclerView() {
     selectionRv = findViewById(R.id.rv_selection)
     selectionRv.divider {
       setDivider(8, true)
@@ -244,18 +191,60 @@ class VideoActivity : EngineActivity<ActivityVideoBinding>(R.layout.activity_vid
         player.seekTo(modelPosition, 0)
       }
     }
-
-    onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-      override fun handleOnBackPressed() {
-        if (isShowControl) {
-          binding.playerView.hideController()
-        } else {
-          finish()
-        }
-      }
-    })
   }
 
+  private fun initDanmakuView() {
+    // 初始化Danmaku
+    binding.danmakuView.apply {
+      isVisible = (SPKeyConstants.ENABLE_DANMAKU.getRequired(true))
+      setShowFPS(false)
+      setTextScale(SPKeyConstants.DANMAKU_SIZE.getRequired(1.0f))
+      setDanmakuOpacity(SPKeyConstants.DANMAKU_ALPHA.getRequired(1.0f))
+      setDisplayArea(SPKeyConstants.DANMAKU_AREA.getRequired(0.5f))
+      setActionOnFrame {
+        time = player.currentPosition
+      }
+    }
+  }
+
+  @OptIn(UnstableApi::class)
+  private fun initPlayerView() {
+    // 初始化播放器
+    binding.playerView.apply {
+      setShowSubtitleButton(false)
+      setShowPlayButtonIfPlaybackIsSuppressed(true)
+      setControllerVisibilityListener(PlayerView.ControllerVisibilityListener { visibility ->
+        isShowControl = visibility == PlayerControlView.VISIBLE
+      })
+    }
+
+    val settingButton: ImageButton =
+      binding.playerView.findViewById(androidx.media3.ui.R.id.exo_settings)
+    settingButton.setOnClickListener {
+      VideoSettingDialog(this).also {
+        it.onDanmakuVisibilityListener = { visible ->
+          binding.danmakuView.isVisible = visible
+        }
+
+        it.onDanmakuSizeListener = { size ->
+          binding.danmakuView.setTextScale(size)
+        }
+
+        it.onDanmakuAlphaListener = { alpha ->
+          binding.danmakuView.setDanmakuOpacity(alpha)
+        }
+
+        it.onDanmakuAreaListener = { area ->
+          binding.danmakuView.setDisplayArea(area)
+        }
+
+      }.show()
+    }
+  }
+
+  /**
+   * 创建视频播放器
+   */
   @UnstableApi
   private fun createVideoPlayer() {
     // 1. 创建 HTTP 数据源工厂，配置连接参数
@@ -300,6 +289,46 @@ class VideoActivity : EngineActivity<ActivityVideoBinding>(R.layout.activity_vid
     binding.playerView.player = player
     player.playWhenReady = true
     binding.playerView.hideController()
+    player.addListener(this)
+  }
+
+  /**
+   * 获取当前视频进度
+   */
+  private suspend fun getCurrentVideoProgress() {
+    withContext(Dispatchers.IO) {
+      try {
+        val videoProgressFile = File(cacheDir, "video_progress")
+        if (!videoProgressFile.exists()) {
+          videoProgressFile.mkdirs()
+        }
+        val files = videoProgressFile.listFiles() ?: arrayOf()
+        if (files.size > MAX_SAVE_PROGRESS_COUNT) {
+          // 按修改时间排序（从旧到新），删除最旧的文件
+          files.sortedBy { it.lastModified() }
+            .take(files.size - MAX_SAVE_PROGRESS_COUNT)  // 取最旧的 N 个文件（需要删除的数量）
+            .forEach {
+              Timber.tag(TAG).i("删除旧的进度文件：${it.name}")
+              it.delete()
+            }
+        }
+        currentVideoProgressFile = File(
+          videoProgressFile, EncryptUtil.encryptMD5ToString(
+            movieModel.url?.ifEmpty { movieModel.id } ?: movieModel.id))
+        if (!currentVideoProgressFile.exists()) {
+          currentVideoProgressFile.createNewFile()
+        } else {
+          val videoProgressContent = currentVideoProgressFile.readText()
+          if (videoProgressContent.isNotEmpty()) {
+            videoProgressModel =
+              NetworkUtils.json.decodeFromString<VideoProgressModel>(videoProgressContent)
+            Timber.tag(TAG).d("videoProgressModel: $videoProgressModel")
+          }
+        }
+      } catch (e: Exception) {
+        Timber.tag(TAG).e(e)
+      }
+    }
   }
 
   private val progressRunnable = object : Runnable {
@@ -367,9 +396,9 @@ class VideoActivity : EngineActivity<ActivityVideoBinding>(R.layout.activity_vid
   }
 
   override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
-    Log.i(
-      TAG,
-      "onMediaItemTransition: ${mediaItem?.localConfiguration?.uri}, currentMediaItemIndex: ${player.currentMediaItemIndex}"
+    Timber.tag(TAG).i(
+      "onMediaItemTransition: %s, currentMediaItemIndex: %d",
+      mediaItem?.localConfiguration?.uri, player.currentMediaItemIndex
     )
     if (!selectionRv.models.isNullOrEmpty()) {
       selectionRv.bindingAdapter.setChecked(player.currentMediaItemIndex, true)
@@ -405,6 +434,7 @@ class VideoActivity : EngineActivity<ActivityVideoBinding>(R.layout.activity_vid
   override fun onDestroy() {
     super.onDestroy()
     handler.removeCallbacksAndMessages(null)
+    player.removeListener(this)
     player.release()
   }
 }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="m"
+            type="xyz.jdynb.tv.model.TipsModel" />
+
+    </data>
+
+    <LinearLayout
+        android:background="@drawable/bg_select"
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="@{m.title}"
+            tools:text="这是标题"
+            android:textSize="17sp"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_marginTop="4dp"
+            android:text="@{m.subTitle}"
+            tools:text="这是描述内容...."
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:textColor="@android:color/holo_red_light"
+            tools:text="10秒后自动关闭"
+            android:text="@{(m.countdown / 1000L) + `秒后自动关闭`}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</layout>

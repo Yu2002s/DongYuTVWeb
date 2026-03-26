@@ -2,6 +2,7 @@ package xyz.jdynb.tv.dialog
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.ViewGroup
@@ -21,7 +22,9 @@ import xyz.jdynb.tv.utils.SpUtils.put
 import xyz.jdynb.tv.R
 import xyz.jdynb.tv.constants.SPKeyConstants
 import xyz.jdynb.tv.databinding.DialogSettingBinding
+import xyz.jdynb.tv.ui.activity.WifiAdbActivity
 import xyz.jdynb.tv.utils.UpdateUtils
+import kotlin.system.exitProcess
 
 class SettingDialog(context: Context, private val mainViewModel: MainViewModel? = null) :
   EngineDialog<DialogSettingBinding>(context, R.style.Theme_BaseDialog) {
@@ -40,7 +43,7 @@ class SettingDialog(context: Context, private val mainViewModel: MainViewModel? 
 
     binding.btnBack.requestFocus()
 
-    binding.swBoot.initSwitch(SPKeyConstants.BOOT_AUTO_START, true)
+    binding.swBoot.initSwitch(SPKeyConstants.BOOT_AUTO_START, false)
     binding.swReverseDirection.initSwitch(SPKeyConstants.REVERSE_DIRECTION, false)
     binding.swHome.initSwitch(SPKeyConstants.HOME_DEFAULT_SEARCH, false) {
       Toast.makeText(context, "下次启动时生效", Toast.LENGTH_SHORT).show()
@@ -78,6 +81,14 @@ class SettingDialog(context: Context, private val mainViewModel: MainViewModel? 
 
     binding.btnWebviewDebug.setOnClickListener {
       X5DebugDialog(context).show()
+    }
+
+    binding.btnRemoteInstall.setOnClickListener {
+      context.startActivity(Intent(context, WifiAdbActivity::class.java))
+    }
+
+    binding.btnExit.setOnClickListener {
+      exitProcess(0)
     }
   }
 

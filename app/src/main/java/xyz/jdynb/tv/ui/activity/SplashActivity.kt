@@ -28,6 +28,11 @@ class SplashActivity : EngineActivity<ActivitySplashBinding>(R.layout.activity_s
   override fun init() {
     super.init()
 
+   /* finish()
+    startActivity(Intent(this, WebVideoActivity::class.java))
+
+    return*/
+
     val isInstallX5 = SPKeyConstants.IS_INSTALL_X5.getRequired(false)
 
     val flavor = BuildConfig.FLAVOR

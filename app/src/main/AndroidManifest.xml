@@ -94,6 +94,10 @@
 
         <activity android:name=".ui.activity.WebViewUpdateActivity" />
 
+        <activity android:name=".ui.activity.WebVideoActivity" />
+
+        <activity android:name=".ui.activity.WifiAdbActivity" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.drake.file_provider"

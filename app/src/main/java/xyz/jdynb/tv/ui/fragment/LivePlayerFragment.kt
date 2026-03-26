@@ -38,6 +38,7 @@ import xyz.jdynb.tv.model.LiveChannelModel
 import xyz.jdynb.tv.model.LiveModel
 import xyz.jdynb.tv.model.LivePlayerModel
 import xyz.jdynb.tv.utils.NetworkUtils.inputStream
+import xyz.jdynb.tv.utils.WebViewUtils.setupWebSettings
 import xyz.jdynb.tv.utils.X5JsManager.execJs
 import java.io.ByteArrayInputStream
 
@@ -248,60 +249,7 @@ abstract class LivePlayerFragment : Fragment(), Playable {
     }
   }
 
-  /**
-   * WebSettings 配置
-   */
-  @SuppressLint("SetJavaScriptEnabled")
-  private fun WebView.setupWebSettings() {
-    settings.apply {
 
-      // tbs x5 播放视频优化
-      // setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY)
-      setPluginState(WebSettings.PluginState.ON_DEMAND)
-
-      isFocusable = false
-
-      // 获取当前的 UA，可以获取当前的浏览器内核版本
-      Log.i(TAG, "userAgent: $userAgentString")
-      userAgentString = USER_AGENT
-
-      // 基本设置
-      javaScriptEnabled = true
-      domStorageEnabled = true
-      databaseEnabled = true
-      allowFileAccess = true
-      allowContentAccess = true
-
-      // 缓存设置
-      cacheMode = WebSettings.LOAD_DEFAULT
-
-      // 布局渲染
-      layoutAlgorithm = WebSettings.LayoutAlgorithm.NORMAL
-      useWideViewPort = false
-      loadWithOverviewMode = false
-      builtInZoomControls = false
-      displayZoomControls = false
-      setSupportZoom(false)
-
-      // 文本渲染
-      textZoom = 100
-      defaultFontSize = 16
-      defaultFixedFontSize = 13
-      minimumFontSize = 8
-      minimumLogicalFontSize = 8
-      // setInitialScale(getMinimumScale())
-
-      // 其他设置
-      setSupportMultipleWindows(false)
-      javaScriptCanOpenWindowsAutomatically = false
-      loadsImagesAutomatically = true // 禁止加载图片
-      // blockNetworkImage = true
-      mediaPlaybackRequiresUserGesture = false
-
-      setAllowUniversalAccessFromFileURLs(true)
-      setAllowFileAccessFromFileURLs(true)
-    }
-  }
 
   /**
    * WebChromeClient 配置

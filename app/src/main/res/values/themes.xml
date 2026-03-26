@@ -25,6 +25,12 @@
         <item name="windowMinWidthMinor">100%</item>
     </style>
 
+    <style name="Theme.TipsDialog" parent="Theme.AppCompat.DayNight.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <style name="Theme.SimpleDialog" parent="Theme.AppCompat.DayNight.Dialog.MinWidth">
         <item name="android:windowBackground">#80FFFFFF</item>
         <item name="android:gravity">center</item>

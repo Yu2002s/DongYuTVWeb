@@ -26,7 +26,7 @@ class BootReceiver : BroadcastReceiver() {
     val action = intent.action
     Log.d(TAG, "Received broadcast: $action")
 
-    if (!SPKeyConstants.BOOT_AUTO_START.getRequired(true)) {
+    if (!SPKeyConstants.BOOT_AUTO_START.getRequired(false)) {
       Log.d(TAG, "Boot auto start disabled")
       return
     }

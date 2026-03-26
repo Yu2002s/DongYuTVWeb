@@ -95,6 +95,11 @@ class SPKeyConstants {
      * 滑动换台
      */
     const val SLIDE_SWITCH_CHANNEL = "slide_switch_channel"
+
+    /**
+     * 重命名APP提示
+     */
+    const val RENAME_APP_TIPS = "rename_app_tips"
   }
 
 }

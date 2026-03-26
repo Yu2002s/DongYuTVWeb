@@ -40,7 +40,8 @@ class SimpleLivePlayerFragment : BaseLivePlayerFragment() {
     Log.i(TAG, "${request.method} url: $url")
 
     val shouldIntercept = super.shouldInterceptRequest(url, request)
-    if (url.endsWith("dy-crypto-js.min.js")) {
+    // 网页已自动注入，这里不需要修改
+    /*if (url.endsWith("dy-crypto-js.min.js")) {
       // 注入 CRYPTO.JS
       return createJsResponse("js/lib/dy-crypto-js.min.js")
     } else if (url.endsWith("dy-http-util.js")) {
@@ -49,7 +50,7 @@ class SimpleLivePlayerFragment : BaseLivePlayerFragment() {
     } else if (url.endsWith("dy-hls.min.js")) {
       // 注入 HLS.JS
       return createJsResponse("js/lib/dy-hls.min.js")
-    }
+    }*/
 
     val referer = request.requestHeaders["X-Referer"]
     Log.i(TAG, "Referer: $referer")
