@@ -1,14 +1,17 @@
 package xyz.jdynb.tv.dialog
 
 import android.app.Dialog
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.view.KeyEvent
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.drake.engine.base.EngineDialog
 import com.drake.engine.utils.NetworkUtils
@@ -24,6 +27,7 @@ import xyz.jdynb.tv.constants.SPKeyConstants
 import xyz.jdynb.tv.databinding.DialogSettingBinding
 import xyz.jdynb.tv.ui.activity.WifiAdbActivity
 import xyz.jdynb.tv.utils.UpdateUtils
+import xyz.jdynb.tv.utils.showToast
 import kotlin.system.exitProcess
 
 class SettingDialog(context: Context, private val mainViewModel: MainViewModel? = null) :
@@ -43,19 +47,14 @@ class SettingDialog(context: Context, private val mainViewModel: MainViewModel? 
 
     binding.btnBack.requestFocus()
 
-    binding.swBoot.initSwitch(SPKeyConstants.BOOT_AUTO_START, false)
-    binding.swReverseDirection.initSwitch(SPKeyConstants.REVERSE_DIRECTION, false)
+
     binding.swHome.initSwitch(SPKeyConstants.HOME_DEFAULT_SEARCH, false) {
       Toast.makeText(context, "下次启动时生效", Toast.LENGTH_SHORT).show()
     }
     binding.swCctv.initSwitch(SPKeyConstants.CCTV_CHANNEL, false) {
       Toast.makeText(context, "需要重启软件才能生效", Toast.LENGTH_LONG).show()
     }
-    binding.swUpdate.initSwitch(SPKeyConstants.CHECK_UPDATE, true)
-    binding.swOkChannel.initSwitch(SPKeyConstants.OK_CHANNEL, true)
-
     binding.swSlideSwitchChannel.initSwitch(SPKeyConstants.SLIDE_SWITCH_CHANNEL, false)
-
     binding.tvIp.text = NetworkUtils.getIPAddress(true)
 
     binding.btnCheckUpdate.setOnClickListener {
@@ -71,7 +70,7 @@ class SettingDialog(context: Context, private val mainViewModel: MainViewModel? 
 
     binding.btnDonate.setOnClickListener {
       showImageDialog("file:///android_asset/images/qrcode.png")
-      Toast.makeText(context, "请扫码打开", Toast.LENGTH_SHORT).show()
+      Toast.makeText(context, "感谢你的支持！", Toast.LENGTH_SHORT).show()
     }
 
     binding.btnFeedback.setOnClickListener {
@@ -87,8 +86,22 @@ class SettingDialog(context: Context, private val mainViewModel: MainViewModel? 
       context.startActivity(Intent(context, WifiAdbActivity::class.java))
     }
 
+    binding.btnExit.isVisible = SPKeyConstants.SHOW_EXIT_BTN.getRequired<Boolean>(false)
     binding.btnExit.setOnClickListener {
       exitProcess(0)
+    }
+
+    binding.btnFaq.setOnClickListener {
+      FaqDialog(context).show()
+    }
+
+    binding.btnHelp.setOnClickListener {
+      showImageDialog("file:///android_asset/images/qrcode_help.png")
+    }
+
+    binding.btnMoreSetting.setOnClickListener {
+      dismiss()
+      FullSettingDialog(context).show()
     }
   }
 

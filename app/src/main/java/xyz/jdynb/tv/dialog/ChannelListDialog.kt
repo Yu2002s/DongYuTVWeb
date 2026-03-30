@@ -9,23 +9,29 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.drake.brv.annotaion.DividerOrientation
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.divider
 import com.drake.brv.utils.dividerSpace
+import com.drake.brv.utils.linear
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
 import com.drake.engine.base.EngineDialog
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import xyz.jdynb.tv.MainViewModel
 import xyz.jdynb.tv.R
+import xyz.jdynb.tv.constants.SPKeyConstants
 import xyz.jdynb.tv.databinding.DialogChannelListBinding
 import xyz.jdynb.tv.databinding.ItemListGroupBinding
 import xyz.jdynb.tv.model.LiveChannelTypeModel
 import xyz.jdynb.tv.model.LiveChannelModel
 import xyz.jdynb.tv.ui.activity.SearchActivity
+import xyz.jdynb.tv.utils.SpUtils.getRequired
 import xyz.jdynb.tv.utils.isTv
 
 class ChannelListDialog(
@@ -100,6 +106,10 @@ class ChannelListDialog(
   }
 
   override fun initView() {
+    if (SPKeyConstants.CHANNEL_SINGLE.getRequired<Boolean>(false)) {
+      binding.rvChannel.linear()
+    }
+
     binding.rvChannel.divider {
       setDivider(10)
       orientation = DividerOrientation.GRID
@@ -148,15 +158,27 @@ class ChannelListDialog(
             it.number == mainViewModel.currentChannelModel.value!!.number
           }
           if (checkedPosition == -1) {
-            return@onChecked
-          }
-          binding.rvChannel.bindingAdapter.setChecked(checkedPosition, true)
-
-          binding.rvChannel.post {
-            binding.rvChannel.scrollToPosition(checkedPosition)
-            if (window?.currentFocus == null) {
-              binding.rvChannel.getChildAt(checkedPosition)?.requestFocus()
+            binding.rvChannel.post {
+              binding.rvChannel.scrollToPosition(0)
             }
+          } else {
+            binding.rvChannel.bindingAdapter.setChecked(checkedPosition, true)
+
+            binding.rvChannel.post {
+              val layoutManager = binding.rvChannel.layoutManager
+              if (layoutManager is GridLayoutManager) {
+                layoutManager.scrollToPositionWithOffset(checkedPosition, 0)
+              } else if (layoutManager is LinearLayoutManager) {
+                layoutManager.scrollToPositionWithOffset(checkedPosition, 0)
+              }
+              if (window?.currentFocus == null) {
+                binding.rvChannel.getChildAt(checkedPosition)?.requestFocus()
+              }
+            }
+          }
+        } else {
+          binding.rvChannel.post {
+            binding.rvChannel.scrollToPosition(0)
           }
         }
       }

@@ -15,7 +15,7 @@
         android:id="@+id/item_name"
         android:padding="8dp"
         android:textSize="23sp"
-        android:textColor="@color/white"
+        android:textColor="@color/tv_select"
         android:background="@drawable/bg_select"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

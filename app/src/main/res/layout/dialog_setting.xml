@@ -34,6 +34,17 @@
                     android:layout_height="wrap_content"/>
 
                 <Button
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="退出软件"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/btn_exit"
+                    android:textSize="19sp"
+                    android:background="@drawable/bg_select"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <Button
                     android:textColor="@color/white"
                     android:layout_marginTop="10dp"
                     android:focusable="true"
@@ -43,32 +54,6 @@
                     android:text="WebView更新(播放问题)"
                     android:textAllCaps="false"
                     android:textSize="19sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:textColor="@color/white"
-                    android:layout_marginTop="10dp"
-                    android:focusable="true"
-                    android:padding="10dp"
-                    android:background="@drawable/bg_select"
-                    tools:checked="true"
-                    android:id="@+id/sw_reverse_direction"
-                    android:text="反转方向键"
-                    android:textSize="19sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:textColor="@color/white"
-                    android:layout_marginTop="10dp"
-                    android:focusable="true"
-                    android:padding="10dp"
-                    android:background="@drawable/bg_select"
-                    tools:checked="true"
-                    android:id="@+id/sw_boot"
-                    android:textSize="19sp"
-                    android:text="开机自启动"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
@@ -106,45 +91,8 @@
                     android:padding="10dp"
                     android:background="@drawable/bg_select"
                     tools:checked="true"
-                    android:id="@+id/sw_ok_channel"
-                    android:text="按OK键换台"
-                    android:textSize="19sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:textColor="@color/white"
-                    android:layout_marginTop="10dp"
-                    android:focusable="true"
-                    android:padding="10dp"
-                    android:background="@drawable/bg_select"
-                    tools:checked="true"
                     android:id="@+id/sw_slide_switch_channel"
                     android:text="滑动切台换源"
-                    android:textSize="19sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <Button
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:text="退出软件"
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/btn_exit"
-                    android:textSize="19sp"
-                    android:background="@drawable/bg_select"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:textColor="@color/white"
-                    android:layout_marginTop="10dp"
-                    android:focusable="true"
-                    android:padding="10dp"
-                    android:background="@drawable/bg_select"
-                    tools:checked="true"
-                    android:id="@+id/sw_update"
-                    android:text="自动检查更新"
                     android:textSize="19sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
@@ -186,6 +134,18 @@
                     android:layout_marginTop="10dp"
                     android:clickable="true"
                     android:focusable="true"
+                    android:text="更多设置"
+                    android:id="@+id/btn_more_setting"
+                    android:textSize="19sp"
+                    android:background="@drawable/bg_select"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+                <Button
+                    android:layout_marginTop="10dp"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:text="捐赠我"
                     android:id="@+id/btn_donate"
                     android:textSize="19sp"
@@ -197,8 +157,30 @@
                     android:layout_marginTop="10dp"
                     android:clickable="true"
                     android:focusable="true"
+                    android:text="常见问题解答"
+                    android:id="@+id/btn_faq"
+                    android:textSize="19sp"
+                    android:background="@drawable/bg_select"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <Button
+                    android:layout_marginTop="10dp"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:text="问题反馈"
                     android:id="@+id/btn_feedback"
+                    android:textSize="19sp"
+                    android:background="@drawable/bg_select"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <Button
+                    android:layout_marginTop="10dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="使用帮助"
+                    android:id="@+id/btn_help"
                     android:textSize="19sp"
                     android:background="@drawable/bg_select"
                     android:layout_width="match_parent"

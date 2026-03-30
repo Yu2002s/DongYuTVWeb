@@ -6,7 +6,7 @@ import xyz.jdynb.tv.BR
 
 data class AdbConnectModel(
   var host: String = "192.168.",
-  var port: String = "",
+  var port: String = "5555",
   var code: String = "",
 ): BaseObservable() {
 

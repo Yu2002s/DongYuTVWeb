@@ -2,7 +2,9 @@ package xyz.jdynb.tv.utils
 
 import android.content.Intent
 import android.util.Log
+import com.drake.engine.utils.AppUtils
 import com.drake.engine.utils.EncryptUtil
+import com.drake.engine.utils.ScreenUtils
 import io.nerdythings.okhttp.profiler.OkHttpProfilerInterceptor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -59,6 +61,8 @@ object NetworkUtils {
         )
         .addHeader("Accept", "*/*")
         .addHeader("Accept-Language", "zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7")
+        .addHeader("Version", AppUtils.getAppVersionCode().toString())
+        .addHeader("Tablet", ScreenUtils.isTablet().toString())
         .build()
 
       chan.proceed(request)

@@ -100,6 +100,20 @@ class SPKeyConstants {
      * 重命名APP提示
      */
     const val RENAME_APP_TIPS = "rename_app_tips"
+    /**
+     * 单频道模式
+     */
+    const val CHANNEL_SINGLE = "channel_single"
+
+    /**
+     * 是否显示退出按钮
+     */
+    const val SHOW_EXIT_BTN = "show_exit_btn"
+
+    /**
+     * 是否允许设置为首页
+     */
+    const val ALLOW_SET_HOME = "allow_set_home"
   }
 
 }

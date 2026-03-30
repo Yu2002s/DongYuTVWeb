@@ -77,7 +77,7 @@ class SimpleLivePlayerFragment : BaseLivePlayerFragment() {
     val extension = urlObj.path?.substringAfterLast(".") ?: return shouldIntercept
     val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
 
-    request.requestHeaders.put("Referer", (referer ?: (urlObj.scheme + "://" + urlObj.host + "/")))
+    request.requestHeaders["Referer"] = (referer ?: (urlObj.scheme + "://" + urlObj.host + "/"))
 
     Log.i(TAG, "headers: ${request.requestHeaders}")
 

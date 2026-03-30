@@ -33,7 +33,7 @@ class CrashActivity : EngineToolbarActivity<ActivityCrashBinding>(R.layout.activ
 
     @JvmStatic
     fun actionStart(log: String) {
-      DongYuTVApplication.Companion.context.startActivity(
+      DongYuTVApplication.context.startActivity(
         Intent(
           DongYuTVApplication.Companion.context,
           CrashActivity::class.java

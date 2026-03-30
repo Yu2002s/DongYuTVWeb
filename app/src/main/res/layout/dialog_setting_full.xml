@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:clickable="true"
+                android:focusable="true"
+                android:text="关闭"
+                android:id="@+id/btn_close"
+                android:textSize="19sp"
+                android:background="@drawable/bg_select"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:textColor="@color/white"
+                android:layout_marginTop="10dp"
+                android:focusable="true"
+                android:padding="10dp"
+                android:background="@drawable/bg_select"
+                tools:checked="true"
+                android:id="@+id/sw_reverse_direction"
+                android:text="反转方向键"
+                android:textSize="19sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:textColor="@color/white"
+                android:layout_marginTop="10dp"
+                android:focusable="true"
+                android:padding="10dp"
+                android:background="@drawable/bg_select"
+                tools:checked="true"
+                android:id="@+id/sw_boot"
+                android:textSize="19sp"
+                android:text="开机自启动"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:textColor="@color/white"
+                android:layout_marginTop="10dp"
+                android:focusable="true"
+                android:padding="10dp"
+                android:background="@drawable/bg_select"
+                tools:checked="true"
+                android:id="@+id/sw_ok_channel"
+                android:text="按OK键换台"
+                android:textSize="19sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:textColor="@color/white"
+                android:layout_marginTop="10dp"
+                android:focusable="true"
+                android:padding="10dp"
+                android:background="@drawable/bg_select"
+                tools:checked="true"
+                android:id="@+id/sw_channel_single"
+                android:text="频道显示单列"
+                android:textSize="19sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:textColor="@color/white"
+                android:layout_marginTop="10dp"
+                android:focusable="true"
+                android:padding="10dp"
+                android:background="@drawable/bg_select"
+                tools:checked="true"
+                android:id="@+id/sw_show_exit"
+                android:text="显示退出按钮"
+                android:textSize="19sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:textColor="@color/white"
+                android:layout_marginTop="10dp"
+                android:focusable="true"
+                android:padding="10dp"
+                android:background="@drawable/bg_select"
+                tools:checked="true"
+                android:id="@+id/sw_update"
+                android:text="自动检查更新"
+                android:textSize="19sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:visibility="gone"
+                android:textColor="@color/white"
+                android:layout_marginTop="10dp"
+                android:focusable="true"
+                android:padding="10dp"
+                android:background="@drawable/bg_select"
+                tools:checked="true"
+                android:id="@+id/sw_home"
+                android:text="允许设置为桌面"
+                android:textSize="19sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+</layout>

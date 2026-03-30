@@ -1,9 +1,11 @@
 package xyz.jdynb.tv.ui.activity
 
 import android.content.BroadcastReceiver
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.util.Log
 import android.view.View
@@ -120,7 +122,7 @@ class SearchActivity : EngineActivity<ActivitySearchBinding>(R.layout.activity_s
       includeVisible = true
       orientation = DividerOrientation.GRID
     }.setup {
-      addType<String>(R.layout.item_list_suggest)
+      addType<String>(R.layout.item_list_title)
 
       R.id.item_name.onClick {
         SearchListActivity.actionStart(this@SearchActivity, getModel())

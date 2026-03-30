@@ -1,53 +1,44 @@
 package xyz.jdynb.tv
 
-import android.animation.FloatEvaluator
-import android.animation.ObjectAnimator
-import android.view.animation.AccelerateInterpolator
-import android.view.animation.DecelerateInterpolator
-import android.view.animation.OvershootInterpolator
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.media.AudioManager
 import android.net.ConnectivityManager
+import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import android.net.wifi.WifiManager
 import android.os.PowerManager
 import android.util.Log
-import android.view.Gravity
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.OvershootInterpolator
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.core.animation.addListener
-import androidx.core.animation.doOnEnd
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.drake.engine.base.EngineActivity
+import com.drake.engine.utils.NetworkUtils
 import kotlinx.coroutines.launch
+import xyz.jdynb.tv.constants.SPKeyConstants
 import xyz.jdynb.tv.databinding.ActivityMainBinding
 import xyz.jdynb.tv.dialog.ChannelListDialog
-import xyz.jdynb.tv.ui.fragment.LivePlayerFragment
-import kotlin.system.exitProcess
-import androidx.core.view.WindowInsetsControllerCompat
-import com.drake.engine.utils.NetworkUtils
-import kotlinx.coroutines.flow.MutableStateFlow
-import xyz.jdynb.tv.utils.SpUtils.getRequired
-import xyz.jdynb.tv.constants.SPKeyConstants
 import xyz.jdynb.tv.dialog.ChannelSourceDialog
 import xyz.jdynb.tv.dialog.SettingDialog
-import xyz.jdynb.tv.dialog.TipsDialog
-import xyz.jdynb.tv.model.TipsModel
-import xyz.jdynb.tv.model.response.main
 import xyz.jdynb.tv.ui.activity.SearchActivity
-import xyz.jdynb.tv.utils.SpUtils.put
+import xyz.jdynb.tv.ui.fragment.LivePlayerFragment
+import xyz.jdynb.tv.utils.SpUtils.getRequired
 import xyz.jdynb.tv.utils.UpdateUtils
+import kotlin.system.exitProcess
 
 class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main) {
 
@@ -159,6 +150,8 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
   override fun initView() {
     binding.m = mainViewModel
     binding.lifecycleOwner = this
+
+    binding.btnExit.isVisible = SPKeyConstants.SHOW_EXIT_BTN.getRequired<Boolean>(false)
 
     channelListDialog = ChannelListDialog(this, mainViewModel)
     channelListDialog.onRefreshListener = {
@@ -316,6 +309,10 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
       // 换源
       R.id.btn_change_source -> {
         chooseLiveSource()
+      }
+
+      R.id.btn_exit -> {
+        handleBackPress()
       }
     }
   }
@@ -531,17 +528,10 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
       .start()
   }
 
-  override fun onBackPressed() {
-    if (handleBackPress()) {
-      super.onBackPressed()
-    }
-  }
-
   /**
    * 事件分发时就拦截，避免事件被 webview 拦截
    */
   override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-    Log.i(TAG, "dispatchKeyEvent: ${event.keyCode}")
     val keyCode = event.keyCode
     val action = event.action
     if (action != KeyEvent.ACTION_DOWN) {
@@ -621,7 +611,7 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
       }
 
       // 返回
-      /*KeyEvent.KEYCODE_BACK,*/ KeyEvent.KEYCODE_ESCAPE -> {
+      KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_ESCAPE -> {
       handleBackPress()
     }
 
@@ -705,9 +695,15 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
         lastBackTime = System.currentTimeMillis()
         Toast.makeText(this, "再按一次返回键退出", Toast.LENGTH_SHORT).show()
         return false
+      } else {
+        finish()
       }
     }
     return true
+  }
+
+  override fun onBackPressed() {
+    // 关闭默认的返回关闭
   }
 
   override fun onDestroy() {

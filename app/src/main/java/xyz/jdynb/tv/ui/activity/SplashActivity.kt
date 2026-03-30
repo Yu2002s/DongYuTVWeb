@@ -1,10 +1,13 @@
 package xyz.jdynb.tv.ui.activity
 
 import android.annotation.SuppressLint
+import android.content.ComponentName
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Handler
 import android.util.Log
+import android.view.Gravity
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
@@ -19,8 +22,11 @@ import xyz.jdynb.tv.MainActivity
 import xyz.jdynb.tv.R
 import xyz.jdynb.tv.constants.SPKeyConstants
 import xyz.jdynb.tv.databinding.ActivitySplashBinding
+import xyz.jdynb.tv.dialog.TipsDialog
+import xyz.jdynb.tv.model.TipsModel
 import xyz.jdynb.tv.utils.SpUtils.getRequired
 import xyz.jdynb.tv.utils.SpUtils.put
+import xyz.jdynb.tv.utils.WebViewUtils
 import xyz.jdynb.tv.utils.X5Utils
 
 class SplashActivity : EngineActivity<ActivitySplashBinding>(R.layout.activity_splash) {
@@ -29,10 +35,10 @@ class SplashActivity : EngineActivity<ActivitySplashBinding>(R.layout.activity_s
   override fun init() {
     super.init()
 
-   /* finish()
-    startActivity(Intent(this, WebVideoActivity::class.java))
+    /* finish()
+     startActivity(Intent(this, WebVideoActivity::class.java))
 
-    return*/
+     return*/
     val isInstallX5 = SPKeyConstants.IS_INSTALL_X5.getRequired(false)
 
     val flavor = BuildConfig.FLAVOR
@@ -69,6 +75,9 @@ class SplashActivity : EngineActivity<ActivitySplashBinding>(R.layout.activity_s
         })
       } else {
         Timber.i("直接进入...")
+        if (WebViewUtils.getWebViewVersionNumber() < 85) {
+          Toast.makeText(this, "如果无法播放请前往设置更新WebView", Toast.LENGTH_LONG).show()
+        }
         enterHome()
       }
       return

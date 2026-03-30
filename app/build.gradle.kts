@@ -34,8 +34,8 @@ android {
     minSdk = 21
     //noinspection ExpiredTargetSdkVersion
     targetSdk = 28
-    versionCode = 20
-    versionName = "1.0.13"
+    versionCode = 22
+    versionName = "1.0.15"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     signingConfig = signingConfigs.getByName("debug")
@@ -92,8 +92,8 @@ android {
 
   /*splits {
     abi {
-      isEnable = true // 开启不同cpu apk 拆分
-      reset() // 重置默认的cpu平台
+      isEnable = true // 开启不同 cpu apk 拆分
+      reset() // 重置默认的 cpu 平台
       include("armeabi-v7a", "arm64-v8a", "armeabi") // 只打包 v8、v7两种架构的安装包
       isUniversalApk = true // 全量包
     }
@@ -109,10 +109,29 @@ android {
       val createTime = SimpleDateFormat("yyyyMMdd_HHmm").format(Date())
       val abiName = getFilter(FilterConfiguration.FilterType.ABI.name) ?: "all"
 
-      val newName = "app_${flavorNameStr}_${buildType.name}_v${versionName}_${createTime}_$abiName.apk"
+      val newName =
+        "app_${flavorNameStr}_${buildType.name}_v${versionName}_${createTime}_$abiName.apk"
       outputFileName = newName
       println("配置 APK 文件名: $newName")
     }
+  }
+}
+
+// 创建自定义任务，同时打包所有 release 变体
+tasks.register("assembleAllRelease") {
+  group = "build"
+  description = "Assemble all release variants (arm32, arm64, webview)"
+
+  dependsOn(
+    "assembleArm32Release",
+    "assembleArm64Release",
+    "assembleWebviewRelease"
+  )
+
+  doLast {
+    println("\n========================================")
+    println("✓ 所有 Release 变体打包完成！")
+    println("========================================\n")
   }
 }
 

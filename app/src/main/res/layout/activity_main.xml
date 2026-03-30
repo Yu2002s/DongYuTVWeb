@@ -7,6 +7,7 @@
     <data>
 
         <import type="android.view.View" />
+
         <import type="com.drake.engine.databinding.DataBindingComponent" />
 
         <variable
@@ -16,9 +17,9 @@
     </data>
 
     <FrameLayout
-        android:keepScreenOn="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:keepScreenOn="true">
 
         <FrameLayout
             android:id="@+id/fragment"
@@ -27,139 +28,152 @@
 
         <LinearLayout
             gone="@{m.showCurrentChannel &amp;&amp; m.currentChannelModel.number > 0}"
-            android:padding="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|top"
             android:background="#90000000"
             android:orientation="vertical"
-            android:layout_gravity="end|top"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:padding="30dp">
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:textSize="30sp"
-                tools:text="12"
                 android:text="@{String.valueOf(m.currentChannelModel.number)}"
                 android:textColor="@color/white"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:textSize="30sp"
+                tools:text="12" />
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:text="@{m.currentChannelModel.channelName}"
                 android:textColor="@color/white"
                 android:textSize="30sp"
                 android:textStyle="bold"
-                android:text="@{m.currentChannelModel.channelName}"
-                tools:text="CCTV-1"
-                android:layout_marginTop="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                tools:text="CCTV-1" />
 
             <TextView
-                android:layout_gravity="end"
-                tools:text="江西"
-                android:layout_marginTop="8dp"
-                android:textSize="19sp"
-                android:textColor="@color/white"
-                android:text="@{m.currentChannelType + ` - ` + m.currentChannelModel.showDesc}"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="8dp"
+                android:text="@{m.currentChannelType + ` - ` + m.currentChannelModel.showDesc}"
+                android:textColor="@color/white"
+                android:textSize="19sp"
+                tools:text="江西" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:translationZ="10dp"
-            gone="@{m.showActions}"
             android:id="@+id/btn_action"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="40dp"
-            android:orientation="horizontal"
+            gone="@{m.showActions}"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:translationZ="10dp">
 
             <Button
-                android:elevation="10dp"
-                android:textStyle="bold"
-                android:background="@drawable/bg_select"
+                android:id="@+id/btn_exit"
                 hit="@{true}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_select"
+                android:elevation="10dp"
+                android:text="退出"
+                android:textColor="@android:color/holo_red_light"
                 android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <Button
                 android:id="@+id/btn_menu"
+                hit="@{true}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/bg_select"
+                android:elevation="10dp"
                 android:text="菜单"
                 android:textColor="@android:color/holo_red_light"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:textSize="17sp"
+                android:textStyle="bold" />
 
             <Button
-                android:elevation="10dp"
-                android:textStyle="bold"
-                android:background="@drawable/bg_select"
-                hit="@{true}"
-                android:layout_marginStart="10dp"
-                android:textColor="@android:color/holo_red_light"
-                android:textSize="17sp"
                 android:id="@+id/btn_change_source"
+                hit="@{true}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/bg_select"
+                android:elevation="10dp"
                 android:text="换源"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <Button
-                android:elevation="10dp"
-                android:textStyle="bold"
-                android:background="@drawable/bg_select"
-                hit="@{true}"
-                android:layout_marginStart="10dp"
                 android:textColor="@android:color/holo_red_light"
                 android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <Button
                 android:id="@+id/btn_refresh"
-                android:text="刷新"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <Button
-                android:textStyle="bold"
-                android:elevation="10dp"
-                android:background="@drawable/bg_select"
                 hit="@{true}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
+                android:background="@drawable/bg_select"
+                android:elevation="10dp"
+                android:text="刷新"
                 android:textColor="@android:color/holo_red_light"
                 android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <Button
                 android:id="@+id/btn_search"
-                android:text="搜索"
+                hit="@{true}"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/bg_select"
+                android:elevation="10dp"
+                android:text="搜索"
+                android:textColor="@android:color/holo_red_light"
+                android:textSize="17sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
         <Button
-            android:elevation="10dp"
-            android:textStyle="bold"
-            android:translationZ="10dp"
+            android:id="@+id/btn_left"
             gone="@{m.showActions}"
             hit="@{true}"
-            android:layout_marginStart="50dp"
-            android:layout_gravity="start|center_vertical"
-            android:textSize="17sp"
-            android:id="@+id/btn_left"
-            android:background="@drawable/bg_circle"
-            android:textColor="@android:color/holo_red_light"
-            android:text="上"
             android:layout_width="80dp"
-            android:layout_height="80dp" />
+            android:layout_height="80dp"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="50dp"
+            android:background="@drawable/bg_circle"
+            android:elevation="10dp"
+            android:text="上"
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:translationZ="10dp" />
 
         <Button
-            android:elevation="10dp"
-            android:textStyle="bold"
-            android:background="@drawable/bg_circle"
-            android:translationZ="10dp"
-            gone="@{m.showActions}"
-            android:layout_marginEnd="50dp"
-            android:layout_gravity="center_vertical|end"
-            android:textSize="17sp"
-            hit="@{true}"
-            android:textColor="@android:color/holo_red_light"
             android:id="@+id/btn_right"
-            android:text="下"
+            gone="@{m.showActions}"
+            hit="@{true}"
             android:layout_width="80dp"
-            android:layout_height="80dp"/>
+            android:layout_height="80dp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginEnd="50dp"
+            android:background="@drawable/bg_circle"
+            android:elevation="10dp"
+            android:text="下"
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:translationZ="10dp" />
 
     </FrameLayout>
 

@@ -582,11 +582,11 @@
           "number": 22
         },
         {
-          "channelName": "CGTN法语频道",
-          "pid": "600084704",
-          "tvLogo": "https://resources.yangshipin.cn/assets/oms/image/202306/a8d0046a47433d952bf6ed17062deb8bd2184ba9aec0f7781df6bf9487a3ffcf.png?imageMogr2/format/webp",
-          "streamId": "2024181801",
-          "number": 23
+          "channelName": "CCTV5+",
+          "args": {
+            "pid": "600001817",
+            "streamId": "2024078001"
+          }
         },
         {
           "channelName": "CGTN俄语频道",

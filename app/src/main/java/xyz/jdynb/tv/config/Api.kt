@@ -4,7 +4,7 @@ import xyz.jdynb.tv.BuildConfig
 
 object Api {
 
-  val BASE_URL: String = if (/*!BuildConfig.DEBUG*/true) {
+  val BASE_URL: String = if (!BuildConfig.DEBUG) {
     // "http://tv.jdynb.xyz"
     "http://tv.jdynb.xyz"
   } else {
@@ -39,4 +39,6 @@ object Api {
   const val APP_CRASH = "/app/crash/add"
 
   const val WEBVIEW_LIST = "/webview/list"
+
+  const val APP_FAQ_LIST = "/app/faq/list"
 }
