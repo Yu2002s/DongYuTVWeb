@@ -65,7 +65,9 @@
         "init": [
           "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/common/play.js"
         ],
-        "play": [],
+        "play": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/common/play.js"
+        ],
         "resume_pause": []
       }
     },
