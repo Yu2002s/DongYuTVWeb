@@ -329,6 +329,18 @@
           "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/guizhou/play.js"
         ]
       }
+    },
+    {
+      "id": "ningbo",
+      "name": "simple",
+      "script": {
+        "init": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/ningbo/init.js"
+        ],
+        "play": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/ningbo/play.js"
+        ]
+      }
     }
   ],
   // 播放频道列表
@@ -2597,6 +2609,38 @@
           "desc": "四川夹江",
           "args": {
             "liveUrl": "https://tvfile.jjrm.org.cn/nmip-media/channellive/channel106282/playlist.m3u8"
+          }
+        },
+        {
+          "player": "ningbo",
+          "channelName": "NBTV-1",
+          "desc": "宁波",
+          "args": {
+            "id": "nbtv1_md"
+          }
+        },
+        {
+          "player": "ningbo",
+          "channelName": "NBTV-2",
+          "desc": "宁波",
+          "args": {
+            "id": "nbtv2_md"
+          }
+        },
+        {
+          "player": "ningbo",
+          "channelName": "NBTV-3",
+          "desc": "宁波",
+          "args": {
+            "id": "nbtv3_md"
+          }
+        },
+        {
+          "player": "ningbo",
+          "channelName": "NBTV-4",
+          "desc": "宁波",
+          "args": {
+            "id": "nbtv4_md"
           }
         }
       ]
