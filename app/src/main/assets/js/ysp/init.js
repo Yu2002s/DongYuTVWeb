@@ -1,21 +1,3 @@
-function addVideoListener() {
-    const video = document.querySelector('video')
-    if (video) {
-        video.addEventListener('playing', function() {
-            if (typeof JSBridge !== 'undefined' && JSBridge.hideLoading) {
-                JSBridge.hideLoading()
-            }
-        })
-
-        return
-    }
-    setTimeout(() => {
-        addVideoListener()
-    }, 20)
-}
-
-addVideoListener()
-
 async function initLivePlayer() {
     let live = window.livePlayerInstance
     let flag = true
@@ -111,6 +93,9 @@ async function clear() {
             // live.videoConfig.pid = '{{pid}}'
             // live.videoConfig.vid = '{{streamId}}'
             console.log('init videoConfig: pid=' + live.videoConfig.pid + "vid=" + live.videoConfig.vid)
+        }
+        if (typeof JSBridge !== 'undefined' && JSBridge.hideLoading) {
+            JSBridge.hideLoading()
         }
         console.log('player:' + player)
         player.style.position = 'fixed'
