@@ -12,12 +12,10 @@
             const video = videoDiv.querySelector('video')
             if (video) {
                 video.play()
-                 video.addEventListener('playing', function() {
-                    if (typeof JSBridge !== 'undefined' && JSBridge.hideLoading) {
-                        JSBridge.hideLoading()
-                    }
-                })
             }
+            if (typeof JSBridge !== 'undefined' && JSBridge.hideLoading) {
+                 JSBridge.hideLoading()
+             }
             return
         }
 
