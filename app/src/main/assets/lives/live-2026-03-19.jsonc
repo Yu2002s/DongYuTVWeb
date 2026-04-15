@@ -1078,13 +1078,6 @@
                 "pid": "600002475",
                 "streamId": "2024054803"
               }
-            },
-            {
-              "channelName": "湖南卫视",
-              "player": "hunan",
-              "args": {
-                "id": "287"
-              }
             }
           ]
         },
@@ -2274,14 +2267,16 @@
       "channelList": [
         {
           "channelName": "湖南卫视",
+          "player": "ysp",
           "args": {
-            "id": "287"
+            "pid": "600002475",
+            "streamId": "2024054803"
           }
         },
         {
           "channelName": "金鹰卡通",
           "args": {
-            "id": "267"
+            "id": "287"
           }
         },
         {
