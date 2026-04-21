@@ -377,6 +377,18 @@
           "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/haerbin/play.js"
         ]
       }
+    },
+    {
+      "id": "guangzhou",
+      "name": "simple",
+      "script": {
+        "init": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/guangzhou/init.js"
+        ],
+        "play": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/guangzhou/play.js"
+        ]
+      }
     }
   ],
   // 播放频道列表
@@ -2845,6 +2857,21 @@
           "args": {
             "id": "254"
           }
+        },
+        {
+          "player": "guangzhou",
+          "channelName": "综合频道",
+          "desc": "广东广州"
+        },
+        {
+          "player": "guangzhou",
+          "channelName": "新闻频道",
+          "desc": "广东广州"
+        },
+        {
+          "player": "guangzhou",
+          "channelName": "4K南国都市频道",
+          "desc": "广东广州"
         }
       ]
     },
