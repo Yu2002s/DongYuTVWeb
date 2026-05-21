@@ -90,7 +90,7 @@
 
         <LinearLayout
             android:id="@+id/btn_action"
-            gone="@{m.showActions}"
+            gone="@{m.showActions &amp;&amp; !m.lockMode}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
@@ -166,7 +166,7 @@
 
         <Button
             android:id="@+id/btn_left"
-            gone="@{m.showActions}"
+            gone="@{m.showActions &amp;&amp; !m.lockMode}"
             hit="@{true}"
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -182,7 +182,7 @@
 
         <Button
             android:id="@+id/btn_right"
-            gone="@{m.showActions}"
+            gone="@{m.showActions &amp;&amp; !m.lockMode}"
             hit="@{true}"
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -195,6 +195,18 @@
             android:textSize="17sp"
             android:textStyle="bold"
             android:translationZ="10dp" />
+
+        <ImageButton
+            gone="@{m.showActions}"
+            hit="@{true}"
+            selected="@{m.lockMode}"
+            android:id="@+id/btn_lock"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bg_select"
+            android:src="@drawable/lock"
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
 
     </FrameLayout>
 

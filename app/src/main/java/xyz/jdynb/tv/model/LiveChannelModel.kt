@@ -79,6 +79,11 @@ data class LiveChannelModel(
   val showDesc: String get() = desc ?: ""
 
   /**
+   * 收藏
+   */
+  var isFavorite: Boolean = false
+
+  /**
    * 选中状态
    */
   @get:Bindable

@@ -1,10 +1,7 @@
 package xyz.jdynb.tv.ui.dialog
 
-import android.content.ActivityNotFoundException
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.provider.Settings
 import android.widget.Toast
 import androidx.appcompat.widget.SwitchCompat
 import com.drake.engine.base.EngineDialog
@@ -13,7 +10,6 @@ import xyz.jdynb.tv.constants.SPKeyConstants
 import xyz.jdynb.tv.databinding.DialogSettingFullBinding
 import xyz.jdynb.tv.utils.SpUtils.getRequired
 import xyz.jdynb.tv.utils.SpUtils.put
-import xyz.jdynb.tv.utils.showToast
 
 class FullSettingDialog(context: Context): EngineDialog<DialogSettingFullBinding>(context, R.style.Theme_BaseDialog) {
 

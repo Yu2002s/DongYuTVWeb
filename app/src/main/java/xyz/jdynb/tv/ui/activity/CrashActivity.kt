@@ -35,7 +35,7 @@ class CrashActivity : EngineToolbarActivity<ActivityCrashBinding>(R.layout.activ
     fun actionStart(log: String) {
       DongYuTVApplication.context.startActivity(
         Intent(
-          DongYuTVApplication.Companion.context,
+          DongYuTVApplication.context,
           CrashActivity::class.java
         ).apply {
           addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

@@ -29,8 +29,10 @@ import xyz.jdynb.tv.databinding.DialogChannelListBinding
 import xyz.jdynb.tv.databinding.ItemListGroupBinding
 import xyz.jdynb.tv.model.LiveChannelTypeModel
 import xyz.jdynb.tv.model.LiveChannelModel
+import xyz.jdynb.tv.model.response.main
 import xyz.jdynb.tv.ui.activity.SearchActivity
 import xyz.jdynb.tv.utils.SpUtils.getRequired
+import xyz.jdynb.tv.utils.SpUtils.put
 import xyz.jdynb.tv.utils.isTv
 
 class ChannelListDialog(
@@ -150,7 +152,11 @@ class ChannelListDialog(
       R.id.tv_channel.onClick {
         val model = getModel<LiveChannelModel>()
         setChecked(modelPosition, true)
+
+        mainViewModel.favoriteMode(mainViewModel.hasFavoriteChannelList)
+
         mainViewModel.changeCurrentIndex(model)
+
         dismiss()
       }
 

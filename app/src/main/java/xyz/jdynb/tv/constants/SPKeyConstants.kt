@@ -130,6 +130,16 @@ class SPKeyConstants {
      * @see xyz.jdynb.tv.model.LiveModel
      */
     const val CHANNEL_CONFIG_URL = "channel_url"
+
+    /**
+     * 是否开启锁定模式
+     */
+    const val LOCK_MODE = "lock_mode"
+
+    /**
+     * 是否开启收藏模式
+     */
+    const val FAVORITE_MODE = "favorite_mode"
   }
 
 }

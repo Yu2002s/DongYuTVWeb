@@ -6,7 +6,6 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -15,15 +14,11 @@ import android.util.Log
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.view.marginEnd
 import com.bumptech.glide.Glide
-import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.dividerSpace
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
 import com.drake.engine.base.EngineDialog
-import com.drake.engine.base.app
-import com.drake.engine.dialog.setMaxWidth
 import com.drake.engine.utils.AppUtils
 import com.tencent.smtt.sdk.QbSdk
 import kotlinx.coroutines.CoroutineScope
@@ -37,12 +32,10 @@ import xyz.jdynb.tv.config.Api
 import xyz.jdynb.tv.constants.SPKeyConstants
 import xyz.jdynb.tv.databinding.DialogX5DebugBinding
 import xyz.jdynb.tv.model.WebViewCoreModel
-import xyz.jdynb.tv.ui.activity.WebViewUpdateActivity
+import xyz.jdynb.tv.ui.activity.X5WebViewDebugActivity
 import xyz.jdynb.tv.utils.NetworkUtils
 import xyz.jdynb.tv.utils.X5Utils
 import java.io.File
-import kotlin.math.max
-import kotlin.math.min
 import androidx.core.graphics.drawable.toDrawable
 
 class X5DebugDialog(context: Context) :
@@ -190,7 +183,7 @@ class X5DebugDialog(context: Context) :
     }
 
     binding.btnX5.setOnClickListener {
-      context.startActivity(Intent(context, WebViewUpdateActivity::class.java))
+      context.startActivity(Intent(context, X5WebViewDebugActivity::class.java))
     }
 
     binding.btnX5.requestFocus()

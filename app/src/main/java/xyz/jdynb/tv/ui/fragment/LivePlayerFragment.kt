@@ -257,8 +257,6 @@ abstract class LivePlayerFragment : Fragment(), Playable {
     }
   }
 
-
-
   /**
    * WebChromeClient 配置
    */

@@ -53,12 +53,11 @@ class SearchActivity : EngineActivity<ActivitySearchBinding>(R.layout.activity_s
   override fun initData() {
     lifecycleScope.launch {
       NetworkUtils.requestSuspendResult<Unit>("/user/checkLogin")
-      Log.i(TAG, "isUserAuthorized: ${isUserAuthorized.get()}")
     }
 
     if (SPKeyConstants.CHECK_UPDATE.getRequired<Boolean>(true)) {
       lifecycleScope.launch {
-        UpdateUtils.checkUpdate(this@SearchActivity, false)
+        UpdateUtils.checkUpdate(this@SearchActivity, false, false)
       }
     }
   }
@@ -79,7 +78,6 @@ class SearchActivity : EngineActivity<ActivitySearchBinding>(R.layout.activity_s
         )
           .onFailure {
             binding.state.showError(it)
-            Log.e("SearchActivity", "Error fetching search suggestions", it)
           }
           .getOrNull()
       binding.state.showContent()

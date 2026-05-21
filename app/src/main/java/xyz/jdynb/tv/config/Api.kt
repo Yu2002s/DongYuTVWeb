@@ -35,9 +35,23 @@ object Api {
    */
   const val CHECK_UPDATE = "/update/check"
 
+  /**
+   * App崩溃记录
+   */
   const val APP_CRASH = "/app/crash/add"
 
+  /**
+   * webview 列表
+   */
   const val WEBVIEW_LIST = "/webview/list"
 
+  /**
+   * App FAQ 列表
+   */
   const val APP_FAQ_LIST = "/app/faq/list"
+
+  /**
+   * 频道列表
+   */
+  const val CHANNEL_LIST = "/movies/live/channel/list"
 }

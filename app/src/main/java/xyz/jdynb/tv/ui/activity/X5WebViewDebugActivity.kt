@@ -16,7 +16,7 @@ import com.tencent.smtt.sdk.WebViewClient
 import xyz.jdynb.tv.R
 import xyz.jdynb.tv.databinding.ActivityWebUpdateBinding
 
-class WebViewUpdateActivity: EngineActivity<ActivityWebUpdateBinding>(R.layout.activity_web_update) {
+class X5WebViewDebugActivity: EngineActivity<ActivityWebUpdateBinding>(R.layout.activity_web_update) {
   override fun initData() {
 
   }

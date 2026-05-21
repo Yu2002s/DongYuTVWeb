@@ -1,28 +1,14 @@
 package xyz.jdynb.tv.ui.fragment
 
-import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.webkit.JavascriptInterface
 import android.webkit.MimeTypeMap
-import android.widget.Toast
 import androidx.core.net.toUri
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest
 import com.tencent.smtt.export.external.interfaces.WebResourceResponse
-import org.json.JSONArray
-import org.json.JSONException
-import org.json.JSONObject
 import timber.log.Timber
 import xyz.jdynb.tv.BuildConfig
 import xyz.jdynb.tv.model.LiveChannelModel
 import xyz.jdynb.tv.utils.NetworkUtils.inputStream
 import xyz.jdynb.tv.utils.SpUtils.remove
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
-import java.nio.charset.StandardCharsets
-import java.util.Locale
 import kotlin.random.Random
 
 class SimpleLivePlayerFragment : BaseLivePlayerFragment() {

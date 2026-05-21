@@ -35,6 +35,7 @@ import xyz.jdynb.tv.ui.fragment.LivePlayerFragment
 import xyz.jdynb.tv.utils.SlideTouchHelper
 import xyz.jdynb.tv.utils.SpUtils.getRequired
 import xyz.jdynb.tv.utils.UpdateUtils
+import xyz.jdynb.tv.utils.showToast
 
 /**
  * 主页面
@@ -118,9 +119,6 @@ class MainActivity : BaseKeyEventActivity<ActivityMainBinding>(R.layout.activity
     super.init()
     // 初始化窗口
     initWindow()
-
-    // 获取当前网络连接状态
-    isNetworkConnected = NetworkUtils.isConnected()
 
     // 检查网络连接状态
     checkNetworkConnection()
@@ -269,6 +267,12 @@ class MainActivity : BaseKeyEventActivity<ActivityMainBinding>(R.layout.activity
     channelListDialog.onSwitchSourceListener = {
       chooseLiveSource()
     }
+
+    binding.btnLock.setOnLongClickListener {
+      mainViewModel.unLock()
+      "已解除锁定".showToast()
+      true
+    }
   }
 
   override fun initData() {
@@ -322,7 +326,7 @@ class MainActivity : BaseKeyEventActivity<ActivityMainBinding>(R.layout.activity
   /**
    * 选择直播源
    */
-  fun chooseLiveSource() {
+  private fun chooseLiveSource() {
     val currentChannelModel = mainViewModel.currentChannelModel.value
     if (currentChannelModel == null) {
       Toast.makeText(this, "请等待初始化之后操作", Toast.LENGTH_SHORT).show()
@@ -377,46 +381,37 @@ class MainActivity : BaseKeyEventActivity<ActivityMainBinding>(R.layout.activity
       }
 
       // 左
-      R.id.btn_left -> {
-        if (SPKeyConstants.REVERSE_DIRECTION.getRequired(false)) {
-          mainViewModel.down()
-        } else {
-          mainViewModel.up()
-        }
-      }
+      R.id.btn_left -> mainViewModel.downOrUp()
 
       // 右
-      R.id.btn_right -> {
-        if (SPKeyConstants.REVERSE_DIRECTION.getRequired(false)) {
-          mainViewModel.up()
-        } else {
-          mainViewModel.down()
-        }
-      }
+      R.id.btn_right -> mainViewModel.upOrDown()
 
       // 刷新
-      R.id.btn_refresh -> {
-        refreshFragment()
-      }
+      R.id.btn_refresh -> refreshFragment()
 
       // 搜索
-      R.id.btn_search -> {
-        startActivity(Intent(this, SearchActivity::class.java))
-      }
+      R.id.btn_search -> startActivity(Intent(this, SearchActivity::class.java))
 
       // 换源
-      R.id.btn_change_source -> {
-        chooseLiveSource()
-      }
+      R.id.btn_change_source -> chooseLiveSource()
 
       // 退出
-      R.id.btn_exit -> {
-        handleBackPress()
+      R.id.btn_exit -> handleBackPress()
+
+      // 锁定
+      R.id.btn_lock -> {
+        if (mainViewModel.lockMode.value) {
+          "请长按解除锁定".showToast()
+          return
+        }
+        mainViewModel.lock()
+        "已锁定".showToast()
       }
     }
   }
 
   override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+    // 触摸时显示 action 内容
     mainViewModel.showActions()
     if (!SPKeyConstants.SLIDE_SWITCH_CHANNEL.getRequired<Boolean>(false)) {
       return super.dispatchTouchEvent(event)
@@ -484,6 +479,8 @@ class MainActivity : BaseKeyEventActivity<ActivityMainBinding>(R.layout.activity
    * 检查网络连接状态
    */
   private fun checkNetworkConnection() {
+    // 获取当前网络连接状态
+    isNetworkConnected = NetworkUtils.isConnected()
     lifecycleScope.launch {
       var count = 1
       while (true) {

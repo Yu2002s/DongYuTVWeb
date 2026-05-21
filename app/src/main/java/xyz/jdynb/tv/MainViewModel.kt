@@ -23,6 +23,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import org.litepal.LitePal
+import org.litepal.extension.count
 import org.litepal.extension.deleteAll
 import org.litepal.extension.findAll
 import org.litepal.extension.findFirst
@@ -97,6 +98,13 @@ class MainViewModel : ViewModel() {
    */
   val showActions = _showActions.asStateFlow()
 
+  private val _lockMode = MutableStateFlow(SPKeyConstants.LOCK_MODE.getRequired<Boolean>(false))
+
+  /**
+   * 是否开启锁定模式
+   */
+  val lockMode = _lockMode.asStateFlow()
+
   /**
    * 切台输入的数字
    */
@@ -106,6 +114,11 @@ class MainViewModel : ViewModel() {
    * 是否启用防抖
    */
   var enableDebounce = true
+
+  /**
+   * 是否是收藏模式
+   */
+  var favoriteMode = SPKeyConstants.FAVORITE_MODE.getRequired<Boolean>(false)
 
   @OptIn(ExperimentalSerializationApi::class)
   private val json = Json {
@@ -158,6 +171,18 @@ class MainViewModel : ViewModel() {
           currentChannelModel.args = savedChannelModel.args
         }
       }
+
+      if (favoriteMode) {
+        if (!hasFavoriteChannelList) {
+          getFavoriteChannelListDB()
+        }
+        currentChannelModel.isFavorite = LitePal.where(
+          "channelName = ? and channelType = ?",
+          currentChannelModel.channelName,
+          currentChannelModel.channelType
+        ).count<LiveChannelModel>() > 0
+      }
+
       flowOf(currentChannelModel)
     }
     // 改变时都会执行这里
@@ -184,6 +209,15 @@ class MainViewModel : ViewModel() {
     )
 
   /**
+   * 初始化频道列表
+   */
+  /*private suspend fun initChannelList() = withContext(Dispatchers.IO) {
+    val channelList = NetworkUtils.requestSuspendCache<List<ChannelModel>>(Api.CHANNEL_LIST)
+      .getOrThrow() // 这里可以进一步进行处理
+    _channelModelList.value = channelList
+  }*/
+
+  /**
    * 初始化数据
    */
   private suspend fun init() = withContext(Dispatchers.IO) {
@@ -192,7 +226,6 @@ class MainViewModel : ViewModel() {
     // 读取网络上的配置文件
     val liveContent =
       NetworkUtils.getResponseBodyCache(liveConfigUrl, "lives/live-2026-03-19.jsonc")
-    // Log.i(TAG, "liveContent: $liveContent")
     // 反序列化赋值给 liveModel 对象
     _liveModel = json.decodeFromString<LiveModel>(liveContent)
     // 频道类型列表
@@ -356,6 +389,19 @@ class MainViewModel : ViewModel() {
    * 下一个频道
    */
   fun up() {
+    val channelModel = currentChannelModel.value
+    if (favoriteMode && hasFavoriteChannelList && channelModel?.isFavorite == true) {
+      // 如果是收藏的
+      var favoriteIndex =
+        _favoriteChannelModelList.value?.indexOfFirst { it.number == channelModel.number } ?: return
+      if (favoriteIndex == _favoriteChannelModelList.value!!.size - 1) {
+        favoriteIndex = 0
+      } else {
+        favoriteIndex++
+      }
+      changeCurrentIndex(_favoriteChannelModelList.value!![favoriteIndex])
+      return
+    }
     if (currentIndex.value >= channelModelList.value.size - 1) {
       _currentIndex.value = 0
     } else {
@@ -367,10 +413,47 @@ class MainViewModel : ViewModel() {
    * 上一个频道
    */
   fun down() {
+    val channelModel = currentChannelModel.value
+    if (favoriteMode && hasFavoriteChannelList && channelModel?.isFavorite == true) {
+      // 如果是收藏的
+      var favoriteIndex =
+        _favoriteChannelModelList.value?.indexOfFirst { it.number == channelModel.number } ?: return
+      if (favoriteIndex == 0) {
+        favoriteIndex = _favoriteChannelModelList.value!!.size - 1
+      } else {
+        favoriteIndex--
+      }
+      Timber.i("favoriteIndex: $favoriteIndex")
+      changeCurrentIndex(_favoriteChannelModelList.value!![favoriteIndex])
+      return
+    }
+    Timber.i("currentIndex: ${currentIndex.value}")
     if (currentIndex.value <= 0) {
       _currentIndex.value = channelModelList.value.size - 1
     } else {
       _currentIndex.value--
+    }
+  }
+
+  /**
+   * 下一个或上一个频道
+   */
+  fun downOrUp() {
+    if (SPKeyConstants.REVERSE_DIRECTION.getRequired(false)) {
+      down()
+    } else {
+      up()
+    }
+  }
+
+  /**
+   * 上一个或下一个频道
+   */
+  fun upOrDown() {
+    if (SPKeyConstants.REVERSE_DIRECTION.getRequired(false)) {
+      up()
+    } else {
+      down()
     }
   }
 
@@ -515,14 +598,57 @@ class MainViewModel : ViewModel() {
     _favoriteChannelModelList.value = null
   }
 
+  private suspend fun getFavoriteChannelListDB() {
+    _favoriteChannelModelList.value = withContext(Dispatchers.IO) {
+      LitePal.findAll<LiveChannelModel>().sortedBy { it.number }.onEach {
+        it.isFavorite = true
+      }
+    }
+  }
+
   /**
    * 获取收藏频道列表
    */
   fun getFavoriteChannelList() {
     viewModelScope.launch {
-      _favoriteChannelModelList.value = withContext(Dispatchers.IO) {
-        LitePal.findAll<LiveChannelModel>().sortedBy { it.number }
-      }
+      getFavoriteChannelListDB()
     }
+  }
+
+  /**
+   * 锁定
+   */
+  fun lock() {
+    _lockMode.value = true
+    SPKeyConstants.LOCK_MODE.put(true)
+  }
+
+  /**
+   * 解锁
+   */
+  fun unLock() {
+    _lockMode.value = false
+    SPKeyConstants.LOCK_MODE.put(false)
+  }
+
+  /**
+   * 是否有收藏频道
+   */
+  val hasFavoriteChannelList get() = !_favoriteChannelModelList.value.isNullOrEmpty()
+
+  /**
+   * 设置收藏模式
+   */
+  fun favoriteMode(enable: Boolean) {
+    if (favoriteMode == enable) {
+      return
+    }
+    if (enable) {
+      "进入收藏模式播放".showToast()
+    } else {
+      "退出收藏模式播放".showToast()
+    }
+    favoriteMode = enable
+    SPKeyConstants.FAVORITE_MODE.put(enable)
   }
 }

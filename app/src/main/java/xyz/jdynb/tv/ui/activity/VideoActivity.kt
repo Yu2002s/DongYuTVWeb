@@ -181,6 +181,7 @@ class VideoActivity : EngineActivity<ActivityVideoBinding>(R.layout.activity_vid
           return@onChecked
         }
         videoProgressModel.currentIndex = position
+        videoProgressModel.currentProgress = 0
         title.text = movieModel.title + " - " + model.name
         stopProgress()
         saveProgress()

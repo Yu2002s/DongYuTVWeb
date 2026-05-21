@@ -92,7 +92,7 @@
             android:excludeFromRecents="false"
             android:screenOrientation="landscape" />
 
-        <activity android:name=".ui.activity.WebViewUpdateActivity" />
+        <activity android:name=".ui.activity.X5WebViewDebugActivity" />
 
         <activity android:name=".ui.activity.WebVideoActivity" />
 

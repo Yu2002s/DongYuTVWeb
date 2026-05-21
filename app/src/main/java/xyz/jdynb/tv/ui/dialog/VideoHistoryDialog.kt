@@ -24,6 +24,9 @@ import xyz.jdynb.tv.utils.NetworkUtils
 import java.io.File
 import kotlin.concurrent.thread
 
+/**
+ * 播放记录
+ */
 class VideoHistoryDialog(context: Context) :
   EngineDialog<DialogVideoHistoryBinding>(context, R.style.Theme_BaseDialog) {
 
