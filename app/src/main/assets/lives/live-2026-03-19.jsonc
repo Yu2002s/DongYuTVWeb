@@ -2872,6 +2872,22 @@
           "player": "guangzhou",
           "channelName": "4K南国都市频道",
           "desc": "广东广州"
+        },
+        {
+          "player": "common",
+          "channelName": "新闻综合",
+          "desc": "江苏镇江",
+          "args": {
+            "liveUrl": "http://zjtv-wshls.homecdn.com/live/2aa50.m3u8"
+          }
+        },
+        {
+          "player": "common",
+          "channelName": "新闻综合",
+          "desc": "江苏镇江",
+          "args": {
+            "liveUrl": "http://zjtv-wshls.homecdn.com/live/2aa16.m3u8"
+          }
         }
       ]
     },
