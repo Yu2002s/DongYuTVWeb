@@ -2,6 +2,8 @@ if (typeof JSBridge !== 'undefined' && JSBridge.hideLoading) {
     JSBridge.hideLoading()
 }
 
+document.body.style.background = 'black'
+
 async function initLivePlayer() {
     let live = window.livePlayerInstance
     let flag = true

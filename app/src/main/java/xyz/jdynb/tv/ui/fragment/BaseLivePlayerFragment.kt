@@ -136,7 +136,7 @@ open class BaseLivePlayerFragment : LivePlayerFragment() {
         connection.setReadTimeout(5000)
 
         // 解析并设置请求头
-        if (headers != null && !headers.isEmpty()) {
+        if (!headers.isNullOrEmpty()) {
           val headersJson = JSONObject(headers)
           val keys = headersJson.keys()
           while (keys.hasNext()) {
@@ -146,7 +146,7 @@ open class BaseLivePlayerFragment : LivePlayerFragment() {
         }
 
         // 处理请求体
-        if (body != null && !body.isEmpty() && !method.equals(
+        if (!body.isNullOrEmpty() && !method.equals(
             "GET",
             ignoreCase = true
           ) && !method.equals("HEAD", ignoreCase = true)
@@ -162,7 +162,7 @@ open class BaseLivePlayerFragment : LivePlayerFragment() {
         val statusCode = connection.getResponseCode()
 
         // 读取响应内容
-        val inputStream = if (statusCode >= 200 && statusCode < 400) {
+        val inputStream = if (statusCode in 200..<400) {
           connection.getInputStream()
         } else {
           connection.errorStream
