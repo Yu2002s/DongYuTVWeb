@@ -29,7 +29,8 @@
         "url": [],
         // 需要排除的地址
         "suffix": [
-          "webp"
+          "webp",
+          "three.js"
         ]
         // 需要排除的地址后缀
       }
@@ -387,6 +388,30 @@
         ],
         "play": [
           "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/guangzhou/play.js"
+        ]
+      }
+    },
+    {
+      "id": "bozhou",
+      "name": "simple",
+      "script": {
+        "init": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/bozhou/init.js"
+        ],
+        "play": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/bozhou/init.js"
+        ]
+      }
+    },
+    {
+      "id": "hefei",
+      "name": "simple",
+      "script": {
+        "init": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/hefei/init.js"
+        ],
+        "play": [
+          "https://gitee.com/jdy2002/DongYuTvWeb/raw/master/app/src/main/assets/js/hefei/init.js"
         ]
       }
     }
@@ -2887,6 +2912,70 @@
           "desc": "江苏镇江",
           "args": {
             "liveUrl": "http://zjtv-wshls.homecdn.com/live/2aa16.m3u8"
+          }
+        },
+        {
+          "player": "common",
+          "channelName": "淮北新闻",
+          "desc": "安徽淮北",
+          "args": {
+            "liveUrl": "https://vms-x.hbnews.net/video/xwzh/index.m3u8"
+          }
+        },
+        {
+          "player": "bozhou",
+          "channelName": "综合频道",
+          "desc": "安徽亳州",
+          "args": {
+            "id": "PD0eb81205061d74ce08d8227e905245f11"
+          }
+        },
+        {
+          "player": "bozhou",
+          "channelName": "农村频道",
+          "desc": "安徽亳州",
+          "args": {
+            "id": "PD07c66e2b8ad52464d81c02cfd3227ceb0"
+          }
+        },
+        {
+          "player": "hefei",
+          "channelName": "新闻频道",
+          "desc": "安徽合肥",
+          "args": {
+            "id": "1"
+          }
+        },
+        {
+          "player": "hefei",
+          "channelName": "新闻频道",
+          "desc": "安徽合肥",
+          "args": {
+            "id": "1"
+          }
+        },
+        {
+          "player": "hefei",
+          "channelName": "生活频道",
+          "desc": "安徽合肥",
+          "args": {
+            "id": "2"
+          }
+        },
+        {
+          "player": "hefei",
+          "channelName": "科创频道",
+          "desc": "安徽合肥",
+          "args": {
+            "id": "3"
+          }
+        },
+        {
+          "player": "hefei",
+          "channelName": "文旅体育频道",
+          "desc": "安徽合肥",
+          "args": {
+            "id": "4"
           }
         }
       ]
