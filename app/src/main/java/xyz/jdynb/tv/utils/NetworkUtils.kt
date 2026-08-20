@@ -32,6 +32,7 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.StandardCharsets
+import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
 object NetworkUtils {
@@ -50,7 +51,10 @@ object NetworkUtils {
   val persistentCookieJar = PersistentCookieJar()
 
   val okHttpClient = OkHttpClient.Builder()
-    .connectTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
+    .connectTimeout(15, TimeUnit.SECONDS)
+    .readTimeout(15, TimeUnit.SECONDS)
+    .writeTimeout(15, TimeUnit.SECONDS)
+    .callTimeout(15, TimeUnit.SECONDS)
     .cookieJar(persistentCookieJar)
     .addInterceptor { chan ->
       val num = Random.nextInt(100, 180)
